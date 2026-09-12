@@ -1,0 +1,108 @@
+{
+  "theme": "dark",
+  "archetype": "7 (Electric & Neon) + 5 (Jewel & Luxury)",
+  "color_palette": {
+    "background": "#050505",
+    "surface": "rgba(255, 255, 255, 0.03)",
+    "surface_hover": "rgba(255, 255, 255, 0.08)",
+    "border": "rgba(255, 255, 255, 0.1)",
+    "primary": "#00FFA3",
+    "primary_hover": "#00CC82",
+    "secondary": "#2962FF",
+    "text_primary": "#FFFFFF",
+    "text_secondary": "#A0A0AB",
+    "text_muted": "#52525B",
+    "success": "#00FFA3",
+    "warning": "#FFD600",
+    "error": "#FF3B30",
+    "glow_shadow": "0 0 15px rgba(0, 255, 163, 0.3)"
+  },
+  "typography": {
+    "heading_font": "Unbounded, sans-serif",
+    "body_font": "Chivo, sans-serif",
+    "mono_font": "Azeret Mono, monospace",
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tighter font-black",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl tracking-tight font-bold",
+      "h3": "text-xl sm:text-2xl tracking-tight font-semibold",
+      "h4": "text-lg sm:text-xl font-medium",
+      "body": "text-base leading-relaxed",
+      "small": "text-sm",
+      "overline": "text-xs tracking-[0.2em] uppercase font-bold text-[#A0A0AB]"
+    }
+  },
+  "spacing_and_layout": {
+    "philosophy": "Generous spacing with dense functional bento areas",
+    "container": "max-w-7xl mx-auto px-6 sm:px-8",
+    "bento_grid": "grid grid-cols-1 md:grid-cols-4 gap-6",
+    "padding": {
+      "section": "py-24 sm:py-32",
+      "card": "p-6 sm:p-8"
+    }
+  },
+  "surfaces_and_micro_themes": {
+    "header": "Crystal Glass: bg-black/60 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50",
+    "card_default": "bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl transition-all duration-300",
+    "card_hover": "hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,255,163,0.1)]",
+    "input": "bg-black/50 border border-white/10 rounded-xl focus:ring-2 focus:ring-[#00FFA3] focus:border-transparent text-white",
+    "button_primary": "bg-[#00FFA3] text-black font-bold rounded-xl px-6 py-3 hover:bg-[#00CC82] transition-colors shadow-[0_0_15px_rgba(0,255,163,0.4)] hover:shadow-[0_0_25px_rgba(0,255,163,0.6)]"
+  },
+  "animations": {
+    "hover": "transition-all duration-300 ease-out",
+    "entrance": "animate-in fade-in slide-in-from-bottom-4 duration-700",
+    "skeleton": "animate-pulse bg-white/10 rounded-xl",
+    "marquee": "slow continuous slide for partner logos or breaking news"
+  },
+  "component_instructions": {
+    "forms": "Use Shadcn customized with dark mode + glassmorphism. Rounded-xl, solid borders.",
+    "tables": "Use Shadcn Tables with hoverable rows, transparent background, white text.",
+    "tabs": "Pill-style tabs with glassmorphic background, active state gets laser green text.",
+    "badges": "Small pill badges, border-[#00FFA3]/50 text-[#00FFA3] bg-[#00FFA3]/10"
+  },
+  "image_urls": [
+    {
+      "url": "https://images.pexels.com/photos/5278665/pexels-photo-5278665.jpeg",
+      "description": "Abstract shiny green and black liquid patterns. Use for Hero Section background with an overlay (bg-black/60).",
+      "category": "hero_background"
+    },
+    {
+      "url": "https://images.pexels.com/photos/36024137/pexels-photo-36024137.jpeg",
+      "description": "Neon sign on building facade. Use for 'Opportunities Board' or 'Campus Chapters' header.",
+      "category": "section_background"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1670834416076-103a2f7d1a27",
+      "description": "Blue abstract background. Use for Learning Hub hero area.",
+      "category": "learning_hub_hero"
+    },
+    {
+      "url": "https://images.pexels.com/photos/6238120/pexels-photo-6238120.jpeg",
+      "description": "Group of diverse young multiracial classmates. Use for Community / About section.",
+      "category": "community_image"
+    },
+    {
+      "url": "https://images.pexels.com/photos/6532369/pexels-photo-6532369.jpeg",
+      "description": "Close-up of a trophy. Use for Rewards & Recognition / Trophies section.",
+      "category": "trophy_icon"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1621886289714-384b89bcff3c",
+      "description": "Person in black hoodie at night. Use as a placeholder for Field Reporter or Writer profile.",
+      "category": "profile_avatar"
+    }
+  ],
+  "icons_library": "@phosphor-icons/react",
+  "instructions_to_main_agent": [
+    "Strictly apply the 'Unbounded' font for headings and 'Chivo' for body. If not available in standard Google Fonts, add them to index.html or global CSS.",
+    "Enforce dark mode permanently.",
+    "Use grid-cols-1 md:grid-cols-4 for the Kanban and Bento grids. Use tight gaps (gap-4 or gap-6) for dashboards.",
+    "Hero overlays MUST be bg-black/60 to let the background image shine while maintaining text contrast.",
+    "Implement glassmorphic surfaces using 'bg-white/[0.03] backdrop-blur-xl border border-white/10'.",
+    "All interactive elements must have 'data-testid' for testing.",
+    "Primary call to action buttons must be Laser Green (#00FFA3) with black text and a glowing box-shadow.",
+    "Use Skeleton components from Shadcn to simulate loading states in the 'swipeable cards' and 'Kanban board' areas.",
+    "For live countdowns, use Monospace font ('Azeret Mono') with tracking-widest.",
+    "Avoid standard Shadcn Vercel look. Override Shadcn border-radius to rounded-2xl for cards and rounded-xl for buttons.",
+    "Render the personalized greeting 'Hey [Name], ready to write?' dynamically using Unbounded font at text-4xl."
+  ]
+}
