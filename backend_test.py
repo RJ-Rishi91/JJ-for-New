@@ -4,9 +4,11 @@ import sys
 import json
 from datetime import datetime
 
+import os
+
 class JuniorJournalistAPITester:
-    def __init__(self, base_url="https://young-reporter.preview.emergentagent.com"):
-        self.base_url = base_url
+    def __init__(self, base_url=None):
+        self.base_url = base_url or os.environ.get("API_URL", "http://127.0.0.1:8000")
         self.token = None
         self.user_id = None
         self.tests_run = 0

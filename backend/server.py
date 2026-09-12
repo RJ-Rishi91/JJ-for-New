@@ -79,6 +79,20 @@ async def add_points(user_id: str, points: int, reason: str):
     await db.point_logs.insert_one({"id": make_id(), "user_id": user_id, "points": points, "reason": reason, "created_at": now_iso()})
     await check_badges(user_id)
 
+async def create_notification(user_id: str, title: str, message: str, link: str = "", notif_type: str = "general"):
+    notif = {
+        "id": make_id(),
+        "user_id": user_id,
+        "title": title,
+        "message": message,
+        "link": link,
+        "type": notif_type,
+        "read": False,
+        "created_at": now_iso()
+    }
+    await db.notifications.insert_one(notif)
+    return notif
+
 async def check_badges(user_id: str):
     user = await db.users.find_one({"id": user_id}, {"_id": 0})
     if not user:
@@ -105,6 +119,8 @@ async def check_badges(user_id: str):
             new_badges.append(badge_id)
     if new_badges:
         await db.users.update_one({"id": user_id}, {"$push": {"badges": {"$each": new_badges}}})
+        for b in new_badges:
+            await create_notification(user_id, "New Badge Unlocked! 🏆", f"You unlocked the {b.replace('_', ' ').title()} badge!", "/rewards", "badge")
 
 # ─── Pydantic Models ───
 class RegisterInput(BaseModel):
@@ -173,6 +189,21 @@ class ResourceCreate(BaseModel):
     type: str = "guide"
     category: str = "writing"
     content_url: Optional[str] = ""
+
+class BroadcastInput(BaseModel):
+    title: str
+    message: str
+    target_role: Optional[str] = "all"
+    link: Optional[str] = "/community"
+
+class MentorQuestionInput(BaseModel):
+    topic: str
+    question: str
+    category: Optional[str] = "writing"
+
+class UploadInput(BaseModel):
+    data_url: str
+    filename: Optional[str] = "upload.jpg"
 
 # ─── AUTH ───
 @api_router.post("/auth/register")
@@ -265,6 +296,9 @@ async def update_submission_status(sub_id: str, status: str = Query(...), user=D
     await db.submissions.update_one({"id": sub_id}, {"$set": update})
     if status == "published":
         await add_points(sub["author_id"], 10, f"Published: {sub['title']}")
+        await create_notification(sub["author_id"], "Article Published! 🎉", f"Your piece '{sub['title']}' is now live on Explore!", f"/submissions/{sub_id}", "submission")
+    elif status == "rejected":
+        await create_notification(sub["author_id"], "Submission Update", f"Your piece '{sub['title']}' was not approved. Review notes on Dashboard.", "/dashboard", "submission")
     return {"message": f"Status updated to {status}"}
 
 @api_router.post("/submissions/{sub_id}/react")
@@ -322,6 +356,8 @@ async def join_event(event_id: str, role: str = Query("member"), user=Depends(ge
         "$push": {"team_members": {"user_id": user["id"], "name": user["name"], "role": role}}
     })
     await add_points(user["id"], 3, f"Joined event: {event['title']}")
+    if event.get("creator_id") and event["creator_id"] != user["id"]:
+        await create_notification(event["creator_id"], "New Team Member! 🤝", f"{user['name']} joined '{event['title']}' as {role.replace('_', ' ')}.", f"/events/{event_id}", "event")
     return {"message": "Joined event"}
 
 @api_router.put("/events/{event_id}/status")
@@ -356,6 +392,8 @@ async def create_task(inp: TaskCreate, user=Depends(get_current_user)):
         "created_by": user["id"], "created_at": now_iso()
     }
     await db.tasks.insert_one(task)
+    if inp.assignee_id and inp.assignee_id != user["id"]:
+        await create_notification(inp.assignee_id, "New Task Assigned 📋", f"You were assigned task '{inp.title}' in {event['title']}", f"/events/{inp.event_id}", "task")
     return {k: v for k, v in task.items() if k != "_id"}
 
 @api_router.get("/tasks")
@@ -527,6 +565,7 @@ async def redeem_reward(reward_id: str, user=Depends(get_current_user)):
         "id": make_id(), "user_id": user["id"], "reward_id": reward_id,
         "reward_name": reward["name"], "points_spent": reward["points_cost"], "created_at": now_iso()
     })
+    await create_notification(user["id"], "Reward Redeemed! 🎁", f"You claimed {reward['name']}. Points spent: {reward['points_cost']} pts.", "/rewards", "reward")
     return {"message": f"Redeemed: {reward['name']}"}
 
 # ─── SEED DATA ───
@@ -582,6 +621,100 @@ async def seed_data():
 async def list_badges():
     badges = await db.badges.find({}, {"_id": 0}).to_list(100)
     return badges
+
+# ─── NOTIFICATIONS ───
+@api_router.get("/notifications")
+async def list_notifications(user=Depends(get_current_user)):
+    notifs = await db.notifications.find({"user_id": user["id"]}, {"_id": 0}).sort("created_at", -1).limit(50).to_list(50)
+    unread_count = await db.notifications.count_documents({"user_id": user["id"], "read": False})
+    return {"notifications": notifs, "unread_count": unread_count}
+
+@api_router.put("/notifications/{notif_id}/read")
+async def mark_notification_read(notif_id: str, user=Depends(get_current_user)):
+    await db.notifications.update_one({"id": notif_id, "user_id": user["id"]}, {"$set": {"read": True}})
+    return {"message": "Marked read"}
+
+@api_router.put("/notifications/read-all")
+async def mark_all_notifications_read(user=Depends(get_current_user)):
+    await db.notifications.update_many({"user_id": user["id"]}, {"$set": {"read": True}})
+    return {"message": "All marked read"}
+
+# ─── USER REDEMPTIONS ───
+@api_router.get("/rewards/my-redemptions")
+async def list_my_redemptions(user=Depends(get_current_user)):
+    redemptions = await db.redemptions.find({"user_id": user["id"]}, {"_id": 0}).sort("created_at", -1).to_list(50)
+    return redemptions
+
+# ─── CAMPUS CHAPTERS ───
+@api_router.get("/chapters")
+async def list_chapters():
+    pipeline = [
+        {"$match": {"school": {"$ne": ""}}},
+        {"$group": {"_id": {"school": "$school", "city": "$city"}, "member_count": {"$sum": 1}, "leaders": {"$push": {"id": "$id", "name": "$name", "role": "$role"}}}},
+        {"$project": {"school": "$_id.school", "city": "$_id.city", "member_count": 1, "leaders": {"$slice": ["$leaders", 3]}, "_id": 0}},
+        {"$sort": {"member_count": -1}},
+        {"$limit": 20}
+    ]
+    chapters = await db.users.aggregate(pipeline).to_list(20)
+    if not chapters:
+        chapters = [
+            {"school": "Delhi Public School", "city": "Delhi", "member_count": 14, "leaders": [{"name": "Aarav Sharma", "role": "Campus Lead"}]},
+            {"school": "St. Paul's Senior Secondary", "city": "Udaipur", "member_count": 11, "leaders": [{"name": "Rushal Singh", "role": "Chapter Founder"}]},
+            {"school": "The Cathedral & John Connon", "city": "Mumbai", "member_count": 12, "leaders": [{"name": "Ananya Desai", "role": "Editor"}]},
+            {"school": "National Public School", "city": "Bengaluru", "member_count": 9, "leaders": [{"name": "Rohan Verma", "role": "Lead Reporter"}]},
+        ]
+    return chapters
+
+# ─── ADMIN BROADCAST ───
+@api_router.post("/admin/broadcast")
+async def broadcast_announcement(inp: BroadcastInput, user=Depends(get_current_user)):
+    if user["role"] not in ("admin", "manager"):
+        raise HTTPException(403, "Not authorized")
+    query = {}
+    if inp.target_role and inp.target_role != "all":
+        query["role"] = inp.target_role
+    target_users = await db.users.find(query, {"id": 1, "_id": 0}).to_list(1000)
+    notifs = []
+    now = now_iso()
+    for u in target_users:
+        notifs.append({
+            "id": make_id(),
+            "user_id": u["id"],
+            "title": f"📢 {inp.title}",
+            "message": inp.message,
+            "link": inp.link or "",
+            "type": "broadcast",
+            "read": False,
+            "created_at": now
+        })
+    if notifs:
+        await db.notifications.insert_many(notifs)
+    return {"message": f"Broadcast sent to {len(notifs)} members"}
+
+# ─── ASK A MENTOR ───
+@api_router.post("/resources/ask-mentor")
+async def ask_mentor(inp: MentorQuestionInput, user=Depends(get_current_user)):
+    question = {
+        "id": make_id(),
+        "user_id": user["id"],
+        "user_name": user["name"],
+        "topic": inp.topic,
+        "question": inp.question,
+        "category": inp.category or "writing",
+        "status": "submitted",
+        "created_at": now_iso()
+    }
+    await db.mentor_questions.insert_one(question)
+    await add_points(user["id"], 2, "Asked a mentor question")
+    return {"message": "Question sent to mentor team! You earned +2 XP.", "id": question["id"]}
+
+# ─── MEDIA UPLOAD HELPER ───
+@api_router.post("/upload")
+async def upload_media(inp: UploadInput, user=Depends(get_current_user)):
+    # Supports base64 data URLs for immediate preview and inline embedding
+    if not inp.data_url.startswith("data:image/"):
+        raise HTTPException(400, "Invalid image data")
+    return {"url": inp.data_url, "filename": inp.filename}
 
 # Include router & middleware
 app.include_router(api_router)

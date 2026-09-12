@@ -66,14 +66,34 @@ export const opportunities = {
   create: (data) => API.post('/opportunities', data),
 };
 
-export const resources = {
-  list: (params) => API.get('/resources', { params }),
-  create: (data) => API.post('/resources', data),
-};
-
 export const rewards = {
   list: () => API.get('/rewards'),
   redeem: (id) => API.post(`/rewards/${id}/redeem`),
+  myRedemptions: () => API.get('/rewards/my-redemptions'),
+};
+
+export const notifications = {
+  list: () => API.get('/notifications'),
+  markRead: (id) => API.put(`/notifications/${id}/read`),
+  markAllRead: () => API.put('/notifications/read-all'),
+};
+
+export const chapters = {
+  list: () => API.get('/chapters'),
+};
+
+export const admin = {
+  broadcast: (data) => API.post('/admin/broadcast', data),
+};
+
+export const resources = {
+  list: (params) => API.get('/resources', { params }),
+  create: (data) => API.post('/resources', data),
+  askMentor: (data) => API.post('/resources/ask-mentor', data),
+};
+
+export const media = {
+  upload: (dataUrl, filename) => API.post('/upload', { data_url: dataUrl, filename }),
 };
 
 export const users = {
