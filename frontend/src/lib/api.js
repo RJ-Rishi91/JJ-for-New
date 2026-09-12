@@ -111,6 +111,21 @@ export const homepage = {
   get: () => API.get('/homepage'),
 };
 
+export const projects = {
+  list: (params) => API.get('/projects', { params }),
+  create: (data) => API.post('/projects', data),
+  get: (id) => API.get(`/projects/${id}`),
+  join: (id, role) => API.post(`/projects/${id}/join?role=${encodeURIComponent(role)}`),
+  updateProgress: (id, data) => API.put(`/projects/${id}/progress`, data),
+};
+
+export const messages = {
+  channels: () => API.get('/messages/channels'),
+  getChannel: (channelId) => API.get(`/messages/channel/${channelId}`),
+  send: (data) => API.post('/messages', data),
+  getDm: (userId) => API.get(`/messages/dm/${userId}`),
+};
+
 export const badges = {
   list: () => API.get('/badges'),
 };

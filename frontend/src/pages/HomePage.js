@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { homepage as homepageApi } from '../lib/api';
+import { homepage as homepageApi, projects as projectApi } from '../lib/api';
 import AuthModal from '../components/AuthModal';
-import { PenTool, Calendar, Trophy, BookOpen, Users, ArrowRight, Flame, Heart, Eye, Clock } from 'lucide-react';
+import { PenTool, Calendar, Trophy, BookOpen, Users, ArrowRight, Flame, Heart, Eye, Clock, Target, Sparkles } from 'lucide-react';
 
 function SkeletonCard() {
   return <div className="skeleton-pulse h-48 w-full rounded-2xl" />;
@@ -36,11 +36,13 @@ function CountdownTimer({ targetDate }) {
 export default function HomePage() {
   const { user } = useAuth();
   const [data, setData] = useState(null);
+  const [projectsList, setProjectsList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [authOpen, setAuthOpen] = useState(false);
 
   useEffect(() => {
     homepageApi.get().then(r => { setData(r.data); setLoading(false); }).catch(() => setLoading(false));
+    projectApi.list().then(r => setProjectsList(r.data || [])).catch(() => {});
   }, []);
 
   const categories = [
@@ -152,8 +154,14 @@ export default function HomePage() {
                 className={`glass rounded-2xl overflow-hidden card-interactive animate-fade-in-up`}
                 style={{ animationDelay: `${i * 100}ms` }}
                 data-testid={`featured-story-${i}`}>
-                <div className="h-40 bg-gradient-to-br from-[#00FFA3]/10 to-[#2962FF]/10 flex items-center justify-center">
-                  <PenTool size={32} className="text-[#00FFA3]/30" />
+                <div className="h-44 w-full bg-black/40 overflow-hidden relative">
+                  {(s.thumbnail_url || s.cover_image) ? (
+                    <img src={s.thumbnail_url || s.cover_image} alt={s.title} className="w-full h-full object-cover transition duration-300 hover:scale-105" />
+                  ) : (
+                    <div className="h-full bg-gradient-to-br from-[#00FFA3]/10 to-[#2962FF]/10 flex items-center justify-center">
+                      <PenTool size={32} className="text-[#00FFA3]/30" />
+                    </div>
+                  )}
                 </div>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-2">
@@ -174,6 +182,74 @@ export default function HomePage() {
           </div>
         )}
       </section>
+
+      {/* Active Campaigns & Collaborative Projects */}
+      {projectsList.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12" data-testid="campaigns-section">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <div className="overline mb-1 flex items-center gap-1.5 text-[#00FFA3]">
+                <Sparkles size={14} /> Collaborative Journalism
+              </div>
+              <h2 className="font-heading text-2xl sm:text-3xl font-bold">Active Campaigns & Reporting Drives</h2>
+            </div>
+            <Link to="/projects" className="text-[#00FFA3] text-sm font-semibold flex items-center gap-1 hover:underline" data-testid="see-all-campaigns">
+              View All Drives <ArrowRight size={14} />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {projectsList.slice(0, 3).map((proj, i) => (
+              <Link
+                key={proj.id}
+                to="/projects"
+                className="glass rounded-2xl overflow-hidden card-interactive flex flex-col justify-between border border-white/10 hover:border-[#00FFA3]/30"
+              >
+                <div className="h-40 relative bg-black/40 overflow-hidden">
+                  {proj.cover_image ? (
+                    <img src={proj.cover_image} alt={proj.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-[#00FFA3]/10 to-[#2962FF]/15 flex items-center justify-center">
+                      <Target size={32} className="text-[#00FFA3]/40" />
+                    </div>
+                  )}
+                  <div className="absolute top-3 left-3">
+                    <span className="badge-pill bg-black/70 backdrop-blur-md text-[#00FFA3] text-[10px] uppercase">
+                      {proj.category}
+                    </span>
+                  </div>
+                  <div className="absolute bottom-2.5 right-3 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded-full text-[10px] font-mono text-white flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00FFA3] animate-pulse" />
+                    {proj.progress || 0}%
+                  </div>
+                </div>
+
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="font-heading text-sm font-bold text-white mb-2 line-clamp-2">{proj.title}</h3>
+                    <p className="text-xs text-[#A0A0AB] mb-4 line-clamp-2">{proj.description}</p>
+                  </div>
+
+                  <div>
+                    <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden mb-3">
+                      <div
+                        className="bg-gradient-to-r from-[#00FFA3] to-[#2962FF] h-1.5 rounded-full"
+                        style={{ width: `${Math.min(100, Math.max(5, proj.progress || 0))}%` }}
+                      />
+                    </div>
+                    <div className="flex items-center justify-between text-[11px] text-[#A0A0AB]">
+                      <span>{proj.team?.length || 1} team members</span>
+                      <span className="text-[#00FFA3] font-semibold flex items-center gap-0.5">
+                        Join Team <ArrowRight size={11} />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Upcoming Events */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12" data-testid="events-section">

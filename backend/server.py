@@ -201,6 +201,25 @@ class MentorQuestionInput(BaseModel):
     question: str
     category: Optional[str] = "writing"
 
+class ProjectCreate(BaseModel):
+    title: str
+    description: str
+    category: Optional[str] = "investigative"
+    goal: Optional[str] = "Publish a 5-part youth series"
+    target_date: Optional[str] = None
+    cover_image: Optional[str] = ""
+    open_roles: Optional[List[str]] = []
+
+class ProjectProgressUpdate(BaseModel):
+    progress: int
+
+class MessageCreate(BaseModel):
+    content: str
+    channel: Optional[str] = "general"
+    channel_id: Optional[str] = None
+    recipient_id: Optional[str] = None
+    attachment_url: Optional[str] = None
+
 class UploadInput(BaseModel):
     data_url: str
     filename: Optional[str] = "upload.jpg"
@@ -615,6 +634,220 @@ async def seed_data():
             {"id": make_id(), "title": "Daily Writing Prompt", "description": "Write about a local hero in your community", "type": "prompt", "category": "writing", "content_url": "#", "created_at": now_iso()},
         ]
         await db.resources.insert_many(resources)
+
+    # Seed Sample Published Submissions
+    sub_count = await db.submissions.count_documents({})
+    if sub_count == 0:
+        sample_subs = [
+            {
+                "id": make_id(),
+                "title": "Campus Mental Health: Breaking the Silence in High Schools",
+                "content": "Across secondary schools and university campuses nationwide, student pressure around standardized tests, college admissions, and social media comparison has reached unprecedented levels.\n\nIn this investigative report, we spoke with guidance counselors, student peer leaders, and adolescent psychologists to explore why open conversations around mental wellness are critical in modern newsrooms.",
+                "type": "article",
+                "category": "opinion",
+                "author_id": "seed-u1",
+                "author_name": "Aarav Sharma",
+                "author_role": "Campus Lead",
+                "author_school": "Delhi Public School (R.K. Puram)",
+                "status": "published",
+                "views": 420,
+                "reactions": {"heart": 34, "fire": 18, "clap": 27, "mindblown": 8},
+                "cover_image": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=60",
+                "co_authors": ["Ananya Desai"],
+                "created_at": now_iso()
+            },
+            {
+                "id": make_id(),
+                "title": "The River Yamuna Restoration: A Student Photo Essay",
+                "content": "Armed with second-hand DSLRs and field notebooks, four youth photojournalists documented the foam pollution and community cleanup drives along the northern banks of the Yamuna.\n\nThese photographs capture both the ecological challenge and the relentless resilience of volunteer youth squads removing tons of plastic waste each weekend.",
+                "type": "photo_essay",
+                "category": "photo_essays",
+                "author_id": "seed-u2",
+                "author_name": "Rohan Verma",
+                "author_role": "Photojournalist",
+                "author_school": "National Public School, Bengaluru",
+                "status": "published",
+                "views": 612,
+                "reactions": {"heart": 56, "fire": 42, "clap": 31, "mindblown": 14},
+                "cover_image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&auto=format&fit=crop&q=60",
+                "co_authors": [],
+                "created_at": now_iso()
+            },
+            {
+                "id": make_id(),
+                "title": "Student Voices on AI in Classrooms: Threat or Learning Accelerator?",
+                "content": "Should AI be banned from homework assignments or integrated into daily coursework? We polled 350 high school seniors to understand how generative AI is shifting essay writing, code debugging, and critical thinking.",
+                "type": "article",
+                "category": "campus_voices",
+                "author_id": "seed-u3",
+                "author_name": "Ananya Desai",
+                "author_role": "Staff Writer",
+                "author_school": "The Cathedral & John Connon, Mumbai",
+                "status": "published",
+                "views": 380,
+                "reactions": {"heart": 29, "fire": 22, "clap": 19, "mindblown": 30},
+                "cover_image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=60",
+                "co_authors": ["Aarav Sharma"],
+                "created_at": now_iso()
+            },
+            {
+                "id": make_id(),
+                "title": "Review: The Best Open-Source Tools for Student Newsrooms",
+                "content": "Running a high school gazette with zero budget? Here is our comprehensive review of open-source publishing CMS, encrypted messaging, and audio transcription tools vetted by student editors.",
+                "type": "article",
+                "category": "reviews",
+                "author_id": "seed-u4",
+                "author_name": "Rushal Singh",
+                "author_role": "Managing Editor",
+                "author_school": "St. Paul's Senior Secondary, Udaipur",
+                "status": "published",
+                "views": 530,
+                "reactions": {"heart": 41, "fire": 35, "clap": 48, "mindblown": 12},
+                "cover_image": "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&auto=format&fit=crop&q=60",
+                "co_authors": [],
+                "created_at": now_iso()
+            },
+            {
+                "id": make_id(),
+                "title": "Field Report: Inside Udaipur's Ancient Water Harvest Systems",
+                "content": "Centuries-old stepwells and interconnecting lake systems designed in medieval Mewar still hold vital lessons for modern urban rainwater harvesting. Our on-the-ground report from the heritage wells of Rajasthan.",
+                "type": "field_report",
+                "category": "field_reports",
+                "author_id": "seed-u4",
+                "author_name": "Rushal Singh",
+                "author_role": "Field Reporter",
+                "author_school": "St. Paul's Senior Secondary, Udaipur",
+                "status": "published",
+                "views": 720,
+                "reactions": {"heart": 88, "fire": 62, "clap": 74, "mindblown": 25},
+                "cover_image": "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=800&auto=format&fit=crop&q=60",
+                "co_authors": [],
+                "created_at": now_iso()
+            },
+            {
+                "id": make_id(),
+                "title": "Echoes of the Classroom: A Collection of Student Poems",
+                "content": "Between bells, chalk dust, and late evening library hours, high school poets pen their reflections on friendship, growing up, and chasing ambitions.",
+                "type": "article",
+                "category": "creative_writing",
+                "author_id": "seed-u1",
+                "author_name": "Aarav Sharma",
+                "author_role": "Writer",
+                "author_school": "Delhi Public School (R.K. Puram)",
+                "status": "published",
+                "views": 290,
+                "reactions": {"heart": 51, "fire": 15, "clap": 32, "mindblown": 6},
+                "cover_image": "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&auto=format&fit=crop&q=60",
+                "co_authors": [],
+                "created_at": now_iso()
+            }
+        ]
+        await db.submissions.insert_many(sample_subs)
+
+    # Seed Sample Projects & Campaigns (Module 7)
+    proj_count = await db.projects.count_documents({})
+    if proj_count == 0:
+        sample_projs = [
+            {
+                "id": make_id(),
+                "title": "Clean Campus & Zero Single-Use Plastic Drive",
+                "description": "A 3-month multi-school campaign auditing plastic waste in school cafeterias and advocating for biodegradable alternatives.",
+                "category": "environment",
+                "goal": "Audit 20 high schools & publish national findings",
+                "target_date": "2026-05-30",
+                "cover_image": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&auto=format&fit=crop&q=60",
+                "open_roles": ["Campus Auditor", "Data Visualizer", "Investigative Writer", "School Liaison"],
+                "creator_id": "seed-u2",
+                "creator_name": "Rohan Verma",
+                "progress": 45,
+                "team": [
+                    {"user_id": "seed-u2", "name": "Rohan Verma", "role": "Campaign Lead"},
+                    {"user_id": "seed-u3", "name": "Ananya Desai", "role": "Data Visualizer"}
+                ],
+                "created_at": now_iso()
+            },
+            {
+                "id": make_id(),
+                "title": "Youth Civic & Voter Awareness Campaign",
+                "description": "Mobilizing student journalists to demystify local civic government, municipal ward budgets, and youth voting rights.",
+                "category": "civic",
+                "goal": "Publish 10 explainers & conduct 5 live webinars",
+                "target_date": "2026-06-15",
+                "cover_image": "https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=800&auto=format&fit=crop&q=60",
+                "open_roles": ["Civic Researcher", "Podcast Anchor", "Social Media Coordinator"],
+                "creator_id": "seed-u1",
+                "creator_name": "Aarav Sharma",
+                "progress": 60,
+                "team": [
+                    {"user_id": "seed-u1", "name": "Aarav Sharma", "role": "Project Lead"},
+                    {"user_id": "seed-u4", "name": "Rushal Singh", "role": "Editorial Advisor"}
+                ],
+                "created_at": now_iso()
+            },
+            {
+                "id": make_id(),
+                "title": "Grassroots Climate Innovators: 50-State Photo Essay",
+                "description": "Documenting young engineers and environmentalists building affordable renewable solutions in tier-2 and tier-3 towns.",
+                "category": "investigative",
+                "goal": "Collect 100 field photo essays and create a virtual gallery",
+                "target_date": "2026-07-20",
+                "cover_image": "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=800&auto=format&fit=crop&q=60",
+                "open_roles": ["Field Photographer", "Story Editor", "Audio Producer"],
+                "creator_id": "seed-u4",
+                "creator_name": "Rushal Singh",
+                "progress": 30,
+                "team": [
+                    {"user_id": "seed-u4", "name": "Rushal Singh", "role": "Project Lead"}
+                ],
+                "created_at": now_iso()
+            }
+        ]
+        await db.projects.insert_many(sample_projs)
+
+    # Seed Sample Events
+    event_count = await db.events.count_documents({})
+    if event_count == 0:
+        sample_events = [
+            {
+                "id": make_id(),
+                "title": "Live National Student Debate: Freedom of the Press in Schools",
+                "description": "An interactive digital debate desk bringing student editors from 15 cities to discuss press freedom, censorship, and ethical reporting.",
+                "type": "debate",
+                "start_date": "2026-04-10T18:00:00Z",
+                "end_date": "2026-04-10T20:30:00Z",
+                "creator_id": "seed-u1",
+                "creator_name": "Aarav Sharma",
+                "open_roles": ["Debate Moderator", "Fact Checker", "Live Twitter/X Correspondent"],
+                "max_team": 8,
+                "team": [{"user_id": "seed-u1", "name": "Aarav Sharma", "role": "Event Leader"}],
+                "created_at": now_iso()
+            },
+            {
+                "id": make_id(),
+                "title": "Investigative Journalism Bootcamp 2026",
+                "description": "Intensive weekend workshop with senior editors covering RTI filing, data scraping, and source protection for youth writers.",
+                "type": "workshop",
+                "start_date": "2026-04-24T14:00:00Z",
+                "end_date": "2026-04-25T17:00:00Z",
+                "creator_id": "seed-u4",
+                "creator_name": "Rushal Singh",
+                "open_roles": ["Session Coordinator", "Note Taker", "Tech Support"],
+                "max_team": 12,
+                "team": [{"user_id": "seed-u4", "name": "Rushal Singh", "role": "Event Leader"}],
+                "created_at": now_iso()
+            }
+        ]
+        await db.events.insert_many(sample_events)
+
+    # Seed Sample Messages
+    msg_count = await db.messages.count_documents({})
+    if msg_count == 0:
+        sample_msgs = [
+            {"id": make_id(), "sender_id": "seed-u1", "sender_name": "Aarav Sharma", "sender_role": "member", "channel": "general", "recipient_id": None, "content": "Welcome everyone to the new Junior Journalist newsroom! Pitch your stories in #investigative or share photo essays in #photojournalism.", "created_at": now_iso()},
+            {"id": make_id(), "sender_id": "seed-u4", "sender_name": "Rushal Singh", "sender_role": "admin", "channel": "general", "recipient_id": None, "content": "The Clean Campus plastic audit project is now live under the Projects tab. You can join the audit team!", "created_at": now_iso()}
+        ]
+        await db.messages.insert_many(sample_msgs)
+
     return {"message": "Seed data created"}
 
 @api_router.get("/badges")
@@ -715,6 +948,116 @@ async def upload_media(inp: UploadInput, user=Depends(get_current_user)):
     if not inp.data_url.startswith("data:image/"):
         raise HTTPException(400, "Invalid image data")
     return {"url": inp.data_url, "filename": inp.filename}
+
+# ─── PROJECTS & CAMPAIGNS (Module 7) ───
+@api_router.get("/projects")
+async def list_projects(category: Optional[str] = None):
+    query = {}
+    if category and category != "all":
+        query["category"] = category
+    projects = await db.projects.find(query, {"_id": 0}).sort("created_at", -1).to_list(50)
+    return projects
+
+@api_router.post("/projects")
+async def create_project(inp: ProjectCreate, user=Depends(get_current_user)):
+    proj = {
+        "id": make_id(),
+        "title": inp.title,
+        "description": inp.description,
+        "category": inp.category or "investigative",
+        "goal": inp.goal or "Publish a 5-part youth series",
+        "target_date": inp.target_date,
+        "cover_image": inp.cover_image or "",
+        "open_roles": inp.open_roles or ["Researcher", "Staff Writer", "Fact Checker", "Visual Lead"],
+        "creator_id": user["id"],
+        "creator_name": user["name"],
+        "progress": 15,
+        "team": [{"user_id": user["id"], "name": user["name"], "role": "Project Lead", "joined_at": now_iso()}],
+        "created_at": now_iso()
+    }
+    await db.projects.insert_one(proj)
+    await add_points(user["id"], 25, "Launched a new project campaign")
+    return proj
+
+@api_router.get("/projects/{project_id}")
+async def get_project(project_id: str):
+    proj = await db.projects.find_one({"id": project_id}, {"_id": 0})
+    if not proj:
+        raise HTTPException(404, "Project not found")
+    return proj
+
+@api_router.post("/projects/{project_id}/join")
+async def join_project(project_id: str, role: str = "Contributor", user=Depends(get_current_user)):
+    proj = await db.projects.find_one({"id": project_id}, {"_id": 0})
+    if not proj:
+        raise HTTPException(404, "Project not found")
+    team = proj.get("team", [])
+    if any(m.get("user_id") == user["id"] for m in team):
+        return {"message": "Already on this project team"}
+    member = {"user_id": user["id"], "name": user["name"], "role": role, "joined_at": now_iso()}
+    await db.projects.update_one({"id": project_id}, {"$push": {"team": member}})
+    await create_notification(proj["creator_id"], "New Project Member! 🚀", f"{user['name']} joined '{proj['title']}' as {role}.", f"/projects/{project_id}", "project")
+    await add_points(user["id"], 10, "Joined a project team")
+    return {"message": f"Joined project as {role}"}
+
+@api_router.put("/projects/{project_id}/progress")
+async def update_project_progress(project_id: str, inp: ProjectProgressUpdate, user=Depends(get_current_user)):
+    proj = await db.projects.find_one({"id": project_id}, {"_id": 0})
+    if not proj:
+        raise HTTPException(404, "Project not found")
+    if proj.get("creator_id") != user["id"] and user["role"] not in ("admin", "manager"):
+        raise HTTPException(403, "Not authorized to update project progress")
+    prog = max(0, min(100, inp.progress))
+    await db.projects.update_one({"id": project_id}, {"$set": {"progress": prog}})
+    return {"message": f"Progress updated to {prog}%"}
+
+# ─── IN-APP MESSAGES & NEWSROOM CHAT (Module 10) ───
+@api_router.get("/messages/channels")
+async def list_message_channels():
+    return [
+        {"id": "general", "name": "General Newsroom", "description": "Global youth journalist discussion & pitches"},
+        {"id": "photojournalism", "name": "Visual & Photography Desk", "description": "Photojournalism tips, photo essays, and visual layout"},
+        {"id": "investigative", "name": "Investigative & Research", "description": "Deep-dives, public records, and fact-checking coordination"},
+        {"id": "campus-leads", "name": "Campus Leads & Editors", "description": "Newsroom leadership, Chapter updates, and event co-ops"}
+    ]
+
+@api_router.get("/messages/channel/{channel_id}")
+async def get_channel_messages(channel_id: str, user=Depends(optional_user)):
+    msgs = await db.messages.find({"$or": [{"channel": channel_id}, {"channel_id": channel_id}]}, {"_id": 0}).sort("created_at", -1).limit(60).to_list(60)
+    msgs.reverse()
+    return msgs
+
+@api_router.post("/messages")
+async def send_message(inp: MessageCreate, user=Depends(get_current_user)):
+    target_channel = inp.channel_id or inp.channel or "general"
+    msg = {
+        "id": make_id(),
+        "sender_id": user["id"],
+        "sender_name": user["name"],
+        "sender_role": user.get("role", "member"),
+        "channel": target_channel,
+        "channel_id": target_channel,
+        "recipient_id": inp.recipient_id,
+        "content": inp.content,
+        "attachment_url": inp.attachment_url,
+        "created_at": now_iso()
+    }
+    await db.messages.insert_one(msg)
+    if inp.recipient_id:
+        await create_notification(inp.recipient_id, f"New Message from {user['name']}", inp.content[:60], "/messages", "message")
+    return msg
+
+@api_router.get("/messages/dm/{recipient_id}")
+async def get_direct_messages(recipient_id: str, user=Depends(get_current_user)):
+    query = {
+        "$or": [
+            {"sender_id": user["id"], "recipient_id": recipient_id},
+            {"sender_id": recipient_id, "recipient_id": user["id"]}
+        ]
+    }
+    msgs = await db.messages.find(query, {"_id": 0}).sort("created_at", -1).limit(60).to_list(60)
+    msgs.reverse()
+    return msgs
 
 # Include router & middleware
 app.include_router(api_router)

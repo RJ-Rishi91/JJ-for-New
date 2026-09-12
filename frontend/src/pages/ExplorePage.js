@@ -71,14 +71,20 @@ export default function ExplorePage() {
               className="glass rounded-2xl overflow-hidden card-interactive animate-fade-in-up"
               style={{ animationDelay: `${i * 50}ms` }}
               data-testid={`story-card-${i}`}>
-              <div className="h-36 bg-gradient-to-br from-white/5 to-transparent flex items-center justify-center">
-                <span className="text-4xl opacity-30">{s.type === 'photo_essay' ? '📸' : s.type === 'video' ? '🎬' : s.type === 'field_report' ? '📍' : '✍️'}</span>
+              <div className="h-44 w-full bg-black/40 overflow-hidden relative">
+                {(s.thumbnail_url || s.cover_image) ? (
+                  <img src={s.thumbnail_url || s.cover_image} alt={s.title} className="w-full h-full object-cover transition duration-300 hover:scale-105" />
+                ) : (
+                  <div className="h-full bg-gradient-to-br from-white/5 to-transparent flex items-center justify-center">
+                    <span className="text-4xl opacity-30">{s.type === 'photo_essay' ? '📸' : s.type === 'video' ? '🎬' : s.type === 'field_report' ? '📍' : '✍️'}</span>
+                  </div>
+                )}
               </div>
               <div className="p-5">
                 <div className="flex gap-2 mb-2">
                   <span className="badge-pill">{s.type?.replace('_', ' ')}</span>
                 </div>
-                <h3 className="font-heading text-sm font-semibold mb-2 line-clamp-2">{s.title}</h3>
+                <h3 className="font-heading text-sm font-semibold mb-2 line-clamp-2 text-white">{s.title}</h3>
                 <div className="flex items-center justify-between text-xs text-[#A0A0AB]">
                   <span>by {s.author_name}</span>
                   <div className="flex items-center gap-3">

@@ -16,6 +16,8 @@ import ProfilePage from "./pages/ProfilePage";
 import DashboardPage from "./pages/DashboardPage";
 import CommunityPage from "./pages/CommunityPage";
 import SubmissionDetailPage from "./pages/SubmissionDetailPage";
+import ProjectsPage from "./pages/ProjectsPage";
+import MessagesPage from "./pages/MessagesPage";
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/explore" element={<ExplorePage />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/messages" element={<MessagesPage />} />
             <Route path="/submit" element={<SubmitPage />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/events/:id" element={<EventDetailPage />} />

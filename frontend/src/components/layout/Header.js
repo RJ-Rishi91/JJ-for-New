@@ -8,6 +8,8 @@ import { notifications as notifApi } from '../../lib/api';
 
 const navItems = [
   { label: 'Explore', path: '/explore' },
+  { label: 'Projects', path: '/projects' },
+  { label: 'Newsroom', path: '/messages' },
   { label: 'Events', path: '/events' },
   { label: 'Learn', path: '/learn' },
   { label: 'Opportunities', path: '/opportunities' },
