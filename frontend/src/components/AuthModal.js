@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import Logo from './common/Logo';
 import { X, Eye, EyeOff } from 'lucide-react';
 
 export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
@@ -38,7 +39,10 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
         <button onClick={onClose} className="absolute top-4 right-4 text-[#A0A0AB] hover:text-white transition" data-testid="auth-close-btn">
           <X size={20} />
         </button>
-        <h2 className="font-heading text-2xl font-bold mb-6" style={{ color: '#00FFA3' }}>
+        <div className="flex justify-center mb-5">
+          <Logo withLink={false} className="h-11 w-auto" />
+        </div>
+        <h2 className="font-heading text-2xl font-bold mb-6 text-center text-white">
           {tab === 'login' ? 'Welcome Back' : 'Join the Collective'}
         </h2>
         <div className="flex gap-2 mb-6">

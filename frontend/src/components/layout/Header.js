@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import AuthModal from '../AuthModal';
+import Logo from '../common/Logo';
 import { Menu, X, ChevronDown, Bell, Check, ExternalLink } from 'lucide-react';
 import { notifications as notifApi } from '../../lib/api';
 
@@ -58,12 +59,7 @@ export default function Header() {
     <>
       <header className="sticky top-0 z-50 bg-black/60 backdrop-blur-xl border-b border-white/10" data-testid="main-header">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2" data-testid="logo-link">
-            <div className="w-8 h-8 rounded-lg bg-[#00FFA3] flex items-center justify-center">
-              <span className="font-heading text-black font-black text-sm">JJ</span>
-            </div>
-            <span className="font-heading text-lg font-bold hidden sm:block">Junior<span className="text-[#00FFA3]">Journalist</span></span>
-          </Link>
+          <Logo className="h-9 w-auto" />
 
           <nav className="hidden lg:flex items-center gap-1" data-testid="desktop-nav">
             {navItems.map((item) => (
