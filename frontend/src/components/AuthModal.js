@@ -34,36 +34,36 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" data-testid="auth-modal">
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose} />
-      <div className="relative w-full max-w-md glass-card rounded-3xl p-8 animate-fade-in-up border border-white/20 shadow-[0_25px_60px_rgba(0,0,0,0.8)]">
-        <button onClick={onClose} className="absolute top-5 right-5 text-[#7B829A] hover:text-white transition" data-testid="auth-close-btn">
-          <X size={20} />
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative w-full max-w-md glass-card rounded-2xl p-6 sm:p-7 animate-fade-in-up border border-white/10 shadow-2xl">
+        <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-white transition" data-testid="auth-close-btn">
+          <X size={18} />
         </button>
-        <div className="flex justify-center mb-5">
-          <Logo withLink={false} className="h-10 w-auto" />
+        <div className="flex justify-center mb-4">
+          <Logo withLink={false} className="h-8 w-auto" />
         </div>
-        <h2 className="font-heading text-2xl font-bold mb-6 text-center text-white">
-          {tab === 'login' ? 'Welcome Back' : 'Join the Collective'}
+        <h2 className="font-heading text-xl font-bold mb-5 text-center text-white">
+          {tab === 'login' ? 'Welcome Back' : 'Join the Newsroom Collective'}
         </h2>
-        <div className="flex gap-2 mb-6 p-1 rounded-2xl glass border border-white/10">
+        <div className="flex gap-1.5 mb-5 p-1 rounded-lg glass border border-white/[0.08]">
           {['login', 'register'].map((t) => (
             <button key={t} onClick={() => { setTab(t); setError(''); }}
-              className={`flex-1 py-2.5 rounded-xl text-xs font-bold font-heading transition-all ${
+              className={`flex-1 py-1.5 rounded-md text-xs font-semibold font-heading transition-all ${
                 tab === t
-                  ? 'bg-[#ff2d55]/25 text-white border border-[#ff2d55]/40 shadow-[0_0_15px_rgba(255,45,85,0.3)]'
-                  : 'text-[#CBD0DC] hover:text-white border border-transparent'
+                  ? 'bg-white/[0.08] text-white border border-white/10 shadow-sm'
+                  : 'text-slate-400 hover:text-white'
               }`}
               data-testid={`auth-tab-${t}`}>
               {t === 'login' ? 'Sign In' : 'Create Account'}
             </button>
           ))}
         </div>
-        {error && <div className="mb-4 p-3.5 rounded-xl bg-[#FF3B30]/10 border border-[#FF3B30]/30 text-[#FF3B30] text-xs font-medium" data-testid="auth-error">{error}</div>}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {error && <div className="mb-3.5 p-2.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs" data-testid="auth-error">{error}</div>}
+        <form onSubmit={handleSubmit} className="space-y-3">
           {tab === 'register' && (
             <>
               <input className="input-dark text-xs" placeholder="Full Name" value={form.name} onChange={set('name')} required data-testid="auth-name-input" />
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2.5">
                 <input className="input-dark text-xs" placeholder="City" value={form.city} onChange={set('city')} data-testid="auth-city-input" />
                 <input className="input-dark text-xs" placeholder="School/College" value={form.school} onChange={set('school')} data-testid="auth-school-input" />
               </div>
@@ -71,25 +71,25 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
           )}
           <input className="input-dark text-xs" type="email" placeholder="Student or Personal Email" value={form.email} onChange={set('email')} required data-testid="auth-email-input" />
           <div className="relative">
-            <input className="input-dark text-xs pr-10" type={showPw ? 'text' : 'password'} placeholder="Password" value={form.password} onChange={set('password')} required data-testid="auth-password-input" />
-            <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#7B829A] hover:text-white">
-              {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+            <input className="input-dark text-xs pr-9" type={showPw ? 'text' : 'password'} placeholder="Password" value={form.password} onChange={set('password')} required data-testid="auth-password-input" />
+            <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
+              {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
             </button>
           </div>
-          <button type="submit" disabled={loading} className="btn-primary w-full text-xs py-3 font-bold" data-testid="auth-submit-btn">
-            {loading ? 'Authenticating...' : tab === 'login' ? 'Sign In to Portal' : 'Create Student Account'}
+          <button type="submit" disabled={loading} className="btn-primary w-full text-xs py-2.5" data-testid="auth-submit-btn">
+            {loading ? 'Authenticating...' : tab === 'login' ? 'Sign In' : 'Create Student Account'}
           </button>
 
           {tab === 'login' && (
-            <div className="pt-2">
+            <div className="pt-1.5">
               <button
                 type="button"
                 onClick={() => {
                   setForm({ ...form, email: 'editor@juniorjournalist.org', password: 'EditorPass123!' });
                 }}
-                className="w-full text-center text-xs text-[#ff758c] hover:underline font-mono py-1 flex items-center justify-center gap-1.5"
+                className="w-full text-center text-xs text-rose-400 hover:text-rose-300 hover:underline font-mono py-1 flex items-center justify-center gap-1.5"
               >
-                <Sparkles size={12} /> Fill Staff / Editor Credentials
+                <Sparkles size={12} /> Fill Demo Staff / Editor Credentials
               </button>
             </div>
           )}

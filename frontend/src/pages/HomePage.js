@@ -3,10 +3,29 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { homepage as homepageApi, projects as projectApi } from '../lib/api';
 import AuthModal from '../components/AuthModal';
-import { PenTool, Calendar, Trophy, Users, ArrowRight, Heart, Eye, Clock, Target, Sparkles, Compass, Zap } from 'lucide-react';
+import {
+  PenTool,
+  Calendar,
+  Trophy,
+  Users,
+  ArrowRight,
+  Heart,
+  Eye,
+  Clock,
+  Target,
+  MessageSquareText,
+  Mic,
+  BookmarkCheck,
+  Feather,
+  Compass,
+  Camera,
+  Flame,
+  ArrowUpRight,
+  ShieldCheck
+} from 'lucide-react';
 
 function SkeletonCard() {
-  return <div className="skeleton-pulse h-52 w-full rounded-3xl border border-white/10" />;
+  return <div className="skeleton-pulse h-48 w-full rounded-xl border border-white/5" />;
 }
 
 function CountdownTimer({ targetDate }) {
@@ -15,7 +34,11 @@ function CountdownTimer({ targetDate }) {
     const calc = () => {
       const diff = new Date(targetDate) - new Date();
       if (diff <= 0) return { days: 0, hours: 0, mins: 0 };
-      return { days: Math.floor(diff / 86400000), hours: Math.floor((diff % 86400000) / 3600000), mins: Math.floor((diff % 3600000) / 60000) };
+      return {
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor((diff % 86400000) / 3600000),
+        mins: Math.floor((diff % 3600000) / 60000)
+      };
     };
     setTimeLeft(calc());
     const i = setInterval(() => setTimeLeft(calc()), 60000);
@@ -23,11 +46,11 @@ function CountdownTimer({ targetDate }) {
   }, [targetDate]);
 
   return (
-    <div className="flex gap-2 font-mono text-sm" data-testid="countdown-timer">
+    <div className="flex items-center gap-1.5 font-mono text-xs" data-testid="countdown-timer">
       {Object.entries(timeLeft).map(([k, v]) => (
-        <div key={k} className="glass rounded-xl px-2.5 py-1 text-center min-w-[50px] border border-white/10 shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-          <span className="text-[#ff758c] font-bold text-base block font-mono">{String(v).padStart(2, '0')}</span>
-          <span className="text-[#7B829A] text-[9px] uppercase tracking-wider">{k}</span>
+        <div key={k} className="glass rounded-md px-2 py-0.5 text-center min-w-[36px] border border-white/10">
+          <span className="text-rose-400 font-semibold text-xs block font-mono">{String(v).padStart(2, '0')}</span>
+          <span className="text-slate-500 text-[8px] uppercase tracking-wider">{k}</span>
         </div>
       ))}
     </div>
@@ -46,80 +69,83 @@ export default function HomePage() {
     projectApi.list().then(r => setProjectsList(r.data || [])).catch(() => {});
   }, []);
 
+  // Human, editorial categories with bespoke Lucide icons instead of generic emojis
   const categories = [
-    { label: 'Opinion', icon: '💬', color: '#FF6B6B' },
-    { label: 'Campus Voices', icon: '🏫', color: '#4ECDC4' },
-    { label: 'Reviews', icon: '📖', color: '#FFD93D' },
-    { label: 'Creative Writing', icon: '✨', color: '#A55EEA' },
-    { label: 'Field Reports', icon: '📍', color: '#00D2D3' },
-    { label: 'Photo Essays', icon: '📸', color: '#FA8231' },
+    { label: 'Opinion', icon: <MessageSquareText size={17} strokeWidth={1.75} />, desc: 'Perspectives & commentary' },
+    { label: 'Campus Voices', icon: <Mic size={17} strokeWidth={1.75} />, desc: 'Student issues & interviews' },
+    { label: 'Reviews', icon: <BookmarkCheck size={17} strokeWidth={1.75} />, desc: 'Arts, literature & culture' },
+    { label: 'Creative Writing', icon: <Feather size={17} strokeWidth={1.75} />, desc: 'Fiction, essays & poetry' },
+    { label: 'Field Reports', icon: <Compass size={17} strokeWidth={1.75} />, desc: 'Local grassroots dispatches' },
+    { label: 'Photo Essays', icon: <Camera size={17} strokeWidth={1.75} />, desc: 'Visual documentary stories' },
   ];
 
   return (
-    <div className="min-h-screen text-white relative z-10" data-testid="home-page">
+    <div className="min-h-screen text-slate-100 relative z-10" data-testid="home-page">
       {/* Hero Section */}
-      <section className="relative pt-12 pb-24 lg:pt-20 lg:pb-32 overflow-hidden" data-testid="hero-section">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
+      <section className="relative pt-12 pb-20 lg:pt-16 lg:pb-24 border-b border-white/[0.06]" data-testid="hero-section">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="max-w-3xl">
-            {/* Ambient Pill Tag */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass border border-white/15 mb-6 animate-fade-in shadow-[0_0_20px_rgba(255,45,85,0.15)]">
-              <span className="w-2 h-2 rounded-full bg-[#ff2d55] animate-pulse shadow-[0_0_8px_#ff2d55]" />
-              <span className="text-xs font-semibold tracking-wider uppercase text-[#CBD0DC] flex items-center gap-1.5 font-heading">
-                Next-Gen Youth Media & Newsroom <Zap size={12} className="text-[#ff758c]" />
+            {/* Editorial Status Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md glass border border-white/10 mb-6 animate-fade-in">
+              <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-300 font-medium">
+                The Young Gazette Newsroom Collective
               </span>
             </div>
 
             {user ? (
-              <h1 className="font-heading text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] mb-6 animate-fade-in-up" data-testid="hero-greeting">
-                Hey {user.name?.split(' ')[0]},<br />
-                <span className="text-gradient-neon glow-text">ready to broadcast?</span>
+              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-5 animate-fade-in-up leading-[1.12]" data-testid="hero-greeting">
+                Welcome back, {user.name?.split(' ')[0]}.<br />
+                <span className="font-serif italic font-normal text-rose-300">Ready to break your next story?</span>
               </h1>
             ) : (
-              <h1 className="font-heading text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] mb-6 animate-fade-in-up" data-testid="hero-title">
+              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-5 animate-fade-in-up leading-[1.12]" data-testid="hero-title">
                 Your Voice.<br />
-                <span className="text-gradient-neon glow-text">Your Story.</span>
+                <span className="font-serif italic font-normal text-rose-300">Your Story.</span>
               </h1>
             )}
 
-            <p className="text-lg sm:text-xl text-[#CBD0DC] mb-10 max-w-xl font-normal leading-relaxed animate-fade-in-up delay-100" data-testid="hero-subtitle">
-              The youth-led creative ecosystem where student reporters write, investigate, collaborate, and build verified media authority.
+            <p className="text-base sm:text-lg text-slate-400 mb-8 max-w-xl font-normal leading-relaxed animate-fade-in-up delay-100" data-testid="hero-subtitle">
+              An independent youth journalism collective where student reporters publish investigations, lead campus desks, and earn verified editorial credentials.
             </p>
 
-            <div className="flex flex-wrap gap-4 animate-fade-in-up delay-200">
+            <div className="flex flex-wrap items-center gap-3 animate-fade-in-up delay-200">
               {user ? (
                 <>
-                  <Link to="/submit" className="btn-primary flex items-center gap-2.5 text-base px-7 py-3.5" data-testid="hero-submit-btn">
-                    <PenTool size={18} /> Start Writing
+                  <Link to="/submit" className="btn-primary" data-testid="hero-submit-btn">
+                    <PenTool size={15} strokeWidth={2} /> Start Writing
                   </Link>
-                  <Link to="/events" className="btn-ghost flex items-center gap-2.5 text-base px-7 py-3.5" data-testid="hero-events-btn">
-                    <Calendar size={18} /> Browse Events
+                  <Link to="/events" className="btn-ghost" data-testid="hero-events-btn">
+                    <Calendar size={15} strokeWidth={1.75} /> Browse Newsroom Events
                   </Link>
                 </>
               ) : (
                 <>
-                  <button onClick={() => setAuthOpen(true)} className="btn-primary flex items-center gap-2.5 text-base px-7 py-3.5" data-testid="hero-join-btn">
-                    Join the Collective <ArrowRight size={18} />
+                  <button onClick={() => setAuthOpen(true)} className="btn-primary" data-testid="hero-join-btn">
+                    Join the Collective <ArrowRight size={15} strokeWidth={2} />
                   </button>
-                  <Link to="/explore" className="btn-ghost flex items-center gap-2.5 text-base px-7 py-3.5" data-testid="hero-explore-btn">
-                    <Compass size={18} /> Explore Stories
+                  <Link to="/explore" className="btn-ghost" data-testid="hero-explore-btn">
+                    Explore Dispatches <ArrowUpRight size={15} strokeWidth={1.75} />
                   </Link>
                 </>
               )}
             </div>
           </div>
 
-          {/* Stats Bar in Frosted Glass */}
+          {/* Stats Bar */}
           {data?.stats && (
-            <div className="grid grid-cols-3 gap-4 sm:gap-6 mt-16 max-w-xl animate-fade-in-up delay-300" data-testid="stats-bar">
+            <div className="grid grid-cols-3 gap-3 sm:gap-4 mt-14 max-w-lg animate-fade-in-up delay-300" data-testid="stats-bar">
               {[
-                { label: 'Articles Published', value: data.stats.total_articles, icon: <PenTool size={18} className="text-[#ff758c]" /> },
-                { label: 'Active Events', value: data.stats.total_events, icon: <Calendar size={18} className="text-[#00f2fe]" /> },
-                { label: 'Global Members', value: data.stats.total_members, icon: <Users size={18} className="text-[#ff8a00]" /> },
+                { label: 'Articles Published', value: data.stats.total_articles, icon: <PenTool size={15} strokeWidth={1.75} className="text-rose-400" /> },
+                { label: 'Active Desks & Events', value: data.stats.total_events, icon: <Calendar size={15} strokeWidth={1.75} className="text-amber-400" /> },
+                { label: 'Student Reporters', value: data.stats.total_members, icon: <Users size={15} strokeWidth={1.75} className="text-indigo-400" /> },
               ].map((s) => (
-                <div key={s.label} className="glass-card rounded-2xl p-5 text-center card-interactive border border-white/12">
-                  <div className="flex items-center justify-center mb-2">{s.icon}</div>
-                  <div className="font-heading text-2xl sm:text-3xl font-black text-white">{s.value}</div>
-                  <div className="text-[11px] text-[#7B829A] uppercase tracking-wider font-semibold mt-0.5">{s.label}</div>
+                <div key={s.label} className="glass-card p-4 card-interactive border border-white/[0.08]">
+                  <div className="flex items-center gap-2 mb-1">
+                    {s.icon}
+                    <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">{s.label}</span>
+                  </div>
+                  <div className="font-heading text-2xl font-bold text-white">{s.value}</div>
                 </div>
               ))}
             </div>
@@ -127,73 +153,86 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Quick Categories */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10" data-testid="categories-section">
-        <div className="overline mb-4 flex items-center gap-2">
-          <Sparkles size={13} /> Explore by Topic
+      {/* Explore by Topic */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12" data-testid="categories-section">
+        <div className="flex items-center justify-between mb-5">
+          <div className="overline">01 / Explore by Desk</div>
+          <Link to="/explore" className="text-xs text-slate-400 hover:text-white transition flex items-center gap-1 font-medium">
+            All Desks <ArrowRight size={13} />
+          </Link>
         </div>
-        <div className="flex gap-3.5 overflow-x-auto no-scrollbar pb-3">
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           {categories.map((cat) => (
-            <Link key={cat.label} to={`/explore?category=${cat.label.toLowerCase().replace(' ', '_')}`}
-              className="glass-card rounded-2xl px-6 py-4 flex items-center gap-3.5 min-w-[200px] card-interactive whitespace-nowrap border border-white/10"
-              data-testid={`category-${cat.label.toLowerCase().replace(' ', '-')}`}>
-              <span className="text-2xl filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.4)]">{cat.icon}</span>
-              <span className="text-sm font-bold font-heading text-white">{cat.label}</span>
+            <Link
+              key={cat.label}
+              to={`/explore?category=${cat.label.toLowerCase().replace(' ', '_')}`}
+              className="glass-card p-3.5 card-interactive flex flex-col justify-between border border-white/[0.08] hover:border-rose-500/30"
+              data-testid={`category-${cat.label.toLowerCase().replace(' ', '-')}`}
+            >
+              <div className="icon-box mb-3">
+                {cat.icon}
+              </div>
+              <div>
+                <h3 className="text-xs font-semibold text-white font-heading mb-0.5">{cat.label}</h3>
+                <p className="text-[10px] text-slate-400 line-clamp-1">{cat.desc}</p>
+              </div>
             </Link>
           ))}
         </div>
       </section>
 
       {/* Featured Stories */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14" data-testid="featured-section">
-        <div className="flex items-center justify-between mb-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 border-t border-white/[0.06]" data-testid="featured-section">
+        <div className="flex items-end justify-between mb-7">
           <div>
-            <div className="overline mb-1.5">Curated Highlights</div>
-            <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-white">Featured Stories</h2>
+            <div className="overline mb-1">02 / Editor's Selection</div>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">Lead Dispatches</h2>
           </div>
-          <Link to="/explore" className="text-[#ff758c] hover:text-white text-sm font-semibold flex items-center gap-1.5 transition" data-testid="see-all-stories">
-            See All Stories <ArrowRight size={15} />
+          <Link to="/explore" className="text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1 transition" data-testid="see-all-stories">
+            View All Dispatches <ArrowRight size={13} />
           </Link>
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[1, 2, 3].map(i => <SkeletonCard key={i} />)}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {(data?.featured || []).slice(0, 3).map((s, i) => (
-              <Link key={s.id} to={`/submissions/${s.id}`}
-                className="glass-card rounded-3xl overflow-hidden card-interactive animate-fade-in-up border border-white/12 flex flex-col justify-between"
-                style={{ animationDelay: `${i * 120}ms` }}
-                data-testid={`featured-story-${i}`}>
-                <div className="h-48 w-full bg-black/40 overflow-hidden relative">
+              <Link
+                key={s.id}
+                to={`/submissions/${s.id}`}
+                className="glass-card overflow-hidden card-interactive animate-fade-in-up flex flex-col justify-between border border-white/[0.08]"
+                style={{ animationDelay: `${i * 100}ms` }}
+                data-testid={`featured-story-${i}`}
+              >
+                <div className="h-44 w-full bg-slate-900 overflow-hidden relative">
                   {(s.thumbnail_url || s.cover_image) ? (
-                    <img src={s.thumbnail_url || s.cover_image} alt={s.title} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+                    <img src={s.thumbnail_url || s.cover_image} alt={s.title} className="w-full h-full object-cover transition-transform duration-300 hover:scale-105" />
                   ) : (
-                    <div className="h-full bg-gradient-to-br from-[#ff2d55]/20 to-[#7000ff]/20 flex items-center justify-center">
-                      <PenTool size={36} className="text-[#ff758c]/40" />
+                    <div className="h-full bg-slate-900 flex items-center justify-center">
+                      <PenTool size={28} className="text-slate-600" />
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0618] via-transparent to-transparent opacity-80" />
+                  <div className="absolute top-3 left-3 flex gap-1.5">
+                    <span className="badge-pill bg-slate-950/80 backdrop-blur-md">{s.type}</span>
+                    <span className="badge-pill bg-slate-950/80 backdrop-blur-md text-slate-300 border-white/10">{s.category}</span>
+                  </div>
                 </div>
-                <div className="p-6 flex-1 flex flex-col justify-between">
+
+                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                   <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="badge-pill">{s.type}</span>
-                      <span className="badge-pill" style={{ borderColor: 'rgba(0,242,254,0.3)', color: '#00f2fe', background: 'rgba(0,242,254,0.1)' }}>
-                        {s.category}
-                      </span>
-                    </div>
-                    <h3 className="font-heading text-lg font-bold mb-3 line-clamp-2 text-white group-hover:text-[#ff758c] transition">
+                    <h3 className="font-heading text-sm sm:text-base font-bold mb-2 text-white line-clamp-2 leading-snug">
                       {s.title}
                     </h3>
                   </div>
-                  <div className="flex items-center justify-between text-xs text-[#7B829A] pt-4 border-t border-white/10">
-                    <span className="font-medium text-[#CBD0DC]">by {s.author_name}</span>
-                    <div className="flex items-center gap-3 font-mono">
-                      <span className="flex items-center gap-1"><Eye size={13} className="text-[#CBD0DC]" />{s.views}</span>
-                      <span className="flex items-center gap-1"><Heart size={13} className="text-[#ff2d55]" />{(s.reactions?.heart || 0) + (s.reactions?.fire || 0)}</span>
+                  <div className="flex items-center justify-between text-xs text-slate-400 pt-3 mt-3 border-t border-white/[0.06]">
+                    <span className="font-medium text-slate-300 text-[11px]">By {s.author_name}</span>
+                    <div className="flex items-center gap-2.5 text-[11px] font-mono">
+                      <span className="flex items-center gap-1"><Eye size={12} />{s.views}</span>
+                      <span className="flex items-center gap-1 text-rose-400"><Heart size={12} />{(s.reactions?.heart || 0) + (s.reactions?.fire || 0)}</span>
                     </div>
                   </div>
                 </div>
@@ -205,63 +244,59 @@ export default function HomePage() {
 
       {/* Active Campaigns & Collaborative Projects */}
       {projectsList.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14" data-testid="campaigns-section">
-          <div className="flex items-center justify-between mb-8">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 border-t border-white/[0.06]" data-testid="campaigns-section">
+          <div className="flex items-end justify-between mb-7">
             <div>
-              <div className="overline mb-1.5 flex items-center gap-1.5">
-                <Sparkles size={13} /> Investigative Drives
-              </div>
-              <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-white">Active Campaigns & Reporting Drives</h2>
+              <div className="overline mb-1">03 / Collaborative Desks</div>
+              <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">Investigative Reporting Drives</h2>
             </div>
-            <Link to="/projects" className="text-[#ff758c] hover:text-white text-sm font-semibold flex items-center gap-1.5 transition" data-testid="see-all-campaigns">
-              View All Drives <ArrowRight size={15} />
+            <Link to="/projects" className="text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1 transition" data-testid="see-all-campaigns">
+              All Active Drives <ArrowRight size={13} />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {projectsList.slice(0, 3).map((proj, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {projectsList.slice(0, 3).map((proj) => (
               <Link
                 key={proj.id}
                 to="/projects"
-                className="glass-card rounded-3xl overflow-hidden card-interactive flex flex-col justify-between border border-white/12 hover:border-[#ff2d55]/40"
+                className="glass-card overflow-hidden card-interactive flex flex-col justify-between border border-white/[0.08]"
               >
-                <div className="h-44 relative bg-black/40 overflow-hidden">
+                <div className="h-40 relative bg-slate-900 overflow-hidden">
                   {proj.cover_image ? (
-                    <img src={proj.cover_image} alt={proj.title} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+                    <img src={proj.cover_image} alt={proj.title} className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-[#ff2d55]/20 to-[#00f2fe]/20 flex items-center justify-center">
-                      <Target size={36} className="text-[#ff758c]/40" />
+                    <div className="w-full h-full bg-slate-900 flex items-center justify-center">
+                      <Target size={28} className="text-slate-600" />
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0618] via-transparent to-transparent opacity-75" />
-                  <div className="absolute top-3.5 left-3.5">
-                    <span className="badge-pill bg-black/60 backdrop-blur-md text-[#ff758c] text-[10px] uppercase">
+                  <div className="absolute top-3 left-3">
+                    <span className="badge-pill bg-slate-950/80 backdrop-blur-md text-[10px]">
                       {proj.category}
                     </span>
                   </div>
-                  <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-mono text-white flex items-center gap-1.5 border border-white/10 shadow-lg">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#ff2d55] animate-pulse" />
-                    {proj.progress || 0}%
+                  <div className="absolute bottom-2.5 right-3 bg-slate-950/85 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-mono text-slate-300 border border-white/10">
+                    {proj.progress || 0}% Filed
                   </div>
                 </div>
 
-                <div className="p-6 flex-1 flex flex-col justify-between">
+                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="font-heading text-base font-bold text-white mb-2 line-clamp-2">{proj.title}</h3>
-                    <p className="text-xs text-[#CBD0DC] mb-5 line-clamp-2 leading-relaxed">{proj.description}</p>
+                    <h3 className="font-heading text-sm font-bold text-white mb-1.5 line-clamp-2">{proj.title}</h3>
+                    <p className="text-xs text-slate-400 mb-4 line-clamp-2 leading-relaxed">{proj.description}</p>
                   </div>
 
                   <div>
-                    <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden mb-3.5 shadow-inner">
+                    <div className="w-full bg-white/[0.08] rounded-full h-1.5 overflow-hidden mb-3">
                       <div
-                        className="bg-gradient-to-r from-[#ff2d55] via-[#ff0844] to-[#ff8a00] h-2 rounded-full shadow-[0_0_10px_rgba(255,45,85,0.5)]"
+                        className="bg-rose-500 h-1.5 rounded-full"
                         style={{ width: `${Math.min(100, Math.max(5, proj.progress || 0))}%` }}
                       />
                     </div>
-                    <div className="flex items-center justify-between text-xs text-[#7B829A]">
-                      <span>{proj.team?.length || 1} team contributors</span>
-                      <span className="text-[#ff758c] font-bold flex items-center gap-1">
-                        Join Drive <ArrowRight size={12} />
+                    <div className="flex items-center justify-between text-[11px] text-slate-400">
+                      <span>{proj.team?.length || 1} contributors</span>
+                      <span className="text-rose-400 font-semibold flex items-center gap-0.5">
+                        Join Desk <ArrowRight size={11} />
                       </span>
                     </div>
                   </div>
@@ -273,43 +308,46 @@ export default function HomePage() {
       )}
 
       {/* Upcoming Events */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14" data-testid="events-section">
-        <div className="flex items-center justify-between mb-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 border-t border-white/[0.06]" data-testid="events-section">
+        <div className="flex items-end justify-between mb-7">
           <div>
-            <div className="overline mb-1.5">Workshops & Sprints</div>
-            <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-white">Upcoming Events</h2>
+            <div className="overline mb-1">04 / Masterclasses & Deadlines</div>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">Upcoming Newsroom Events</h2>
           </div>
-          <Link to="/events" className="text-[#ff758c] hover:text-white text-sm font-semibold flex items-center gap-1.5 transition" data-testid="see-all-events">
-            View All Events <ArrowRight size={15} />
+          <Link to="/events" className="text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1 transition" data-testid="see-all-events">
+            Full Calendar <ArrowRight size={13} />
           </Link>
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {[1, 2].map(i => <SkeletonCard key={i} />)}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {(data?.upcoming_events || []).map((ev, i) => (
-              <Link key={ev.id} to={`/events/${ev.id}`}
-                className="glass-card rounded-3xl p-7 card-interactive animate-fade-in-up border border-white/12"
-                style={{ animationDelay: `${i * 120}ms` }}
-                data-testid={`event-card-${i}`}>
-                <div className="flex items-start justify-between mb-4">
+              <Link
+                key={ev.id}
+                to={`/events/${ev.id}`}
+                className="glass-card p-5 card-interactive animate-fade-in-up border border-white/[0.08]"
+                style={{ animationDelay: `${i * 100}ms` }}
+                data-testid={`event-card-${i}`}
+              >
+                <div className="flex items-start justify-between mb-3">
                   <div>
-                    <span className="badge-pill mb-2.5">{ev.type}</span>
-                    <h3 className="font-heading text-xl font-bold text-white mt-1">{ev.title}</h3>
+                    <span className="badge-pill mb-2">{ev.type}</span>
+                    <h3 className="font-heading text-base font-bold text-white mt-1">{ev.title}</h3>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs text-[#CBD0DC] glass px-3 py-1.5 rounded-full border border-white/10">
-                    <Users size={14} className="text-[#00f2fe]" /> {ev.team_members?.length || 0}/{ev.max_team}
+                  <div className="flex items-center gap-1 text-xs text-slate-400 font-mono">
+                    <Users size={13} /> {ev.team_members?.length || 0}/{ev.max_team}
                   </div>
                 </div>
-                <p className="text-sm text-[#CBD0DC] mb-6 line-clamp-2 leading-relaxed">{ev.description}</p>
+                <p className="text-xs text-slate-400 mb-4 line-clamp-2 leading-relaxed">{ev.description}</p>
                 {ev.end_date && (
-                  <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-white/10">
-                    <div className="flex items-center gap-1.5 text-xs text-[#7B829A]">
-                      <Clock size={14} className="text-[#ff8a00]" />
-                      <span>Registration Deadline:</span>
+                  <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-white/[0.06]">
+                    <div className="flex items-center gap-1 text-[11px] text-slate-400">
+                      <Clock size={13} className="text-amber-400" />
+                      <span>Closes in:</span>
                     </div>
                     <CountdownTimer targetDate={ev.end_date} />
                   </div>
@@ -321,36 +359,41 @@ export default function HomePage() {
       </section>
 
       {/* Opportunities */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14" data-testid="opportunities-section">
-        <div className="flex items-center justify-between mb-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 border-t border-white/[0.06]" data-testid="opportunities-section">
+        <div className="flex items-end justify-between mb-7">
           <div>
-            <div className="overline mb-1.5">Career & Fellowships</div>
-            <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-white">Opportunities</h2>
+            <div className="overline mb-1">05 / Growth Pathways</div>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">Fellowships & Grants</h2>
           </div>
-          <Link to="/opportunities" className="text-[#ff758c] hover:text-white text-sm font-semibold flex items-center gap-1.5 transition" data-testid="see-all-opps">
-            Browse All <ArrowRight size={15} />
+          <Link to="/opportunities" className="text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1 transition" data-testid="see-all-opps">
+            Browse All <ArrowRight size={13} />
           </Link>
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[1, 2, 3, 4].map(i => <SkeletonCard key={i} />)}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {(data?.opportunities || []).map((opp, i) => (
-              <div key={opp.id} className="glass-card rounded-2xl p-6 card-interactive animate-fade-in-up border border-white/10 flex flex-col justify-between" style={{ animationDelay: `${i * 100}ms` }} data-testid={`opp-card-${i}`}>
+              <div
+                key={opp.id}
+                className="glass-card p-4 card-interactive animate-fade-in-up border border-white/[0.08] flex flex-col justify-between"
+                style={{ animationDelay: `${i * 80}ms` }}
+                data-testid={`opp-card-${i}`}
+              >
                 <div>
-                  <div className="badge-pill mb-3" style={{
-                    borderColor: opp.type === 'internship' ? 'rgba(0,242,254,0.3)' : opp.type === 'scholarship' ? 'rgba(255,138,0,0.3)' : 'rgba(255,45,85,0.3)',
-                    color: opp.type === 'internship' ? '#00f2fe' : opp.type === 'scholarship' ? '#ff8a00' : '#ff758c',
-                    background: opp.type === 'internship' ? 'rgba(0,242,254,0.1)' : opp.type === 'scholarship' ? 'rgba(255,138,0,0.1)' : 'rgba(255,45,85,0.1)',
+                  <div className="badge-pill mb-2.5 text-[10px]" style={{
+                    borderColor: opp.type === 'internship' ? 'rgba(99,102,241,0.3)' : opp.type === 'scholarship' ? 'rgba(245,158,11,0.3)' : 'rgba(244,63,94,0.3)',
+                    color: opp.type === 'internship' ? '#818cf8' : opp.type === 'scholarship' ? '#fbbf24' : '#fda4af',
+                    background: opp.type === 'internship' ? 'rgba(99,102,241,0.08)' : opp.type === 'scholarship' ? 'rgba(245,158,11,0.08)' : 'rgba(244,63,94,0.08)',
                   }}>{opp.type}</div>
-                  <h4 className="font-heading text-base font-bold mb-1.5 text-white">{opp.title}</h4>
-                  <p className="text-xs text-[#CBD0DC] mb-4">{opp.organization}</p>
+                  <h4 className="font-heading text-xs font-bold mb-1 text-white line-clamp-2">{opp.title}</h4>
+                  <p className="text-[11px] text-slate-400 mb-3">{opp.organization}</p>
                 </div>
                 {opp.deadline && (
-                  <p className="text-[11px] text-[#ff8a00] font-mono pt-3 border-t border-white/10">
+                  <p className="text-[10px] text-amber-400 font-mono pt-2 border-t border-white/[0.06]">
                     Deadline: {new Date(opp.deadline).toLocaleDateString()}
                   </p>
                 )}
@@ -360,34 +403,37 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* Top Writers / Leaderboard Preview */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14 pb-24" data-testid="writers-section">
-        <div className="flex items-center justify-between mb-8">
+      {/* Top Reporters / Community Leaderboard */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 pb-20 border-t border-white/[0.06]" data-testid="writers-section">
+        <div className="flex items-end justify-between mb-7">
           <div>
-            <div className="overline mb-1.5">Hall of Fame</div>
-            <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-white">Top Reporters</h2>
+            <div className="overline mb-1">06 / Newsroom Ranks</div>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">Top Reporters</h2>
           </div>
-          <Link to="/community" className="text-[#ff758c] hover:text-white text-sm font-semibold flex items-center gap-1.5 transition" data-testid="see-leaderboard">
-            Full Leaderboard <ArrowRight size={15} />
+          <Link to="/community" className="text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1 transition" data-testid="see-leaderboard">
+            Full Leaderboard <ArrowRight size={13} />
           </Link>
         </div>
 
-        <div className="flex gap-4 overflow-x-auto no-scrollbar pb-3">
+        <div className="flex gap-3.5 overflow-x-auto no-scrollbar pb-2">
           {(data?.top_writers || []).map((w, i) => (
-            <Link key={w.id} to={`/profile/${w.id}`}
-              className="glass-card rounded-2xl p-6 min-w-[210px] text-center card-interactive animate-fade-in-up border border-white/12"
-              style={{ animationDelay: `${i * 100}ms` }}
-              data-testid={`top-writer-${i}`}>
-              <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#ff2d55]/30 to-[#ff8a00]/30 border-2 border-[#ff2d55]/40 flex items-center justify-center mx-auto mb-3.5 shadow-[0_0_15px_rgba(255,45,85,0.3)]">
-                <span className="font-heading text-xl font-black text-white">{w.name?.[0]?.toUpperCase()}</span>
+            <Link
+              key={w.id}
+              to={`/profile/${w.id}`}
+              className="glass-card p-4 min-w-[180px] text-center card-interactive animate-fade-in-up border border-white/[0.08]"
+              style={{ animationDelay: `${i * 80}ms` }}
+              data-testid={`top-writer-${i}`}
+            >
+              <div className="w-12 h-12 rounded-full bg-slate-800 border border-white/15 flex items-center justify-center mx-auto mb-2.5">
+                <span className="font-heading text-base font-bold text-slate-200">{w.name?.[0]?.toUpperCase()}</span>
               </div>
-              <h4 className="font-heading text-sm font-bold mb-1 text-white truncate">{w.name}</h4>
-              <div className="flex items-center justify-center gap-1 text-[#ff758c] font-mono text-xs font-bold mb-2">
-                <Trophy size={13} /> {w.lifetime_xp} XP
+              <h4 className="font-heading text-xs font-bold mb-1 text-white truncate">{w.name}</h4>
+              <div className="flex items-center justify-center gap-1 text-rose-400 font-mono text-[11px] font-semibold mb-2">
+                <Trophy size={11} /> {w.lifetime_xp} XP
               </div>
               <div className="flex flex-wrap gap-1 justify-center">
                 {(w.role_tags || []).slice(0, 2).map(t => (
-                  <span key={t} className="text-[9px] px-2 py-0.5 rounded-full bg-white/10 text-[#CBD0DC] font-medium">{t}</span>
+                  <span key={t} className="text-[9px] px-1.5 py-0.5 rounded bg-white/[0.06] text-slate-400 font-mono">{t}</span>
                 ))}
               </div>
             </Link>
@@ -395,26 +441,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Floating CTA Section */}
+      {/* Editorial Mission Callout */}
       {!user && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 pb-32" data-testid="cta-section">
-          <div className="glass-card rounded-3xl p-10 sm:p-16 text-center relative overflow-hidden border border-white/20 shadow-[0_30px_70px_rgba(0,0,0,0.7)]">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#ff2d55]/15 via-transparent to-[#ff8a00]/15 pointer-events-none" />
-            <div className="relative z-10 max-w-2xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass border border-white/20 mb-6">
-                <Sparkles size={14} className="text-[#ff758c]" />
-                <span className="text-xs font-bold tracking-wider uppercase text-white font-heading">
-                  Join 1,000+ Student Journalists
-                </span>
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 pb-24" data-testid="cta-section">
+          <div className="glass-card p-8 sm:p-12 text-center border border-white/10 relative overflow-hidden">
+            <div className="max-w-xl mx-auto">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-mono text-rose-300 bg-rose-500/10 border border-rose-500/20 mb-4">
+                <ShieldCheck size={13} /> Young Gazette Publishing Ecosystem
               </div>
-              <h2 className="font-heading text-3xl sm:text-5xl font-black tracking-tight mb-4 text-white">
-                Ready to Join the Movement?
+              <h2 className="font-heading text-2xl sm:text-4xl font-bold tracking-tight mb-3 text-white">
+                Built by Student Journalists.<br />
+                <span className="font-serif italic font-normal text-rose-300">Read by Global Audiences.</span>
               </h2>
-              <p className="text-[#CBD0DC] mb-8 text-base sm:text-lg leading-relaxed">
-                Publish articles, lead investigative teams, unlock verified achievements, and showcase your digital portfolio to top colleges and media outlets.
+              <p className="text-slate-400 mb-6 text-sm leading-relaxed">
+                Publish investigative reports, collaborate across campus chapters, earn verified editorial credentials, and showcase your digital portfolio.
               </p>
-              <button onClick={() => setAuthOpen(true)} className="btn-primary text-base px-9 py-4 font-bold shadow-2xl" data-testid="cta-join-btn">
-                Get Started Free <ArrowRight size={20} className="inline ml-2" />
+              <button onClick={() => setAuthOpen(true)} className="btn-primary" data-testid="cta-join-btn">
+                Apply for Reporter Access <ArrowRight size={15} />
               </button>
             </div>
           </div>

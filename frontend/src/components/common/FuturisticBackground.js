@@ -3,110 +3,84 @@ import gsap from 'gsap';
 
 export default function FuturisticBackground() {
   const containerRef = useRef(null);
-  const blob1Ref = useRef(null);
-  const blob2Ref = useRef(null);
-  const blob3Ref = useRef(null);
-  const blob4Ref = useRef(null);
-  const blob5Ref = useRef(null);
+  const leak1Ref = useRef(null);
+  const leak2Ref = useRef(null);
+  const leak3Ref = useRef(null);
+  const leak4Ref = useRef(null);
 
   useEffect(() => {
-    // 1. Continuous organic floating animation for blobs
     const ctx = gsap.context(() => {
-      // Blob 1: Hot Pink / Magenta (#ff2d55)
-      gsap.to(blob1Ref.current, {
-        x: '+=90',
-        y: '-=60',
-        scale: 1.15,
-        rotation: 45,
-        duration: 8,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      });
-
-      // Blob 2: Deep Electric Purple / Indigo (#7000ff)
-      gsap.to(blob2Ref.current, {
-        x: '-=110',
-        y: '+=80',
-        scale: 1.25,
-        rotation: -60,
-        duration: 11,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      });
-
-      // Blob 3: Neon Cyan / Blue (#00f2fe)
-      gsap.to(blob3Ref.current, {
-        x: '+=80',
-        y: '+=100',
-        scale: 0.9,
-        duration: 9.5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      });
-
-      // Blob 4: Vivid Crimson / Fire Red (#ff0844)
-      gsap.to(blob4Ref.current, {
-        x: '-=70',
-        y: '-=90',
-        scale: 1.2,
-        rotation: 30,
-        duration: 13,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      });
-
-      // Blob 5: Amber / Golden Core Glow (#ff8a00)
-      gsap.to(blob5Ref.current, {
-        x: '+=50',
+      // 1. Organic, slow breathing atmospheric light leaks
+      gsap.to(leak1Ref.current, {
+        x: '+=60',
         y: '-=40',
-        scale: 1.1,
-        duration: 7,
+        scale: 1.08,
+        duration: 14,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      });
+
+      gsap.to(leak2Ref.current, {
+        x: '-=70',
+        y: '+=50',
+        scale: 1.12,
+        duration: 18,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      });
+
+      gsap.to(leak3Ref.current, {
+        x: '+=50',
+        y: '+=60',
+        scale: 0.95,
+        duration: 16,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      });
+
+      gsap.to(leak4Ref.current, {
+        x: '-=40',
+        y: '-=50',
+        scale: 1.06,
+        duration: 20,
         repeat: -1,
         yoyo: true,
         ease: 'sine.inOut',
       });
     }, containerRef);
 
-    // 2. Interactive mouse parallax
+    // 2. High-inertia subtle mouse parallax
     const handleMouseMove = (e) => {
       const { innerWidth, innerHeight } = window;
-      const mouseX = (e.clientX / innerWidth - 0.5) * 2; // -1 to 1
-      const mouseY = (e.clientY / innerHeight - 0.5) * 2; // -1 to 1
+      const mouseX = (e.clientX / innerWidth - 0.5) * 2;
+      const mouseY = (e.clientY / innerHeight - 0.5) * 2;
 
-      // Subtle parallax offset with damped easing
-      gsap.to(blob1Ref.current, {
-        xPercent: mouseX * 25,
-        yPercent: mouseY * 25,
-        duration: 1.6,
-        ease: 'power2.out',
+      gsap.to(leak1Ref.current, {
+        xPercent: mouseX * 14,
+        yPercent: mouseY * 14,
+        duration: 2.4,
+        ease: 'power1.out',
       });
-      gsap.to(blob2Ref.current, {
-        xPercent: -mouseX * 30,
-        yPercent: -mouseY * 30,
-        duration: 2.0,
-        ease: 'power2.out',
+      gsap.to(leak2Ref.current, {
+        xPercent: -mouseX * 18,
+        yPercent: -mouseY * 18,
+        duration: 2.8,
+        ease: 'power1.out',
       });
-      gsap.to(blob3Ref.current, {
-        xPercent: mouseX * 40,
-        yPercent: -mouseY * 20,
-        duration: 1.4,
-        ease: 'power2.out',
-      });
-      gsap.to(blob4Ref.current, {
-        xPercent: -mouseX * 35,
-        yPercent: mouseY * 35,
+      gsap.to(leak3Ref.current, {
+        xPercent: mouseX * 22,
+        yPercent: -mouseY * 12,
         duration: 2.2,
-        ease: 'power2.out',
+        ease: 'power1.out',
       });
-      gsap.to(blob5Ref.current, {
-        xPercent: mouseX * 15,
+      gsap.to(leak4Ref.current, {
+        xPercent: -mouseX * 15,
         yPercent: mouseY * 15,
-        duration: 1.8,
-        ease: 'power2.out',
+        duration: 3.0,
+        ease: 'power1.out',
       });
     };
 
@@ -123,100 +97,84 @@ export default function FuturisticBackground() {
       ref={containerRef}
       className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none"
       style={{
-        background: 'radial-gradient(ellipse at 50% 0%, #170d2b 0%, #0c0819 45%, #05030a 100%)',
+        background: 'radial-gradient(ellipse at 50% -10%, #17112c 0%, #0c0918 45%, #07050e 100%)',
       }}
       aria-hidden="true"
     >
-      {/* Dimensional Grid / Sub-mesh Overlay */}
+      {/* Film grain noise filter for physical warmth and tactile soul */}
+      <svg className="absolute inset-0 w-full h-full opacity-[0.035] pointer-events-none">
+        <filter id="filmGrain">
+          <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#filmGrain)" />
+      </svg>
+
+      {/* Atmospheric Light Leak 1: Warm Rose & Crimson (Editorial Warmth) */}
       <div
-        className="absolute inset-0 opacity-[0.03]"
+        ref={leak1Ref}
+        className="absolute rounded-full blur-[160px] opacity-[0.22] will-change-transform"
         style={{
-          backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px)`,
-          backgroundSize: '64px 64px',
+          width: '52vw',
+          height: '52vw',
+          maxWidth: '680px',
+          maxHeight: '680px',
+          top: '-8%',
+          left: '8%',
+          background: 'radial-gradient(circle, #e11d48 0%, #be123c 45%, transparent 75%)',
         }}
       />
 
-      {/* Blob 1: Magenta / Pink */}
+      {/* Atmospheric Light Leak 2: Rich Editorial Indigo */}
       <div
-        ref={blob1Ref}
-        className="absolute rounded-full blur-[130px] opacity-45 will-change-transform"
+        ref={leak2Ref}
+        className="absolute rounded-full blur-[180px] opacity-[0.24] will-change-transform"
         style={{
           width: '55vw',
           height: '55vw',
-          maxWidth: '650px',
-          maxHeight: '650px',
-          top: '-10%',
-          left: '5%',
-          background: 'radial-gradient(circle, #ff2d55 0%, #d81b60 60%, transparent 80%)',
+          maxWidth: '720px',
+          maxHeight: '720px',
+          top: '8%',
+          right: '-6%',
+          background: 'radial-gradient(circle, #4f46e5 0%, #312e81 50%, transparent 75%)',
         }}
       />
 
-      {/* Blob 2: Deep Violet / Purple */}
+      {/* Atmospheric Light Leak 3: Subtle Warm Amber Glow */}
       <div
-        ref={blob2Ref}
-        className="absolute rounded-full blur-[140px] opacity-45 will-change-transform"
+        ref={leak3Ref}
+        className="absolute rounded-full blur-[150px] opacity-[0.14] will-change-transform"
         style={{
-          width: '60vw',
-          height: '60vw',
-          maxWidth: '750px',
-          maxHeight: '750px',
-          top: '10%',
-          right: '-10%',
-          background: 'radial-gradient(circle, #7000ff 0%, #302b63 60%, transparent 80%)',
+          width: '42vw',
+          height: '42vw',
+          maxWidth: '520px',
+          maxHeight: '520px',
+          top: '40%',
+          left: '25%',
+          background: 'radial-gradient(circle, #d97706 0%, #b45309 45%, transparent 70%)',
         }}
       />
 
-      {/* Blob 3: Vibrant Cyan / Ice Blue */}
+      {/* Atmospheric Light Leak 4: Soft Deep Violet */}
       <div
-        ref={blob3Ref}
-        className="absolute rounded-full blur-[120px] opacity-35 will-change-transform"
+        ref={leak4Ref}
+        className="absolute rounded-full blur-[170px] opacity-[0.20] will-change-transform"
         style={{
-          width: '45vw',
-          height: '45vw',
-          maxWidth: '550px',
-          maxHeight: '550px',
-          top: '45%',
-          left: '-5%',
-          background: 'radial-gradient(circle, #00f2fe 0%, #4facfe 50%, transparent 75%)',
-        }}
-      />
-
-      {/* Blob 4: Crimson / Neon Red */}
-      <div
-        ref={blob4Ref}
-        className="absolute rounded-full blur-[150px] opacity-40 will-change-transform"
-        style={{
-          width: '50vw',
-          height: '50vw',
-          maxWidth: '650px',
-          maxHeight: '650px',
+          width: '48vw',
+          height: '48vw',
+          maxWidth: '620px',
+          maxHeight: '620px',
           bottom: '-5%',
-          right: '5%',
-          background: 'radial-gradient(circle, #ff0844 0%, #ff4b1f 60%, transparent 80%)',
+          right: '10%',
+          background: 'radial-gradient(circle, #7c3aed 0%, #4c1d95 50%, transparent 75%)',
         }}
       />
 
-      {/* Blob 5: Amber / Golden Glow Accent */}
-      <div
-        ref={blob5Ref}
-        className="absolute rounded-full blur-[110px] opacity-25 will-change-transform"
-        style={{
-          width: '35vw',
-          height: '35vw',
-          maxWidth: '450px',
-          maxHeight: '450px',
-          bottom: '25%',
-          left: '35%',
-          background: 'radial-gradient(circle, #ff8a00 0%, #ff2d55 50%, transparent 70%)',
-        }}
-      />
-
-      {/* Atmospheric Vignette */}
+      {/* Cinematic Vignette */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle at 50% 50%, transparent 40%, rgba(5, 3, 10, 0.6) 100%)',
+          background: 'radial-gradient(circle at 50% 40%, transparent 35%, rgba(7, 5, 14, 0.65) 100%)',
         }}
       />
     </div>

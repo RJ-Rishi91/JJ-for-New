@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../common/Logo';
 import { useAuth } from '../../contexts/AuthContext';
 import { newsletter as newsApi, contact as contactApi } from '../../lib/api';
-import { Mail, Send, CheckCircle, MessageSquare, X, Shield, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { Mail, Send, CheckCircle, MessageSquare, X, Shield, Eye, EyeOff, Sparkles, ArrowRight } from 'lucide-react';
 
 export default function Footer() {
   const { user, login } = useAuth();
@@ -93,45 +93,44 @@ export default function Footer() {
   };
 
   return (
-    <footer className="border-t border-white/10 glass-nav text-[#CBD0DC] pt-16 pb-12 relative z-20">
+    <footer className="border-t border-white/[0.08] glass-nav text-slate-400 pt-14 pb-10 relative z-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        {/* Newsletter Callout in Frosted Glass */}
-        <div className="glass-card rounded-3xl p-8 sm:p-12 mb-16 border border-white/15 relative overflow-hidden shadow-2xl">
-          <div className="absolute -right-10 -bottom-10 w-72 h-72 bg-[#ff2d55]/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 relative z-10">
+        {/* Newsletter Callout */}
+        <div className="glass-card rounded-2xl p-6 sm:p-8 mb-14 border border-white/[0.08] relative overflow-hidden">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
             <div className="max-w-xl">
-              <div className="flex items-center gap-2 text-[#ff758c] text-xs font-mono font-bold uppercase tracking-wider mb-2">
-                <Mail size={16} /> Young Gazette Weekly Digest
+              <div className="flex items-center gap-1.5 text-rose-400 text-xs font-mono font-medium uppercase tracking-wider mb-2">
+                <Mail size={14} /> Young Gazette Weekly Dispatch
               </div>
-              <h3 className="font-heading text-2xl sm:text-3xl font-bold text-white mb-2">
+              <h3 className="font-heading text-xl sm:text-2xl font-bold text-white mb-1.5">
                 Stories that matter, straight to your inbox.
               </h3>
-              <p className="text-sm text-[#CBD0DC] leading-relaxed">
-                Join our global readership of students, mentors, and educators. Get investigative scoops, scholarship deadlines, and writing sparks every Friday.
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                Join our readership of student journalists and educators. Fresh investigative scoops, scholarship deadlines, and editorial prompts every Friday.
               </p>
             </div>
 
             <div className="w-full lg:w-auto">
-              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2.5 max-w-md w-full">
+              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2 max-w-md w-full">
                 <input
                   type="email"
                   required
-                  placeholder="Enter your student email..."
+                  placeholder="Enter your email address..."
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="input-dark text-xs py-3 px-4 rounded-xl flex-1"
+                  className="input-dark text-xs py-2 px-3.5 flex-1"
                 />
                 <button
                   type="submit"
                   disabled={newsLoading}
-                  className="btn-primary text-xs py-3 px-6 rounded-xl flex items-center justify-center gap-2 whitespace-nowrap"
+                  className="btn-primary text-xs py-2 px-4 whitespace-nowrap"
                 >
-                  <Send size={14} /> {newsLoading ? 'Subscribing...' : 'Subscribe'}
+                  <Send size={13} /> {newsLoading ? 'Subscribing...' : 'Subscribe'}
                 </button>
               </form>
               {newsStatus && (
-                <p className="text-xs text-[#ff758c] mt-2 flex items-center gap-1.5 animate-fade-in font-medium">
-                  <CheckCircle size={14} /> {newsStatus}
+                <p className="text-xs text-rose-300 mt-2 flex items-center gap-1.5 animate-fade-in font-medium">
+                  <CheckCircle size={13} /> {newsStatus}
                 </p>
               )}
             </div>
@@ -139,73 +138,73 @@ export default function Footer() {
         </div>
 
         {/* Links Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12 text-xs">
           <div className="col-span-2">
-            <Logo className="h-8 w-auto mb-4" />
-            <p className="text-xs text-[#7B829A] max-w-sm leading-relaxed mb-4">
+            <Logo className="h-7 w-auto mb-3" />
+            <p className="text-slate-400 max-w-sm leading-relaxed mb-3 text-xs">
               Junior Journalist is an independent, non-profit youth journalism collective. We empower student reporters to investigate, publish, and lead change across campuses globally.
             </p>
-            <div className="flex items-center gap-2 text-xs text-[#ff758c] font-medium">
-              <Shield size={14} /> 100% Student-First Editorial Freedom
+            <div className="flex items-center gap-1.5 text-slate-300 font-mono text-[11px]">
+              <Shield size={13} className="text-rose-400" /> 100% Student-First Editorial Freedom
             </div>
           </div>
 
           <div>
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 font-heading">Platform</h4>
-            <ul className="space-y-2.5 text-xs">
-              <li><Link to="/explore" className="hover:text-[#ff758c] transition">Explore Articles</Link></li>
-              <li><Link to="/projects" className="hover:text-[#ff758c] transition">Investigative Desks</Link></li>
-              <li><Link to="/messages" className="hover:text-[#ff758c] transition">Newsroom Chat</Link></li>
-              <li><Link to="/events" className="hover:text-[#ff758c] transition">Events & Workshops</Link></li>
-              <li><Link to="/community" className="hover:text-[#ff758c] transition">Campus Chapters</Link></li>
+            <h4 className="font-semibold text-white uppercase tracking-wider mb-3 font-mono text-[11px]">Platform</h4>
+            <ul className="space-y-2 text-slate-400">
+              <li><Link to="/explore" className="hover:text-white transition">Explore Dispatches</Link></li>
+              <li><Link to="/projects" className="hover:text-white transition">Investigative Desks</Link></li>
+              <li><Link to="/messages" className="hover:text-white transition">Newsroom Chat</Link></li>
+              <li><Link to="/events" className="hover:text-white transition">Events & Workshops</Link></li>
+              <li><Link to="/community" className="hover:text-white transition">Campus Chapters</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 font-heading">Learning & Ops</h4>
-            <ul className="space-y-2.5 text-xs">
-              <li><Link to="/learn" className="hover:text-[#ff758c] transition">Skill-Building Hub</Link></li>
-              <li><Link to="/opportunities" className="hover:text-[#ff758c] transition">Fellowships & Grants</Link></li>
-              <li><Link to="/rewards" className="hover:text-[#ff758c] transition">XP & Rewards Store</Link></li>
-              <li><Link to="/dashboard" className="hover:text-[#ff758c] transition">Reporter Dashboard</Link></li>
+            <h4 className="font-semibold text-white uppercase tracking-wider mb-3 font-mono text-[11px]">Editorial Ops</h4>
+            <ul className="space-y-2 text-slate-400">
+              <li><Link to="/learn" className="hover:text-white transition">Skill-Building Hub</Link></li>
+              <li><Link to="/opportunities" className="hover:text-white transition">Fellowships & Grants</Link></li>
+              <li><Link to="/rewards" className="hover:text-white transition">XP & Recognition Store</Link></li>
+              <li><Link to="/dashboard" className="hover:text-white transition">Reporter Dashboard</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 font-heading">Editorial Desk</h4>
-            <ul className="space-y-2.5 text-xs">
-              <li><Link to="/submit" className="hover:text-[#ff758c] transition">Submit Your Story</Link></li>
+            <h4 className="font-semibold text-white uppercase tracking-wider mb-3 font-mono text-[11px]">Newsroom Desk</h4>
+            <ul className="space-y-2 text-slate-400">
+              <li><Link to="/submit" className="hover:text-white transition">Submit Your Story</Link></li>
               <li>
-                <button onClick={() => setContactOpen(true)} className="hover:text-[#ff758c] transition text-left">
+                <button onClick={() => setContactOpen(true)} className="hover:text-rose-400 transition text-left">
                   Contact Editorial Desk
                 </button>
               </li>
               <li>
-                <button onClick={handleAdminClick} className="hover:text-[#ff758c] text-[#ff758c] font-semibold transition text-left flex items-center gap-1.5">
-                  <Shield size={13} /> Newsroom HQ Login
+                <button onClick={handleAdminClick} className="hover:text-rose-300 text-rose-400 font-semibold transition text-left flex items-center gap-1">
+                  <Shield size={12} /> Newsroom HQ Login
                 </button>
               </li>
-              <li><span className="text-[#7B829A]">Code of Ethics</span></li>
+              <li><span className="text-slate-500">Code of Ethics</span></li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-[#7B829A]">
-          <p>© {new Date().getFullYear()} Junior Journalist. All rights reserved. By youth, for truth.</p>
-          <div className="flex flex-wrap items-center gap-4">
-            <button onClick={() => setContactOpen(true)} className="hover:text-white transition">
-              Editorial Tips & Queries
+        <div className="pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-500">
+          <p>© {new Date().getFullYear()} Junior Journalist. Under Young Gazette. By youth, for truth.</p>
+          <div className="flex flex-wrap items-center gap-3 font-medium">
+            <button onClick={() => setContactOpen(true)} className="hover:text-slate-300 transition">
+              Editorial Tips & Inquiries
             </button>
             <span>•</span>
-            <Link to="/explore" className="hover:text-white transition">Digital Anthologies</Link>
+            <Link to="/explore" className="hover:text-slate-300 transition">Digital Archives</Link>
             <span>•</span>
             <button
               onClick={handleAdminClick}
-              className="hover:text-[#ff758c] text-[#ff758c] transition flex items-center gap-1.5 font-bold"
+              className="hover:text-rose-300 text-rose-400 transition flex items-center gap-1 font-semibold"
               data-testid="footer-admin-login"
             >
-              <Shield size={13} /> Admin / Staff Portal
+              <Shield size={12} /> Staff Portal
             </button>
           </div>
         </div>
@@ -213,101 +212,101 @@ export default function Footer() {
 
       {/* CONTACT EDITORIAL DESK MODAL */}
       {contactOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="glass-card rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-white/20 animate-fade-in-up relative shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="glass-card rounded-2xl p-6 sm:p-7 max-w-lg w-full border border-white/10 animate-fade-in-up relative shadow-2xl">
             <button
               onClick={() => setContactOpen(false)}
-              className="absolute top-5 right-5 text-[#7B829A] hover:text-white"
+              className="absolute top-4 right-4 text-slate-400 hover:text-white"
             >
-              <X size={20} />
+              <X size={18} />
             </button>
 
-            <div className="flex items-center gap-2.5 mb-2">
-              <MessageSquare size={20} className="text-[#ff758c]" />
-              <h3 className="font-heading text-xl font-bold text-white">Contact Editorial Desk</h3>
+            <div className="flex items-center gap-2 mb-1.5">
+              <MessageSquare size={18} className="text-rose-400" />
+              <h3 className="font-heading text-lg font-bold text-white">Contact Editorial Desk</h3>
             </div>
-            <p className="text-xs text-[#CBD0DC] mb-6">
-              Have a confidential story tip, partnership inquiry, or question for our student editors? We read every submission.
+            <p className="text-xs text-slate-400 mb-5">
+              Confidential story tip, chapter partnership, or questions for our student editors? We review every submission.
             </p>
 
             {contactSuccess ? (
-              <div className="p-6 rounded-2xl bg-[#ff2d55]/10 border border-[#ff2d55]/30 text-center text-xs text-[#ff758c] space-y-2">
-                <CheckCircle size={32} className="mx-auto text-[#ff758c]" />
-                <h4 className="font-bold text-sm text-white">Inquiry Dispatched!</h4>
-                <p>Thank you for reaching out. An editorial coordinator will get in touch with you shortly.</p>
+              <div className="p-5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-center text-xs text-rose-300 space-y-1.5">
+                <CheckCircle size={28} className="mx-auto text-rose-400" />
+                <h4 className="font-bold text-sm text-white">Message Delivered</h4>
+                <p>An editorial coordinator will get back to you shortly.</p>
               </div>
             ) : (
-              <form onSubmit={handleContact} className="space-y-4">
-                <div className="grid grid-cols-2 gap-3">
+              <form onSubmit={handleContact} className="space-y-3">
+                <div className="grid grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-xs text-[#CBD0DC] mb-1">Your Name</label>
+                    <label className="block text-xs text-slate-300 mb-1">Your Name</label>
                     <input
                       type="text"
                       required
                       placeholder="e.g. Maya Chen"
                       value={contactForm.name}
                       onChange={e => setContactForm({ ...contactForm, name: e.target.value })}
-                      className="input-dark w-full text-xs"
+                      className="input-dark text-xs"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-[#CBD0DC] mb-1">Your Email</label>
+                    <label className="block text-xs text-slate-300 mb-1">Your Email</label>
                     <input
                       type="email"
                       required
                       placeholder="e.g. maya@school.edu"
                       value={contactForm.email}
                       onChange={e => setContactForm({ ...contactForm, email: e.target.value })}
-                      className="input-dark w-full text-xs"
+                      className="input-dark text-xs"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-xs text-[#CBD0DC] mb-1">Category</label>
+                    <label className="block text-xs text-slate-300 mb-1">Category</label>
                     <select
                       value={contactForm.category}
                       onChange={e => setContactForm({ ...contactForm, category: e.target.value })}
-                      className="input-dark w-full text-xs"
+                      className="input-dark text-xs"
                     >
-                      <option value="general" className="bg-[#0c0819] text-white">General Inquiry</option>
-                      <option value="story_pitch" className="bg-[#0c0819] text-white">Confidential Story Tip</option>
-                      <option value="campus_partner" className="bg-[#0c0819] text-white">Campus Chapter Setup</option>
-                      <option value="corrections" className="bg-[#0c0819] text-white">Fact Check / Correction</option>
+                      <option value="general" className="bg-[#110e1c] text-white">General Inquiry</option>
+                      <option value="story_pitch" className="bg-[#110e1c] text-white">Confidential Story Tip</option>
+                      <option value="campus_partner" className="bg-[#110e1c] text-white">Campus Chapter Setup</option>
+                      <option value="corrections" className="bg-[#110e1c] text-white">Fact Check / Correction</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs text-[#CBD0DC] mb-1">Subject</label>
+                    <label className="block text-xs text-slate-300 mb-1">Subject</label>
                     <input
                       type="text"
                       required
                       placeholder="Brief topic..."
                       value={contactForm.subject}
                       onChange={e => setContactForm({ ...contactForm, subject: e.target.value })}
-                      className="input-dark w-full text-xs"
+                      className="input-dark text-xs"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs text-[#CBD0DC] mb-1">Message</label>
+                  <label className="block text-xs text-slate-300 mb-1">Message</label>
                   <textarea
                     required
-                    rows={4}
-                    placeholder="Provide context, details, or documentation..."
+                    rows={3}
+                    placeholder="Provide details or documentation..."
                     value={contactForm.message}
                     onChange={e => setContactForm({ ...contactForm, message: e.target.value })}
-                    className="input-dark w-full text-xs leading-relaxed"
+                    className="input-dark text-xs leading-relaxed"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={contactLoading}
-                  className="btn-primary w-full text-xs py-3 flex items-center justify-center gap-2"
+                  className="btn-primary w-full text-xs py-2 mt-1"
                 >
-                  <Send size={14} /> {contactLoading ? 'Sending...' : 'Send Message to Desk'}
+                  <Send size={13} /> {contactLoading ? 'Sending...' : 'Send Message to Desk'}
                 </button>
               </form>
             )}
@@ -317,37 +316,37 @@ export default function Footer() {
 
       {/* ADMIN / STAFF LOGIN MODAL */}
       {adminModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="glass-card rounded-3xl p-6 sm:p-8 max-w-md w-full border border-white/20 animate-fade-in-up relative shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="glass-card rounded-2xl p-6 sm:p-7 max-w-md w-full border border-white/10 animate-fade-in-up relative shadow-2xl">
             <button
               onClick={() => setAdminModalOpen(false)}
-              className="absolute top-5 right-5 text-[#7B829A] hover:text-white"
+              className="absolute top-4 right-4 text-slate-400 hover:text-white"
             >
-              <X size={20} />
+              <X size={18} />
             </button>
 
-            <div className="flex items-center gap-2.5 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-[#ff2d55]/20 flex items-center justify-center text-[#ff758c] border border-[#ff2d55]/30">
-                <Shield size={20} />
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-8 h-8 rounded-lg bg-rose-500/15 flex items-center justify-center text-rose-400 border border-rose-500/25">
+                <Shield size={16} />
               </div>
               <div>
-                <h3 className="font-heading text-xl font-bold text-white">Staff & Admin Newsroom Login</h3>
-                <p className="text-xs text-[#CBD0DC]">Access the Editorial Command Center.</p>
+                <h3 className="font-heading text-lg font-bold text-white">Newsroom Staff Login</h3>
+                <p className="text-xs text-slate-400">Editorial command center access.</p>
               </div>
             </div>
 
             {/* Quick Demo One-Click Sign In */}
-            <div className="my-5 p-4 rounded-2xl bg-[#ff2d55]/10 border border-[#ff2d55]/30">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                  <Sparkles size={14} className="text-[#ff758c]" /> Demo Editorial Lead
+            <div className="my-4 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs font-semibold text-white flex items-center gap-1">
+                  <Sparkles size={13} className="text-rose-400" /> Demo Lead Editor
                 </span>
-                <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-[#ff2d55]/20 text-[#ff758c] font-bold">
-                  Admin Access
+                <span className="text-[9px] uppercase font-mono px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 font-bold">
+                  Managing Editor
                 </span>
               </div>
-              <p className="text-[11px] text-[#CBD0DC] mb-3 leading-relaxed">
-                Log in as Managing Editor (Rushal Singh) with full permissions to review articles, manage opportunities, and dispatch broadcasts.
+              <p className="text-[11px] text-slate-300 mb-2.5 leading-relaxed">
+                Log in as Rushal Singh with full editorial review and dispatch permissions.
               </p>
               <button
                 type="button"
@@ -357,46 +356,46 @@ export default function Footer() {
                   setTimeout(() => handleAdminLogin(), 50);
                 }}
                 disabled={adminLoading}
-                className="btn-primary w-full text-xs py-2.5"
+                className="btn-primary w-full text-xs py-2"
               >
-                {adminLoading ? 'Signing In...' : '⚡ Quick Login as Managing Editor'}
+                {adminLoading ? 'Signing In...' : 'Quick Login as Managing Editor'}
               </button>
             </div>
 
             {adminError && (
-              <div className="mb-4 p-3 rounded-xl bg-[#FF3B30]/10 border border-[#FF3B30]/30 text-[#FF3B30] text-xs">
+              <div className="mb-3 p-2.5 rounded-lg bg-red-500/10 border border-red-500/25 text-red-400 text-xs">
                 {adminError}
               </div>
             )}
 
-            <form onSubmit={handleAdminLogin} className="space-y-4 pt-2">
+            <form onSubmit={handleAdminLogin} className="space-y-3 pt-1">
               <div>
-                <label className="block text-xs text-[#CBD0DC] mb-1 font-semibold">Staff Email</label>
+                <label className="block text-xs text-slate-300 mb-1 font-medium">Staff Email</label>
                 <input
                   type="email"
                   required
                   value={adminEmail}
                   onChange={e => setAdminEmail(e.target.value)}
-                  className="input-dark w-full text-xs"
+                  className="input-dark text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-xs text-[#CBD0DC] mb-1 font-semibold">Password</label>
+                <label className="block text-xs text-slate-300 mb-1 font-medium">Password</label>
                 <div className="relative">
                   <input
                     type={adminShowPw ? 'text' : 'password'}
                     required
                     value={adminPassword}
                     onChange={e => setAdminPassword(e.target.value)}
-                    className="input-dark w-full text-xs pr-10"
+                    className="input-dark text-xs pr-9"
                   />
                   <button
                     type="button"
                     onClick={() => setAdminShowPw(!adminShowPw)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#7B829A] hover:text-white"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
                   >
-                    {adminShowPw ? <EyeOff size={16} /> : <Eye size={16} />}
+                    {adminShowPw ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
                 </div>
               </div>
@@ -404,7 +403,7 @@ export default function Footer() {
               <button
                 type="submit"
                 disabled={adminLoading}
-                className="btn-ghost w-full text-xs py-2.5 hover:text-white border-white/20"
+                className="btn-ghost w-full text-xs py-2 text-slate-300 hover:text-white"
               >
                 {adminLoading ? 'Authenticating...' : 'Sign In with Custom Credentials'}
               </button>
