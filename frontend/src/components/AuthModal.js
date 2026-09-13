@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import Logo from './common/Logo';
-import { X, Eye, EyeOff } from 'lucide-react';
+import { X, Eye, EyeOff, Sparkles } from 'lucide-react';
 
 export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
   const { login, register } = useAuth();
@@ -34,46 +34,50 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" data-testid="auth-modal">
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-md glass rounded-2xl p-8 animate-fade-in-up">
-        <button onClick={onClose} className="absolute top-4 right-4 text-[#A0A0AB] hover:text-white transition" data-testid="auth-close-btn">
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose} />
+      <div className="relative w-full max-w-md glass-card rounded-3xl p-8 animate-fade-in-up border border-white/20 shadow-[0_25px_60px_rgba(0,0,0,0.8)]">
+        <button onClick={onClose} className="absolute top-5 right-5 text-[#7B829A] hover:text-white transition" data-testid="auth-close-btn">
           <X size={20} />
         </button>
         <div className="flex justify-center mb-5">
-          <Logo withLink={false} className="h-11 w-auto" />
+          <Logo withLink={false} className="h-10 w-auto" />
         </div>
         <h2 className="font-heading text-2xl font-bold mb-6 text-center text-white">
           {tab === 'login' ? 'Welcome Back' : 'Join the Collective'}
         </h2>
-        <div className="flex gap-2 mb-6">
+        <div className="flex gap-2 mb-6 p-1 rounded-2xl glass border border-white/10">
           {['login', 'register'].map((t) => (
             <button key={t} onClick={() => { setTab(t); setError(''); }}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${tab === t ? 'bg-[#00FFA3]/10 text-[#00FFA3] border border-[#00FFA3]/30' : 'text-[#A0A0AB] hover:text-white'}`}
+              className={`flex-1 py-2.5 rounded-xl text-xs font-bold font-heading transition-all ${
+                tab === t
+                  ? 'bg-[#ff2d55]/25 text-white border border-[#ff2d55]/40 shadow-[0_0_15px_rgba(255,45,85,0.3)]'
+                  : 'text-[#CBD0DC] hover:text-white border border-transparent'
+              }`}
               data-testid={`auth-tab-${t}`}>
-              {t === 'login' ? 'Sign In' : 'Sign Up'}
+              {t === 'login' ? 'Sign In' : 'Create Account'}
             </button>
           ))}
         </div>
-        {error && <div className="mb-4 p-3 rounded-xl bg-[#FF3B30]/10 border border-[#FF3B30]/30 text-[#FF3B30] text-sm" data-testid="auth-error">{error}</div>}
+        {error && <div className="mb-4 p-3.5 rounded-xl bg-[#FF3B30]/10 border border-[#FF3B30]/30 text-[#FF3B30] text-xs font-medium" data-testid="auth-error">{error}</div>}
         <form onSubmit={handleSubmit} className="space-y-4">
           {tab === 'register' && (
             <>
-              <input className="input-dark" placeholder="Full Name" value={form.name} onChange={set('name')} required data-testid="auth-name-input" />
+              <input className="input-dark text-xs" placeholder="Full Name" value={form.name} onChange={set('name')} required data-testid="auth-name-input" />
               <div className="grid grid-cols-2 gap-3">
-                <input className="input-dark" placeholder="City" value={form.city} onChange={set('city')} data-testid="auth-city-input" />
-                <input className="input-dark" placeholder="School/College" value={form.school} onChange={set('school')} data-testid="auth-school-input" />
+                <input className="input-dark text-xs" placeholder="City" value={form.city} onChange={set('city')} data-testid="auth-city-input" />
+                <input className="input-dark text-xs" placeholder="School/College" value={form.school} onChange={set('school')} data-testid="auth-school-input" />
               </div>
             </>
           )}
-          <input className="input-dark" type="email" placeholder="Email" value={form.email} onChange={set('email')} required data-testid="auth-email-input" />
+          <input className="input-dark text-xs" type="email" placeholder="Student or Personal Email" value={form.email} onChange={set('email')} required data-testid="auth-email-input" />
           <div className="relative">
-            <input className="input-dark pr-10" type={showPw ? 'text' : 'password'} placeholder="Password" value={form.password} onChange={set('password')} required data-testid="auth-password-input" />
-            <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#52525B] hover:text-white">
-              {showPw ? <EyeOff size={18} /> : <Eye size={18} />}
+            <input className="input-dark text-xs pr-10" type={showPw ? 'text' : 'password'} placeholder="Password" value={form.password} onChange={set('password')} required data-testid="auth-password-input" />
+            <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#7B829A] hover:text-white">
+              {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
-          <button type="submit" disabled={loading} className="btn-primary w-full" data-testid="auth-submit-btn">
-            {loading ? 'Loading...' : tab === 'login' ? 'Sign In' : 'Create Account'}
+          <button type="submit" disabled={loading} className="btn-primary w-full text-xs py-3 font-bold" data-testid="auth-submit-btn">
+            {loading ? 'Authenticating...' : tab === 'login' ? 'Sign In to Portal' : 'Create Student Account'}
           </button>
 
           {tab === 'login' && (
@@ -83,9 +87,9 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
                 onClick={() => {
                   setForm({ ...form, email: 'editor@juniorjournalist.org', password: 'EditorPass123!' });
                 }}
-                className="w-full text-center text-xs text-[#00FFA3] hover:underline font-mono py-1"
+                className="w-full text-center text-xs text-[#ff758c] hover:underline font-mono py-1 flex items-center justify-center gap-1.5"
               >
-                ⚡ Fill Staff / Editor Credentials
+                <Sparkles size={12} /> Fill Staff / Editor Credentials
               </button>
             </div>
           )}
