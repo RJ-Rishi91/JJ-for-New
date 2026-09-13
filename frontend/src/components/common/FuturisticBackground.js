@@ -1,86 +1,70 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import ThreeScene3D from './ThreeScene3D';
 
 export default function FuturisticBackground() {
   const containerRef = useRef(null);
-  const leak1Ref = useRef(null);
-  const leak2Ref = useRef(null);
-  const leak3Ref = useRef(null);
-  const leak4Ref = useRef(null);
+  const glow1Ref = useRef(null);
+  const glow2Ref = useRef(null);
+  const glow3Ref = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. Organic, slow breathing atmospheric light leaks
-      gsap.to(leak1Ref.current, {
-        x: '+=60',
-        y: '-=40',
-        scale: 1.08,
-        duration: 14,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      });
-
-      gsap.to(leak2Ref.current, {
-        x: '-=70',
-        y: '+=50',
-        scale: 1.12,
-        duration: 18,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      });
-
-      gsap.to(leak3Ref.current, {
-        x: '+=50',
-        y: '+=60',
-        scale: 0.95,
-        duration: 16,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      });
-
-      gsap.to(leak4Ref.current, {
-        x: '-=40',
+      // 1. Organic, slow luminous light breathing
+      gsap.to(glow1Ref.current, {
+        x: '+=80',
         y: '-=50',
-        scale: 1.06,
-        duration: 20,
+        scale: 1.15,
+        duration: 12,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      });
+
+      gsap.to(glow2Ref.current, {
+        x: '-=90',
+        y: '+=60',
+        scale: 1.18,
+        duration: 15,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      });
+
+      gsap.to(glow3Ref.current, {
+        x: '+=60',
+        y: '+=70',
+        scale: 0.92,
+        duration: 13,
         repeat: -1,
         yoyo: true,
         ease: 'sine.inOut',
       });
     }, containerRef);
 
-    // 2. High-inertia subtle mouse parallax
+    // 2. Mouse Parallax for Luminous Glows
     const handleMouseMove = (e) => {
       const { innerWidth, innerHeight } = window;
       const mouseX = (e.clientX / innerWidth - 0.5) * 2;
       const mouseY = (e.clientY / innerHeight - 0.5) * 2;
 
-      gsap.to(leak1Ref.current, {
-        xPercent: mouseX * 14,
-        yPercent: mouseY * 14,
+      gsap.to(glow1Ref.current, {
+        xPercent: mouseX * 18,
+        yPercent: mouseY * 18,
+        duration: 2.0,
+        ease: 'power2.out',
+      });
+      gsap.to(glow2Ref.current, {
+        xPercent: -mouseX * 22,
+        yPercent: -mouseY * 22,
         duration: 2.4,
-        ease: 'power1.out',
+        ease: 'power2.out',
       });
-      gsap.to(leak2Ref.current, {
-        xPercent: -mouseX * 18,
-        yPercent: -mouseY * 18,
-        duration: 2.8,
-        ease: 'power1.out',
-      });
-      gsap.to(leak3Ref.current, {
-        xPercent: mouseX * 22,
-        yPercent: -mouseY * 12,
-        duration: 2.2,
-        ease: 'power1.out',
-      });
-      gsap.to(leak4Ref.current, {
-        xPercent: -mouseX * 15,
-        yPercent: mouseY * 15,
-        duration: 3.0,
-        ease: 'power1.out',
+      gsap.to(glow3Ref.current, {
+        xPercent: mouseX * 26,
+        yPercent: -mouseY * 16,
+        duration: 1.8,
+        ease: 'power2.out',
       });
     };
 
@@ -97,84 +81,76 @@ export default function FuturisticBackground() {
       ref={containerRef}
       className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none"
       style={{
-        background: 'radial-gradient(ellipse at 50% -10%, #17112c 0%, #0c0918 45%, #07050e 100%)',
+        // Luminous, dimensional titanium-indigo spatial background (NOT pitch black)
+        background: 'radial-gradient(ellipse at 50% -10%, #2b2259 0%, #181436 40%, #0f0c22 100%)',
       }}
       aria-hidden="true"
     >
-      {/* Film grain noise filter for physical warmth and tactile soul */}
-      <svg className="absolute inset-0 w-full h-full opacity-[0.035] pointer-events-none">
-        <filter id="filmGrain">
-          <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
-          <feColorMatrix type="saturate" values="0" />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#filmGrain)" />
-      </svg>
-
-      {/* Atmospheric Light Leak 1: Warm Rose & Crimson (Editorial Warmth) */}
+      {/* 3D Perspective Depth Grid */}
       <div
-        ref={leak1Ref}
-        className="absolute rounded-full blur-[160px] opacity-[0.22] will-change-transform"
+        className="absolute inset-0 opacity-[0.05]"
         style={{
-          width: '52vw',
-          height: '52vw',
-          maxWidth: '680px',
-          maxHeight: '680px',
-          top: '-8%',
-          left: '8%',
-          background: 'radial-gradient(circle, #e11d48 0%, #be123c 45%, transparent 75%)',
+          backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(255, 255, 255, 0.4) 1px, transparent 1px)`,
+          backgroundSize: '56px 56px',
         }}
       />
 
-      {/* Atmospheric Light Leak 2: Rich Editorial Indigo */}
+      {/* Interactive WebGL Three.js 3D Scene in the upper hero / atmosphere */}
+      <div className="absolute top-0 right-[-5%] sm:right-[5%] lg:right-[12%] w-[420px] sm:w-[580px] lg:w-[680px] h-[450px] sm:h-[620px] opacity-75 sm:opacity-85 pointer-events-none">
+        <ThreeScene3D />
+      </div>
+
+      {/* Luminous Volumetric Light 1: Electric Indigo Glow */}
       <div
-        ref={leak2Ref}
-        className="absolute rounded-full blur-[180px] opacity-[0.24] will-change-transform"
+        ref={glow1Ref}
+        className="absolute rounded-full blur-[140px] opacity-35 will-change-transform"
         style={{
           width: '55vw',
           height: '55vw',
-          maxWidth: '720px',
-          maxHeight: '720px',
-          top: '8%',
-          right: '-6%',
-          background: 'radial-gradient(circle, #4f46e5 0%, #312e81 50%, transparent 75%)',
+          maxWidth: '700px',
+          maxHeight: '700px',
+          top: '-12%',
+          right: '5%',
+          background: 'radial-gradient(circle, #818cf8 0%, #4f46e5 50%, transparent 75%)',
         }}
       />
 
-      {/* Atmospheric Light Leak 3: Subtle Warm Amber Glow */}
+      {/* Luminous Volumetric Light 2: Radiant Rose / Coral */}
       <div
-        ref={leak3Ref}
-        className="absolute rounded-full blur-[150px] opacity-[0.14] will-change-transform"
+        ref={glow2Ref}
+        className="absolute rounded-full blur-[150px] opacity-30 will-change-transform"
         style={{
-          width: '42vw',
-          height: '42vw',
-          maxWidth: '520px',
-          maxHeight: '520px',
-          top: '40%',
-          left: '25%',
-          background: 'radial-gradient(circle, #d97706 0%, #b45309 45%, transparent 70%)',
+          width: '50vw',
+          height: '50vw',
+          maxWidth: '650px',
+          maxHeight: '650px',
+          top: '5%',
+          left: '-5%',
+          background: 'radial-gradient(circle, #fb7185 0%, #e11d48 50%, transparent 75%)',
         }}
       />
 
-      {/* Atmospheric Light Leak 4: Soft Deep Violet */}
+      {/* Luminous Volumetric Light 3: Sky Cyan Glow */}
       <div
-        ref={leak4Ref}
-        className="absolute rounded-full blur-[170px] opacity-[0.20] will-change-transform"
+        ref={glow3Ref}
+        className="absolute rounded-full blur-[130px] opacity-25 will-change-transform"
         style={{
-          width: '48vw',
-          height: '48vw',
-          maxWidth: '620px',
-          maxHeight: '620px',
-          bottom: '-5%',
-          right: '10%',
-          background: 'radial-gradient(circle, #7c3aed 0%, #4c1d95 50%, transparent 75%)',
+          width: '40vw',
+          height: '40vw',
+          maxWidth: '500px',
+          maxHeight: '500px',
+          top: '45%',
+          left: '30%',
+          background: 'radial-gradient(circle, #38bdf8 0%, #0284c7 45%, transparent 70%)',
         }}
       />
 
-      {/* Cinematic Vignette */}
+      {/* Subtle Luminous Ambient Vignette */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle at 50% 40%, transparent 35%, rgba(7, 5, 14, 0.65) 100%)',
+          background: 'radial-gradient(circle at 50% 30%, transparent 40%, rgba(14, 11, 32, 0.45) 100%)',
         }}
       />
     </div>
