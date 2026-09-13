@@ -317,7 +317,7 @@ async def create_submission(inp: SubmissionCreate, user=Depends(get_current_user
         "created_at": now_iso(), "published_at": None
     }
     await db.submissions.insert_one(sub)
-    await add_points(user["id"], 5, f"Submitted: {inp.title}")
+    await add_points(user["id"], 25, f"Submitted: {inp.title}")
     tag = {"article": "writer", "photo_essay": "photographer", "field_report": "reporter", "video": "videographer"}.get(inp.type, "writer")
     if tag not in user.get("role_tags", []):
         await db.users.update_one({"id": user["id"]}, {"$addToSet": {"role_tags": tag}})
@@ -411,7 +411,7 @@ async def add_article_comment(sub_id: str, inp: CommentCreate, user=Depends(get_
             f"/submissions/{sub_id}",
             "comment"
         )
-    return comment
+    return {k: v for k, v in comment.items() if k != "_id"}
 
 @api_router.delete("/submissions/{sub_id}/comments/{comment_id}")
 async def delete_article_comment(sub_id: str, comment_id: str, user=Depends(get_current_user)):
@@ -1333,7 +1333,7 @@ async def send_message(inp: MessageCreate, user=Depends(get_current_user)):
     await db.messages.insert_one(msg)
     if inp.recipient_id:
         await create_notification(inp.recipient_id, f"New Message from {user['name']}", inp.content[:60], "/messages", "message")
-    return msg
+    return {k: v for k, v in msg.items() if k != "_id"}
 
 @api_router.get("/messages/dm/{recipient_id}")
 async def get_direct_messages(recipient_id: str, user=Depends(get_current_user)):
