@@ -45,12 +45,12 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
         <h2 className="font-heading text-xl font-bold mb-5 text-center text-white">
           {tab === 'login' ? 'Welcome Back' : 'Join the Newsroom Collective'}
         </h2>
-        <div className="flex gap-1.5 mb-5 p-1 rounded-lg glass border border-white/[0.08]">
+        <div className="flex gap-1.5 mb-5 p-1 rounded-full glass border border-white/[0.08]">
           {['login', 'register'].map((t) => (
             <button key={t} onClick={() => { setTab(t); setError(''); }}
-              className={`flex-1 py-1.5 rounded-md text-xs font-semibold font-heading transition-all ${
+              className={`flex-1 py-1.5 rounded-full text-xs font-semibold font-heading transition-all ${
                 tab === t
-                  ? 'bg-white/[0.08] text-white border border-white/10 shadow-sm'
+                  ? 'bg-blue-600/30 text-white border border-blue-500/40 shadow-sm'
                   : 'text-slate-400 hover:text-white'
               }`}
               data-testid={`auth-tab-${t}`}>
@@ -69,15 +69,15 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
               </div>
             </>
           )}
-          <input className="input-dark text-xs" type="email" placeholder="Student or Personal Email" value={form.email} onChange={set('email')} required data-testid="auth-email-input" />
+          <input className="input-dark text-xs" type="email" placeholder="Student or Professional Email" value={form.email} onChange={set('email')} required data-testid="auth-email-input" />
           <div className="relative">
             <input className="input-dark text-xs pr-9" type={showPw ? 'text' : 'password'} placeholder="Password" value={form.password} onChange={set('password')} required data-testid="auth-password-input" />
-            <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
+            <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
               {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
             </button>
           </div>
           <button type="submit" disabled={loading} className="btn-primary w-full text-xs py-2.5" data-testid="auth-submit-btn">
-            {loading ? 'Authenticating...' : tab === 'login' ? 'Sign In' : 'Create Student Account'}
+            {loading ? 'Authenticating...' : tab === 'login' ? 'Sign In to Newsroom' : 'Create Account'}
           </button>
 
           {tab === 'login' && (
@@ -87,9 +87,9 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
                 onClick={() => {
                   setForm({ ...form, email: 'editor@juniorjournalist.org', password: 'EditorPass123!' });
                 }}
-                className="w-full text-center text-xs text-rose-400 hover:text-rose-300 hover:underline font-mono py-1 flex items-center justify-center gap-1.5"
+                className="w-full text-center text-xs text-blue-400 hover:text-blue-300 hover:underline font-mono py-1 flex items-center justify-center gap-1.5"
               >
-                <Sparkles size={12} /> Fill Demo Staff / Editor Credentials
+                <Sparkles size={12} /> Fill Demo Managing Editor Credentials
               </button>
             </div>
           )}

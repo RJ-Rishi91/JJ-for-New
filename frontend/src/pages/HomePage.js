@@ -22,12 +22,12 @@ import {
   Camera,
   ArrowUpRight,
   ShieldCheck,
-  Sparkles,
-  Layers3
+  Globe2,
+  Newspaper
 } from 'lucide-react';
 
 function SkeletonCard() {
-  return <div className="skeleton-pulse h-48 w-full rounded-xl border border-white/10" />;
+  return <div className="skeleton-pulse h-48 w-full rounded-2xl border border-white/10" />;
 }
 
 function CountdownTimer({ targetDate }) {
@@ -50,8 +50,8 @@ function CountdownTimer({ targetDate }) {
   return (
     <div className="flex items-center gap-1.5 font-mono text-xs" data-testid="countdown-timer">
       {Object.entries(timeLeft).map(([k, v]) => (
-        <div key={k} className="glass rounded-md px-2 py-0.5 text-center min-w-[36px] border border-white/15">
-          <span className="text-rose-400 font-semibold text-xs block font-mono">{String(v).padStart(2, '0')}</span>
+        <div key={k} className="glass rounded-lg px-2 py-0.5 text-center min-w-[36px] border border-white/15">
+          <span className="text-sky-400 font-semibold text-xs block font-mono">{String(v).padStart(2, '0')}</span>
           <span className="text-slate-400 text-[8px] uppercase tracking-wider">{k}</span>
         </div>
       ))}
@@ -72,52 +72,52 @@ export default function HomePage() {
   }, []);
 
   const categories = [
-    { label: 'Opinion', icon: <MessageSquareText size={17} strokeWidth={1.75} />, desc: 'Perspectives & commentary' },
-    { label: 'Campus Voices', icon: <Mic size={17} strokeWidth={1.75} />, desc: 'Student issues & interviews' },
-    { label: 'Reviews', icon: <BookmarkCheck size={17} strokeWidth={1.75} />, desc: 'Arts, literature & culture' },
-    { label: 'Creative Writing', icon: <Feather size={17} strokeWidth={1.75} />, desc: 'Fiction, essays & poetry' },
-    { label: 'Field Reports', icon: <Compass size={17} strokeWidth={1.75} />, desc: 'Local grassroots dispatches' },
-    { label: 'Photo Essays', icon: <Camera size={17} strokeWidth={1.75} />, desc: 'Visual documentary stories' },
+    { label: 'Opinion', icon: <MessageSquareText size={17} strokeWidth={1.75} />, desc: 'Analysis & commentary' },
+    { label: 'Campus Voices', icon: <Mic size={17} strokeWidth={1.75} />, desc: 'Student affairs & dialogue' },
+    { label: 'Reviews', icon: <BookmarkCheck size={17} strokeWidth={1.75} />, desc: 'Culture, media & policy' },
+    { label: 'Creative Writing', icon: <Feather size={17} strokeWidth={1.75} />, desc: 'Essays, dispatches & prose' },
+    { label: 'Field Reports', icon: <Compass size={17} strokeWidth={1.75} />, desc: 'Investigative reporting' },
+    { label: 'Photo Essays', icon: <Camera size={17} strokeWidth={1.75} />, desc: 'Documentary visual journalism' },
   ];
 
   return (
     <div className="min-h-screen text-slate-100 relative z-10" data-testid="home-page">
       {/* Hero Section with 3D Spatial Depth */}
-      <section className="relative pt-12 pb-20 lg:pt-16 lg:pb-28 border-b border-white/[0.08]" data-testid="hero-section">
+      <section className="relative pt-14 pb-20 lg:pt-18 lg:pb-28 border-b border-white/[0.08]" data-testid="hero-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="max-w-2xl relative z-10">
-            {/* Luminous Editorial Status Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md glass border border-white/15 mb-6 animate-fade-in shadow-[0_0_15px_rgba(129,140,248,0.2)]">
-              <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse shadow-[0_0_8px_#f43f5e]" />
-              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-200 font-medium flex items-center gap-1.5">
-                Young Gazette 3D Newsroom <Layers3 size={12} className="text-rose-400" />
+            {/* Executive Status Badge */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full glass border border-white/15 mb-6 animate-fade-in shadow-[0_0_15px_rgba(37,99,235,0.2)]">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_#3b82f6]" />
+              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-200 font-semibold flex items-center gap-1.5">
+                The Young Gazette Newsroom <Globe2 size={12} className="text-blue-400" />
               </span>
             </div>
 
             {user ? (
-              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-5 animate-fade-in-up leading-[1.12]" data-testid="hero-greeting">
+              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-5 animate-fade-in-up leading-[1.12]" data-testid="hero-greeting">
                 Welcome back, {user.name?.split(' ')[0]}.<br />
-                <span className="font-serif italic font-normal text-rose-300">Ready to break your next story?</span>
+                <span className="font-serif italic font-normal text-sky-300">Ready to file your next report?</span>
               </h1>
             ) : (
-              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-5 animate-fade-in-up leading-[1.12]" data-testid="hero-title">
+              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-5 animate-fade-in-up leading-[1.12]" data-testid="hero-title">
                 Your Voice.<br />
-                <span className="font-serif italic font-normal text-rose-300">Your Story.</span>
+                <span className="font-serif italic font-normal text-sky-300">Your Story.</span>
               </h1>
             )}
 
             <p className="text-base sm:text-lg text-slate-300 mb-8 max-w-xl font-normal leading-relaxed animate-fade-in-up delay-100" data-testid="hero-subtitle">
-              An independent youth journalism collective where student reporters publish investigations, lead campus desks, and earn verified editorial credentials.
+              An independent, global youth journalism collective empowering student reporters to publish verified investigations, lead campus desks, and build editorial authority.
             </p>
 
-            <div className="flex flex-wrap items-center gap-3 animate-fade-in-up delay-200">
+            <div className="flex flex-wrap items-center gap-3.5 animate-fade-in-up delay-200">
               {user ? (
                 <>
                   <Link to="/submit" className="btn-primary" data-testid="hero-submit-btn">
-                    <PenTool size={15} strokeWidth={2} /> Start Writing
+                    <PenTool size={15} strokeWidth={2} /> File a Story
                   </Link>
                   <Link to="/events" className="btn-ghost" data-testid="hero-events-btn">
-                    <Calendar size={15} strokeWidth={1.75} /> Browse Newsroom Events
+                    <Calendar size={15} strokeWidth={1.75} /> Editorial Calendar
                   </Link>
                 </>
               ) : (
@@ -137,14 +137,14 @@ export default function HomePage() {
           {data?.stats && (
             <div className="grid grid-cols-3 gap-3 sm:gap-4 mt-14 max-w-lg animate-fade-in-up delay-300 relative z-10" data-testid="stats-bar">
               {[
-                { label: 'Articles Published', value: data.stats.total_articles, icon: <PenTool size={15} strokeWidth={1.75} className="text-rose-400" /> },
-                { label: 'Active Desks & Events', value: data.stats.total_events, icon: <Calendar size={15} strokeWidth={1.75} className="text-amber-400" /> },
-                { label: 'Student Reporters', value: data.stats.total_members, icon: <Users size={15} strokeWidth={1.75} className="text-indigo-400" /> },
+                { label: 'Published Dispatches', value: data.stats.total_articles, icon: <Newspaper size={15} strokeWidth={1.75} className="text-blue-400" /> },
+                { label: 'Active Desks & Events', value: data.stats.total_events, icon: <Calendar size={15} strokeWidth={1.75} className="text-sky-400" /> },
+                { label: 'Accredited Reporters', value: data.stats.total_members, icon: <Users size={15} strokeWidth={1.75} className="text-slate-300" /> },
               ].map((s) => (
-                <TiltCard key={s.label} maxAngle={12} className="glass-card p-4 card-interactive border border-white/[0.12]">
+                <TiltCard key={s.label} maxAngle={10} className="glass-card p-4 card-interactive border border-white/[0.12]">
                   <div className="flex items-center gap-2 mb-1 translate-z-20">
                     {s.icon}
-                    <span className="text-[11px] font-mono text-slate-300 uppercase tracking-wider">{s.label}</span>
+                    <span className="text-[10px] font-mono text-slate-300 uppercase tracking-wider font-medium">{s.label}</span>
                   </div>
                   <div className="font-heading text-2xl font-bold text-white translate-z-30">{s.value}</div>
                 </TiltCard>
@@ -154,10 +154,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 01 / Explore by Desk with 3D Tilt Cards */}
+      {/* 01 / Explore by Desk */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12" data-testid="categories-section">
         <div className="flex items-center justify-between mb-5">
-          <div className="overline">01 / Explore by Desk</div>
+          <div className="overline">01 / Editorial Desks</div>
           <Link to="/explore" className="text-xs text-slate-300 hover:text-white transition flex items-center gap-1 font-medium">
             All Desks <ArrowRight size={13} />
           </Link>
@@ -171,7 +171,7 @@ export default function HomePage() {
               data-testid={`category-${cat.label.toLowerCase().replace(' ', '-')}`}
               className="block"
             >
-              <TiltCard maxAngle={15} className="glass-card p-3.5 card-interactive h-full flex flex-col justify-between border border-white/[0.12] hover:border-rose-500/40">
+              <TiltCard maxAngle={12} className="glass-card p-3.5 card-interactive h-full flex flex-col justify-between border border-white/[0.12] hover:border-blue-500/40">
                 <div className="icon-box mb-3 translate-z-20">
                   {cat.icon}
                 </div>
@@ -185,14 +185,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 02 / Featured Stories with 3D Parallax Depth */}
+      {/* 02 / Featured Stories */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 border-t border-white/[0.08]" data-testid="featured-section">
         <div className="flex items-end justify-between mb-7">
           <div>
-            <div className="overline mb-1">02 / Editor's Selection</div>
-            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">Lead Dispatches</h2>
+            <div className="overline mb-1">02 / Lead Reporting</div>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">Front Page Dispatches</h2>
           </div>
-          <Link to="/explore" className="text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1 transition" data-testid="see-all-stories">
+          <Link to="/explore" className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1 transition" data-testid="see-all-stories">
             View All Dispatches <ArrowRight size={13} />
           </Link>
         </div>
@@ -211,7 +211,7 @@ export default function HomePage() {
                 className="block"
               >
                 <TiltCard
-                  maxAngle={10}
+                  maxAngle={8}
                   className="glass-card overflow-hidden card-interactive animate-fade-in-up h-full flex flex-col justify-between border border-white/[0.12]"
                   style={{ animationDelay: `${i * 100}ms` }}
                 >
@@ -239,7 +239,7 @@ export default function HomePage() {
                       <span className="font-medium text-slate-300 text-[11px]">By {s.author_name}</span>
                       <div className="flex items-center gap-2.5 text-[11px] font-mono">
                         <span className="flex items-center gap-1"><Eye size={12} />{s.views}</span>
-                        <span className="flex items-center gap-1 text-rose-400"><Heart size={12} />{(s.reactions?.heart || 0) + (s.reactions?.fire || 0)}</span>
+                        <span className="flex items-center gap-1 text-blue-400"><Heart size={12} />{(s.reactions?.heart || 0) + (s.reactions?.fire || 0)}</span>
                       </div>
                     </div>
                   </div>
@@ -258,7 +258,7 @@ export default function HomePage() {
               <div className="overline mb-1">03 / Collaborative Desks</div>
               <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">Investigative Reporting Drives</h2>
             </div>
-            <Link to="/projects" className="text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1 transition" data-testid="see-all-campaigns">
+            <Link to="/projects" className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1 transition" data-testid="see-all-campaigns">
               All Active Drives <ArrowRight size={13} />
             </Link>
           </div>
@@ -270,7 +270,7 @@ export default function HomePage() {
                 to="/projects"
                 className="block"
               >
-                <TiltCard maxAngle={10} className="glass-card overflow-hidden card-interactive h-full flex flex-col justify-between border border-white/[0.12]">
+                <TiltCard maxAngle={8} className="glass-card overflow-hidden card-interactive h-full flex flex-col justify-between border border-white/[0.12]">
                   <div className="h-40 relative bg-slate-900 overflow-hidden translate-z-10">
                     {proj.cover_image ? (
                       <img src={proj.cover_image} alt={proj.title} className="w-full h-full object-cover" />
@@ -284,8 +284,8 @@ export default function HomePage() {
                         {proj.category}
                       </span>
                     </div>
-                    <div className="absolute bottom-2.5 right-3 bg-slate-950/90 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-mono text-slate-200 border border-white/15 translate-z-20">
-                      {proj.progress || 0}% Filed
+                    <div className="absolute bottom-2.5 right-3 bg-slate-950/90 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[10px] font-mono text-slate-200 border border-white/15 translate-z-20">
+                      {proj.progress || 0}% Complete
                     </div>
                   </div>
 
@@ -298,13 +298,13 @@ export default function HomePage() {
                     <div>
                       <div className="w-full bg-white/[0.1] rounded-full h-1.5 overflow-hidden mb-3">
                         <div
-                          className="bg-rose-500 h-1.5 rounded-full"
+                          className="bg-blue-500 h-1.5 rounded-full"
                           style={{ width: `${Math.min(100, Math.max(5, proj.progress || 0))}%` }}
                         />
                       </div>
                       <div className="flex items-center justify-between text-[11px] text-slate-400">
-                        <span>{proj.team?.length || 1} contributors</span>
-                        <span className="text-rose-400 font-semibold flex items-center gap-0.5">
+                        <span>{proj.team?.length || 1} staff contributors</span>
+                        <span className="text-blue-400 font-semibold flex items-center gap-0.5">
                           Join Desk <ArrowRight size={11} />
                         </span>
                       </div>
@@ -317,14 +317,14 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* 04 / Masterclasses & Deadlines */}
+      {/* 04 / Upcoming Events */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 border-t border-white/[0.08]" data-testid="events-section">
         <div className="flex items-end justify-between mb-7">
           <div>
-            <div className="overline mb-1">04 / Masterclasses & Deadlines</div>
+            <div className="overline mb-1">04 / Briefings & Masterclasses</div>
             <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">Upcoming Newsroom Events</h2>
           </div>
-          <Link to="/events" className="text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1 transition" data-testid="see-all-events">
+          <Link to="/events" className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1 transition" data-testid="see-all-events">
             Full Calendar <ArrowRight size={13} />
           </Link>
         </div>
@@ -352,7 +352,7 @@ export default function HomePage() {
                       <span className="badge-pill mb-2">{ev.type}</span>
                       <h3 className="font-heading text-base font-bold text-white mt-1">{ev.title}</h3>
                     </div>
-                    <div className="flex items-center gap-1 text-xs text-slate-300 font-mono glass px-2 py-0.5 rounded">
+                    <div className="flex items-center gap-1 text-xs text-slate-300 font-mono glass px-2.5 py-0.5 rounded-full">
                       <Users size={13} /> {ev.team_members?.length || 0}/{ev.max_team}
                     </div>
                   </div>
@@ -361,7 +361,7 @@ export default function HomePage() {
                     <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-white/[0.08] translate-z-20">
                       <div className="flex items-center gap-1 text-[11px] text-slate-300">
                         <Clock size={13} className="text-amber-400" />
-                        <span>Closes in:</span>
+                        <span>Deadline:</span>
                       </div>
                       <CountdownTimer targetDate={ev.end_date} />
                     </div>
@@ -377,10 +377,10 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 border-t border-white/[0.08]" data-testid="opportunities-section">
         <div className="flex items-end justify-between mb-7">
           <div>
-            <div className="overline mb-1">05 / Growth Pathways</div>
-            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">Fellowships & Grants</h2>
+            <div className="overline mb-1">05 / Fellowships & Grants</div>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">Editorial Opportunities</h2>
           </div>
-          <Link to="/opportunities" className="text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1 transition" data-testid="see-all-opps">
+          <Link to="/opportunities" className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1 transition" data-testid="see-all-opps">
             Browse All <ArrowRight size={13} />
           </Link>
         </div>
@@ -394,16 +394,16 @@ export default function HomePage() {
             {(data?.opportunities || []).map((opp, i) => (
               <TiltCard
                 key={opp.id}
-                maxAngle={12}
+                maxAngle={10}
                 className="glass-card p-4 card-interactive animate-fade-in-up border border-white/[0.12] flex flex-col justify-between"
                 style={{ animationDelay: `${i * 80}ms` }}
                 data-testid={`opp-card-${i}`}
               >
                 <div className="translate-z-20">
                   <div className="badge-pill mb-2.5 text-[10px]" style={{
-                    borderColor: opp.type === 'internship' ? 'rgba(99,102,241,0.4)' : opp.type === 'scholarship' ? 'rgba(245,158,11,0.4)' : 'rgba(244,63,94,0.4)',
-                    color: opp.type === 'internship' ? '#a5b4fc' : opp.type === 'scholarship' ? '#fcd34d' : '#fda4af',
-                    background: opp.type === 'internship' ? 'rgba(99,102,241,0.15)' : opp.type === 'scholarship' ? 'rgba(245,158,11,0.15)' : 'rgba(244,63,94,0.15)',
+                    borderColor: opp.type === 'internship' ? 'rgba(59,130,246,0.4)' : opp.type === 'scholarship' ? 'rgba(245,158,11,0.4)' : 'rgba(148,163,184,0.4)',
+                    color: opp.type === 'internship' ? '#93c5fd' : opp.type === 'scholarship' ? '#fcd34d' : '#cbd5e1',
+                    background: opp.type === 'internship' ? 'rgba(59,130,246,0.15)' : opp.type === 'scholarship' ? 'rgba(245,158,11,0.15)' : 'rgba(148,163,184,0.15)',
                   }}>{opp.type}</div>
                   <h4 className="font-heading text-xs font-bold mb-1 text-white line-clamp-2">{opp.title}</h4>
                   <p className="text-[11px] text-slate-300 mb-3">{opp.organization}</p>
@@ -419,14 +419,14 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* 06 / Top Reporters */}
+      {/* 06 / Accredited Reporters */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 pb-20 border-t border-white/[0.08]" data-testid="writers-section">
         <div className="flex items-end justify-between mb-7">
           <div>
             <div className="overline mb-1">06 / Newsroom Ranks</div>
-            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">Top Reporters</h2>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white">Accredited Reporters</h2>
           </div>
-          <Link to="/community" className="text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1 transition" data-testid="see-leaderboard">
+          <Link to="/community" className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1 transition" data-testid="see-leaderboard">
             Full Leaderboard <ArrowRight size={13} />
           </Link>
         </div>
@@ -440,20 +440,20 @@ export default function HomePage() {
               className="block"
             >
               <TiltCard
-                maxAngle={14}
+                maxAngle={12}
                 className="glass-card p-4 min-w-[180px] text-center card-interactive animate-fade-in-up border border-white/[0.12]"
                 style={{ animationDelay: `${i * 80}ms` }}
               >
-                <div className="w-12 h-12 rounded-full bg-slate-800 border border-white/20 flex items-center justify-center mx-auto mb-2.5 translate-z-20 shadow-lg">
+                <div className="w-12 h-12 rounded-full bg-slate-800 border border-white/20 flex items-center justify-center mx-auto mb-2.5 translate-z-20 shadow-md">
                   <span className="font-heading text-base font-bold text-white">{w.name?.[0]?.toUpperCase()}</span>
                 </div>
                 <h4 className="font-heading text-xs font-bold mb-1 text-white truncate translate-z-10">{w.name}</h4>
-                <div className="flex items-center justify-center gap-1 text-rose-400 font-mono text-[11px] font-semibold mb-2 translate-z-20">
+                <div className="flex items-center justify-center gap-1 text-blue-400 font-mono text-[11px] font-semibold mb-2 translate-z-20">
                   <Trophy size={11} /> {w.lifetime_xp} XP
                 </div>
                 <div className="flex flex-wrap gap-1 justify-center translate-z-10">
                   {(w.role_tags || []).slice(0, 2).map(t => (
-                    <span key={t} className="text-[9px] px-1.5 py-0.5 rounded bg-white/[0.08] text-slate-300 font-mono">{t}</span>
+                    <span key={t} className="text-[9px] px-2 py-0.5 rounded-full bg-white/[0.08] text-slate-300 font-mono">{t}</span>
                   ))}
                 </div>
               </TiltCard>
@@ -462,20 +462,20 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Editorial Mission Callout with Tilt */}
+      {/* Editorial Mission Callout */}
       {!user && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 pb-24" data-testid="cta-section">
-          <TiltCard maxAngle={6} className="glass-card p-8 sm:p-12 text-center border border-white/15 relative overflow-hidden shadow-2xl">
+          <TiltCard maxAngle={5} className="glass-card p-8 sm:p-12 text-center border border-white/15 relative overflow-hidden shadow-2xl">
             <div className="max-w-xl mx-auto translate-z-20">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-mono text-rose-300 bg-rose-500/15 border border-rose-500/30 mb-4">
-                <ShieldCheck size={13} /> Young Gazette Publishing Ecosystem
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono text-blue-300 bg-blue-500/15 border border-blue-500/30 mb-4">
+                <ShieldCheck size={13} /> Young Gazette Publishing Network
               </div>
               <h2 className="font-heading text-2xl sm:text-4xl font-bold tracking-tight mb-3 text-white">
-                Built by Student Journalists.<br />
-                <span className="font-serif italic font-normal text-rose-300">Read by Global Audiences.</span>
+                Built by Student Reporters.<br />
+                <span className="font-serif italic font-normal text-sky-300">Read by Global Audiences.</span>
               </h2>
               <p className="text-slate-300 mb-6 text-sm leading-relaxed">
-                Publish investigative reports, collaborate across campus chapters, earn verified editorial credentials, and showcase your digital portfolio.
+                Publish investigative reports, collaborate across international campus desks, earn accredited editorial XP, and build your digital portfolio.
               </p>
               <button onClick={() => setAuthOpen(true)} className="btn-primary translate-z-30" data-testid="cta-join-btn">
                 Apply for Reporter Access <ArrowRight size={15} />

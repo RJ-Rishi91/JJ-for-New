@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../common/Logo';
 import { useAuth } from '../../contexts/AuthContext';
 import { newsletter as newsApi, contact as contactApi } from '../../lib/api';
-import { Mail, Send, CheckCircle, MessageSquare, X, Shield, Eye, EyeOff, Sparkles, ArrowRight } from 'lucide-react';
+import { Mail, Send, CheckCircle, MessageSquare, X, Shield, Eye, EyeOff, Sparkles } from 'lucide-react';
 
 export default function Footer() {
   const { user, login } = useAuth();
@@ -96,17 +96,17 @@ export default function Footer() {
     <footer className="border-t border-white/[0.08] glass-nav text-slate-400 pt-14 pb-10 relative z-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Newsletter Callout */}
-        <div className="glass-card rounded-2xl p-6 sm:p-8 mb-14 border border-white/[0.08] relative overflow-hidden">
+        <div className="glass-card rounded-2xl p-6 sm:p-8 mb-14 border border-white/[0.1] relative overflow-hidden">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
             <div className="max-w-xl">
-              <div className="flex items-center gap-1.5 text-rose-400 text-xs font-mono font-medium uppercase tracking-wider mb-2">
+              <div className="flex items-center gap-1.5 text-blue-400 text-xs font-mono font-medium uppercase tracking-wider mb-2">
                 <Mail size={14} /> Young Gazette Weekly Dispatch
               </div>
               <h3 className="font-heading text-xl sm:text-2xl font-bold text-white mb-1.5">
                 Stories that matter, straight to your inbox.
               </h3>
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Join our readership of student journalists and educators. Fresh investigative scoops, scholarship deadlines, and editorial prompts every Friday.
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Join our readership of student journalists, mentors, and educators. Investigative scoops, scholarship deadlines, and writing sparks every Friday.
               </p>
             </div>
 
@@ -118,18 +118,18 @@ export default function Footer() {
                   placeholder="Enter your email address..."
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="input-dark text-xs py-2 px-3.5 flex-1"
+                  className="input-dark text-xs py-2.5 px-4 flex-1"
                 />
                 <button
                   type="submit"
                   disabled={newsLoading}
-                  className="btn-primary text-xs py-2 px-4 whitespace-nowrap"
+                  className="btn-primary text-xs py-2.5 px-6 whitespace-nowrap"
                 >
                   <Send size={13} /> {newsLoading ? 'Subscribing...' : 'Subscribe'}
                 </button>
               </form>
               {newsStatus && (
-                <p className="text-xs text-rose-300 mt-2 flex items-center gap-1.5 animate-fade-in font-medium">
+                <p className="text-xs text-blue-300 mt-2 flex items-center gap-1.5 animate-fade-in font-medium">
                   <CheckCircle size={13} /> {newsStatus}
                 </p>
               )}
@@ -145,7 +145,7 @@ export default function Footer() {
               Junior Journalist is an independent, non-profit youth journalism collective. We empower student reporters to investigate, publish, and lead change across campuses globally.
             </p>
             <div className="flex items-center gap-1.5 text-slate-300 font-mono text-[11px]">
-              <Shield size={13} className="text-rose-400" /> 100% Student-First Editorial Freedom
+              <Shield size={13} className="text-blue-400" /> 100% Student-First Editorial Freedom
             </div>
           </div>
 
@@ -175,12 +175,12 @@ export default function Footer() {
             <ul className="space-y-2 text-slate-400">
               <li><Link to="/submit" className="hover:text-white transition">Submit Your Story</Link></li>
               <li>
-                <button onClick={() => setContactOpen(true)} className="hover:text-rose-400 transition text-left">
+                <button onClick={() => setContactOpen(true)} className="hover:text-blue-400 transition text-left">
                   Contact Editorial Desk
                 </button>
               </li>
               <li>
-                <button onClick={handleAdminClick} className="hover:text-rose-300 text-rose-400 font-semibold transition text-left flex items-center gap-1">
+                <button onClick={handleAdminClick} className="hover:text-blue-300 text-blue-400 font-semibold transition text-left flex items-center gap-1">
                   <Shield size={12} /> Newsroom HQ Login
                 </button>
               </li>
@@ -201,7 +201,7 @@ export default function Footer() {
             <span>•</span>
             <button
               onClick={handleAdminClick}
-              className="hover:text-rose-300 text-rose-400 transition flex items-center gap-1 font-semibold"
+              className="hover:text-blue-300 text-blue-400 transition flex items-center gap-1 font-semibold"
               data-testid="footer-admin-login"
             >
               <Shield size={12} /> Staff Portal
@@ -222,7 +222,7 @@ export default function Footer() {
             </button>
 
             <div className="flex items-center gap-2 mb-1.5">
-              <MessageSquare size={18} className="text-rose-400" />
+              <MessageSquare size={18} className="text-blue-400" />
               <h3 className="font-heading text-lg font-bold text-white">Contact Editorial Desk</h3>
             </div>
             <p className="text-xs text-slate-400 mb-5">
@@ -230,8 +230,8 @@ export default function Footer() {
             </p>
 
             {contactSuccess ? (
-              <div className="p-5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-center text-xs text-rose-300 space-y-1.5">
-                <CheckCircle size={28} className="mx-auto text-rose-400" />
+              <div className="p-5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-center text-xs text-blue-300 space-y-1.5">
+                <CheckCircle size={28} className="mx-auto text-blue-400" />
                 <h4 className="font-bold text-sm text-white">Message Delivered</h4>
                 <p>An editorial coordinator will get back to you shortly.</p>
               </div>
@@ -270,10 +270,10 @@ export default function Footer() {
                       onChange={e => setContactForm({ ...contactForm, category: e.target.value })}
                       className="input-dark text-xs"
                     >
-                      <option value="general" className="bg-[#110e1c] text-white">General Inquiry</option>
-                      <option value="story_pitch" className="bg-[#110e1c] text-white">Confidential Story Tip</option>
-                      <option value="campus_partner" className="bg-[#110e1c] text-white">Campus Chapter Setup</option>
-                      <option value="corrections" className="bg-[#110e1c] text-white">Fact Check / Correction</option>
+                      <option value="general" className="bg-[#111827] text-white">General Inquiry</option>
+                      <option value="story_pitch" className="bg-[#111827] text-white">Confidential Story Tip</option>
+                      <option value="campus_partner" className="bg-[#111827] text-white">Campus Chapter Setup</option>
+                      <option value="corrections" className="bg-[#111827] text-white">Fact Check / Correction</option>
                     </select>
                   </div>
                   <div>
@@ -297,7 +297,7 @@ export default function Footer() {
                     placeholder="Provide details or documentation..."
                     value={contactForm.message}
                     onChange={e => setContactForm({ ...contactForm, message: e.target.value })}
-                    className="input-dark text-xs leading-relaxed"
+                    className="input-dark text-xs rounded-2xl leading-relaxed"
                   />
                 </div>
 
@@ -326,7 +326,7 @@ export default function Footer() {
             </button>
 
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 rounded-lg bg-rose-500/15 flex items-center justify-center text-rose-400 border border-rose-500/25">
+              <div className="w-8 h-8 rounded-full bg-blue-500/15 flex items-center justify-center text-blue-400 border border-blue-500/30">
                 <Shield size={16} />
               </div>
               <div>
@@ -336,12 +336,12 @@ export default function Footer() {
             </div>
 
             {/* Quick Demo One-Click Sign In */}
-            <div className="my-4 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20">
+            <div className="my-4 p-3.5 rounded-2xl bg-blue-500/10 border border-blue-500/20">
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-semibold text-white flex items-center gap-1">
-                  <Sparkles size={13} className="text-rose-400" /> Demo Lead Editor
+                  <Sparkles size={13} className="text-blue-400" /> Demo Lead Editor
                 </span>
-                <span className="text-[9px] uppercase font-mono px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 font-bold">
+                <span className="text-[9px] uppercase font-mono px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-bold">
                   Managing Editor
                 </span>
               </div>
