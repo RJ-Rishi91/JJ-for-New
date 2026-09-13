@@ -1,9 +1,10 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, Query
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-import os, logging, uuid, jwt, bcrypt
+import os, logging, uuid, jwt, bcrypt, base64
 from pathlib import Path
 from pydantic import BaseModel, Field
 from typing import List, Optional
@@ -21,6 +22,10 @@ app = FastAPI(title="Junior Journalist API", version="1.0.0")
 api_router = APIRouter(prefix="/api")
 security = HTTPBearer(auto_error=False)
 
+UPLOAD_DIR = ROOT_DIR / "uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
+
 JWT_SECRET = os.environ.get("JWT_SECRET", "jj_secret_key_2025_young_gazette")
 JWT_ALGO = "HS256"
 
@@ -31,6 +36,21 @@ async def root_health():
 @api_router.get("/health")
 async def api_health():
     return {"status": "ok", "app": "Junior Journalist API"}
+
+@app.on_event("startup")
+async def init_db_indexes():
+    try:
+        await db.users.create_index("email", unique=True)
+        await db.users.create_index("id", unique=True)
+        await db.submissions.create_index([("status", 1), ("created_at", -1)])
+        await db.submissions.create_index("category")
+        await db.messages.create_index([("channel", 1), ("created_at", -1)])
+        await db.notifications.create_index([("user_id", 1), ("read", 1)])
+        await db.comments.create_index([("submission_id", 1), ("created_at", 1)])
+        await db.projects.create_index("category")
+        logger.info("MongoDB indexes verified successfully.")
+    except Exception as e:
+        logger.warning(f"MongoDB index verification note: {e}")
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -224,6 +244,21 @@ class UploadInput(BaseModel):
     data_url: str
     filename: Optional[str] = "upload.jpg"
 
+class CommentCreate(BaseModel):
+    content: str
+
+class NewsletterInput(BaseModel):
+    email: str
+    name: Optional[str] = ""
+    school: Optional[str] = ""
+
+class ContactInput(BaseModel):
+    name: str
+    email: str
+    category: Optional[str] = "general"
+    subject: str
+    message: str
+
 # ─── AUTH ───
 @api_router.post("/auth/register")
 async def register(inp: RegisterInput):
@@ -303,13 +338,15 @@ async def get_submission(sub_id: str):
     return sub
 
 @api_router.put("/submissions/{sub_id}/status")
-async def update_submission_status(sub_id: str, status: str = Query(...), user=Depends(get_current_user)):
-    if user["role"] not in ("admin", "manager"):
-        raise HTTPException(403, "Not authorized")
+async def update_submission_status(sub_id: str, status: str = Query(...), notes: Optional[str] = Query(None), user=Depends(get_current_user)):
+    if user["role"] not in ("admin", "manager", "editor"):
+        raise HTTPException(403, "Not authorized. Requires editor or admin role.")
     sub = await db.submissions.find_one({"id": sub_id}, {"_id": 0})
     if not sub:
         raise HTTPException(404, "Not found")
     update = {"status": status}
+    if notes:
+        update["editorial_notes"] = notes
     if status == "published":
         update["published_at"] = now_iso()
     await db.submissions.update_one({"id": sub_id}, {"$set": update})
@@ -317,7 +354,8 @@ async def update_submission_status(sub_id: str, status: str = Query(...), user=D
         await add_points(sub["author_id"], 10, f"Published: {sub['title']}")
         await create_notification(sub["author_id"], "Article Published! 🎉", f"Your piece '{sub['title']}' is now live on Explore!", f"/submissions/{sub_id}", "submission")
     elif status == "rejected":
-        await create_notification(sub["author_id"], "Submission Update", f"Your piece '{sub['title']}' was not approved. Review notes on Dashboard.", "/dashboard", "submission")
+        feedback_str = f" Editorial notes: {notes}" if notes else " Review notes on your Dashboard."
+        await create_notification(sub["author_id"], "Submission Update", f"Your piece '{sub['title']}' was not approved.{feedback_str}", "/dashboard", "submission")
     return {"message": f"Status updated to {status}"}
 
 @api_router.post("/submissions/{sub_id}/react")
@@ -327,6 +365,50 @@ async def react_submission(sub_id: str, reaction: str = Query(...), user=Depends
         raise HTTPException(400, f"Invalid reaction. Use: {valid}")
     await db.submissions.update_one({"id": sub_id}, {"$inc": {f"reactions.{reaction}": 1}})
     return {"message": "Reacted"}
+
+# ─── ARTICLE COMMENTS & PEER DISCUSSION ───
+@api_router.get("/submissions/{sub_id}/comments")
+async def list_article_comments(sub_id: str):
+    comments = await db.comments.find({"submission_id": sub_id}, {"_id": 0}).sort("created_at", 1).limit(100).to_list(100)
+    return comments
+
+@api_router.post("/submissions/{sub_id}/comments")
+async def add_article_comment(sub_id: str, inp: CommentCreate, user=Depends(get_current_user)):
+    sub = await db.submissions.find_one({"id": sub_id}, {"_id": 0})
+    if not sub:
+        raise HTTPException(404, "Article not found")
+    if not inp.content.strip():
+        raise HTTPException(400, "Comment cannot be empty")
+    comment = {
+        "id": make_id(),
+        "submission_id": sub_id,
+        "user_id": user["id"],
+        "user_name": user["name"],
+        "user_role": user.get("role", "member"),
+        "content": inp.content.strip(),
+        "created_at": now_iso()
+    }
+    await db.comments.insert_one(comment)
+    await add_points(user["id"], 2, f"Commented on article: {sub['title'][:40]}")
+    if sub["author_id"] != user["id"]:
+        await create_notification(
+            sub["author_id"],
+            "New Article Comment 💬",
+            f"{user['name']} commented on your story '{sub['title'][:35]}...'",
+            f"/submissions/{sub_id}",
+            "comment"
+        )
+    return comment
+
+@api_router.delete("/submissions/{sub_id}/comments/{comment_id}")
+async def delete_article_comment(sub_id: str, comment_id: str, user=Depends(get_current_user)):
+    comment = await db.comments.find_one({"id": comment_id, "submission_id": sub_id})
+    if not comment:
+        raise HTTPException(404, "Comment not found")
+    if comment["user_id"] != user["id"] and user["role"] not in ("admin", "editor", "manager"):
+        raise HTTPException(403, "Not authorized")
+    await db.comments.delete_one({"id": comment_id})
+    return {"message": "Comment deleted"}
 
 # ─── EVENTS ───
 @api_router.post("/events")
@@ -554,8 +636,8 @@ async def get_user_profile(user_id: str):
 async def update_user_role(user_id: str, role: str = Query(...), user=Depends(get_current_user)):
     if user["role"] != "admin":
         raise HTTPException(403, "Admin only")
-    if role not in ("member", "manager", "admin"):
-        raise HTTPException(400, "Invalid role")
+    if role not in ("member", "editor", "manager", "admin"):
+        raise HTTPException(400, "Invalid role. Allowed: member, editor, manager, admin")
     await db.users.update_one({"id": user_id}, {"$set": {"role": role}})
     return {"message": f"User role updated to {role}"}
 
@@ -590,6 +672,42 @@ async def redeem_reward(reward_id: str, user=Depends(get_current_user)):
 # ─── SEED DATA ───
 @api_router.post("/seed")
 async def seed_data():
+    user_count = await db.users.count_documents({})
+    if user_count == 0:
+        demo_users = [
+            {
+                "id": "seed-u4",
+                "email": "editor@juniorjournalist.org",
+                "password_hash": hash_pw("EditorPass123!"),
+                "name": "Rushal Singh",
+                "bio": "Managing Editor & investigative reporter mentoring young journalists.",
+                "city": "Udaipur",
+                "school": "St. Paul's Senior Secondary",
+                "role": "admin",
+                "role_tags": ["Managing Editor", "Investigative Lead"],
+                "lifetime_xp": 280,
+                "redeemable_points": 240,
+                "badges": ["wordsmith", "storyteller", "veteran_leader"],
+                "joined_at": now_iso()
+            },
+            {
+                "id": "seed-u1",
+                "email": "aarav@juniorjournalist.org",
+                "password_hash": hash_pw("StudentPass123!"),
+                "name": "Aarav Sharma",
+                "bio": "Campus lead passionate about civic reporting and climate resilience.",
+                "city": "New Delhi",
+                "school": "Delhi Public School (R.K. Puram)",
+                "role": "editor",
+                "role_tags": ["Campus Lead", "Civic Writer"],
+                "lifetime_xp": 190,
+                "redeemable_points": 150,
+                "badges": ["wordsmith", "organizer", "rising_star"],
+                "joined_at": now_iso()
+            }
+        ]
+        await db.users.insert_many(demo_users)
+
     badge_count = await db.badges.count_documents({})
     if badge_count == 0:
         badges = [
@@ -846,7 +964,45 @@ async def seed_data():
             {"id": make_id(), "sender_id": "seed-u1", "sender_name": "Aarav Sharma", "sender_role": "member", "channel": "general", "recipient_id": None, "content": "Welcome everyone to the new Junior Journalist newsroom! Pitch your stories in #investigative or share photo essays in #photojournalism.", "created_at": now_iso()},
             {"id": make_id(), "sender_id": "seed-u4", "sender_name": "Rushal Singh", "sender_role": "admin", "channel": "general", "recipient_id": None, "content": "The Clean Campus plastic audit project is now live under the Projects tab. You can join the audit team!", "created_at": now_iso()}
         ]
-        await db.messages.insert_many(sample_msgs)
+    # Seed Sample Digital Publication Archives
+    archive_count = await db.archives.count_documents({})
+    if archive_count == 0:
+        sample_archives = [
+            {
+                "id": make_id(),
+                "title": "Young Gazette — Issue #03: The Climate Innovators Edition",
+                "issue_number": 3,
+                "season": "Spring 2026",
+                "cover_image": "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=800&auto=format&fit=crop&q=60",
+                "pdf_url": "https://raw.githubusercontent.com/RJ-Rishi91/JJ-for-New/main/sample_issue_03.pdf",
+                "articles_count": 12,
+                "pages": 32,
+                "created_at": now_iso()
+            },
+            {
+                "id": make_id(),
+                "title": "Young Gazette — Issue #02: Voices of Campus Governance",
+                "issue_number": 2,
+                "season": "Winter 2025",
+                "cover_image": "https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=800&auto=format&fit=crop&q=60",
+                "pdf_url": "https://raw.githubusercontent.com/RJ-Rishi91/JJ-for-New/main/sample_issue_02.pdf",
+                "articles_count": 10,
+                "pages": 28,
+                "created_at": now_iso()
+            },
+            {
+                "id": make_id(),
+                "title": "Young Gazette — Issue #01: The Inaugural Youth Anthology",
+                "issue_number": 1,
+                "season": "Fall 2025",
+                "cover_image": "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800&auto=format&fit=crop&q=60",
+                "pdf_url": "https://raw.githubusercontent.com/RJ-Rishi91/JJ-for-New/main/sample_issue_01.pdf",
+                "articles_count": 14,
+                "pages": 36,
+                "created_at": now_iso()
+            }
+        ]
+        await db.archives.insert_many(sample_archives)
 
     return {"message": "Seed data created"}
 
@@ -944,10 +1100,67 @@ async def ask_mentor(inp: MentorQuestionInput, user=Depends(get_current_user)):
 # ─── MEDIA UPLOAD HELPER ───
 @api_router.post("/upload")
 async def upload_media(inp: UploadInput, user=Depends(get_current_user)):
-    # Supports base64 data URLs for immediate preview and inline embedding
     if not inp.data_url.startswith("data:image/"):
-        raise HTTPException(400, "Invalid image data")
-    return {"url": inp.data_url, "filename": inp.filename}
+        raise HTTPException(400, "Invalid image data format. Must be an image data URL.")
+    try:
+        header, b64data = inp.data_url.split(",", 1)
+        ext = "jpg"
+        if "png" in header: ext = "png"
+        elif "webp" in header: ext = "webp"
+        elif "gif" in header: ext = "gif"
+        
+        file_id = f"{uuid.uuid4().hex}.{ext}"
+        filepath = UPLOAD_DIR / file_id
+        
+        file_bytes = base64.b64decode(b64data)
+        with open(filepath, "wb") as f:
+            f.write(file_bytes)
+            
+        file_url = f"/uploads/{file_id}"
+        return {"url": file_url, "filename": inp.filename or file_id}
+    except Exception as e:
+        logger.warning(f"Upload write note: {e}")
+        return {"url": inp.data_url, "filename": inp.filename}
+
+# ─── NEWSLETTER & ARCHIVES ───
+@api_router.post("/newsletter/subscribe")
+async def subscribe_newsletter(inp: NewsletterInput):
+    if not inp.email or "@" not in inp.email:
+        raise HTTPException(400, "Valid email required")
+    existing = await db.newsletter_subscribers.find_one({"email": inp.email.lower()})
+    if existing:
+        return {"message": "You are already subscribed to the Young Gazette digest!", "subscribed": True}
+    doc = {
+        "id": make_id(),
+        "email": inp.email.lower(),
+        "name": inp.name or "",
+        "school": inp.school or "",
+        "created_at": now_iso()
+    }
+    await db.newsletter_subscribers.insert_one(doc)
+    return {"message": "Subscribed successfully! Welcome to the Young Gazette weekly digest.", "subscribed": True}
+
+@api_router.get("/archives")
+async def list_publication_archives():
+    archives = await db.archives.find({}, {"_id": 0}).sort("issue_number", -1).to_list(50)
+    return archives
+
+# ─── CONTACT & INQUIRIES ───
+@api_router.post("/contact")
+async def submit_contact_inquiry(inp: ContactInput):
+    if not inp.email or "@" not in inp.email:
+        raise HTTPException(400, "Valid email required")
+    inquiry = {
+        "id": make_id(),
+        "name": inp.name,
+        "email": inp.email.lower(),
+        "category": inp.category or "general",
+        "subject": inp.subject,
+        "message": inp.message,
+        "created_at": now_iso()
+    }
+    await db.contact_inquiries.insert_one(inquiry)
+    return {"message": "Your inquiry has been received. Our editorial team will review it shortly."}
 
 # ─── PROJECTS & CAMPAIGNS (Module 7) ───
 @api_router.get("/projects")

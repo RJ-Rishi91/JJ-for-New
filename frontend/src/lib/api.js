@@ -42,8 +42,11 @@ export const submissions = {
   create: (data) => API.post('/submissions', data),
   list: (params) => API.get('/submissions', { params }),
   get: (id) => API.get(`/submissions/${id}`),
-  updateStatus: (id, status) => API.put(`/submissions/${id}/status?status=${status}`),
+  updateStatus: (id, status, notes) => API.put(`/submissions/${id}/status`, null, { params: { status, notes } }),
   react: (id, reaction) => API.post(`/submissions/${id}/react?reaction=${reaction}`),
+  comments: (id) => API.get(`/submissions/${id}/comments`),
+  addComment: (id, content) => API.post(`/submissions/${id}/comments`, { content }),
+  deleteComment: (id, commentId) => API.delete(`/submissions/${id}/comments/${commentId}`),
 };
 
 export const events = {
@@ -124,6 +127,18 @@ export const messages = {
   getChannel: (channelId) => API.get(`/messages/channel/${channelId}`),
   send: (data) => API.post('/messages', data),
   getDm: (userId) => API.get(`/messages/dm/${userId}`),
+};
+
+export const newsletter = {
+  subscribe: (data) => API.post('/newsletter/subscribe', data),
+};
+
+export const archives = {
+  list: () => API.get('/archives'),
+};
+
+export const contact = {
+  send: (data) => API.post('/contact', data),
 };
 
 export const badges = {
