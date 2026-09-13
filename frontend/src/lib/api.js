@@ -67,6 +67,7 @@ export const tasks = {
 export const opportunities = {
   list: (params) => API.get('/opportunities', { params }),
   create: (data) => API.post('/opportunities', data),
+  delete: (id) => API.delete(`/opportunities/${id}`),
 };
 
 export const rewards = {
@@ -87,11 +88,14 @@ export const chapters = {
 
 export const admin = {
   broadcast: (data) => API.post('/admin/broadcast', data),
+  inquiries: () => API.get('/admin/contact-inquiries'),
+  subscribers: () => API.get('/admin/subscribers'),
 };
 
 export const resources = {
   list: (params) => API.get('/resources', { params }),
   create: (data) => API.post('/resources', data),
+  delete: (id) => API.delete(`/resources/${id}`),
   askMentor: (data) => API.post('/resources/ask-mentor', data),
 };
 
@@ -135,6 +139,8 @@ export const newsletter = {
 
 export const archives = {
   list: () => API.get('/archives'),
+  create: (data) => API.post('/archives', data),
+  delete: (id) => API.delete(`/archives/${id}`),
 };
 
 export const contact = {

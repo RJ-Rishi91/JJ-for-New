@@ -259,6 +259,15 @@ class ContactInput(BaseModel):
     subject: str
     message: str
 
+class ArchiveCreate(BaseModel):
+    title: str
+    issue_number: int
+    season: str
+    cover_image: Optional[str] = None
+    pdf_url: str
+    articles_count: Optional[int] = 10
+    pages: Optional[int] = 28
+
 # ─── AUTH ───
 @api_router.post("/auth/register")
 async def register(inp: RegisterInput):
@@ -344,19 +353,23 @@ async def update_submission_status(sub_id: str, status: str = Query(...), notes:
     sub = await db.submissions.find_one({"id": sub_id}, {"_id": 0})
     if not sub:
         raise HTTPException(404, "Not found")
-    update = {"status": status}
+    target_status = "published" if status in ("published", "approved") else status
+    update = {"status": target_status}
     if notes:
         update["editorial_notes"] = notes
-    if status == "published":
+    if target_status == "published":
         update["published_at"] = now_iso()
     await db.submissions.update_one({"id": sub_id}, {"$set": update})
-    if status == "published":
+    if target_status == "published":
         await add_points(sub["author_id"], 10, f"Published: {sub['title']}")
         await create_notification(sub["author_id"], "Article Published! 🎉", f"Your piece '{sub['title']}' is now live on Explore!", f"/submissions/{sub_id}", "submission")
-    elif status == "rejected":
+    elif target_status == "revision_requested":
+        feedback_str = f" Notes from Editor: {notes}" if notes else " Please check review notes on your piece."
+        await create_notification(sub["author_id"], "Revision Requested 📝", f"Your piece '{sub['title']}' needs revision before publication.{feedback_str}", f"/submissions/{sub_id}", "submission")
+    elif target_status == "rejected":
         feedback_str = f" Editorial notes: {notes}" if notes else " Review notes on your Dashboard."
-        await create_notification(sub["author_id"], "Submission Update", f"Your piece '{sub['title']}' was not approved.{feedback_str}", "/dashboard", "submission")
-    return {"message": f"Status updated to {status}"}
+        await create_notification(sub["author_id"], "Submission Update", f"Your piece '{sub['title']}' was declined.{feedback_str}", "/dashboard", "submission")
+    return {"message": f"Status updated to {target_status}"}
 
 @api_router.post("/submissions/{sub_id}/react")
 async def react_submission(sub_id: str, reaction: str = Query(...), user=Depends(get_current_user)):
@@ -551,6 +564,13 @@ async def list_opportunities(type: Optional[str] = None, limit: int = 50):
     opps = await db.opportunities.find(query, {"_id": 0}).sort("created_at", -1).limit(limit).to_list(limit)
     return opps
 
+@api_router.delete("/opportunities/{opp_id}")
+async def delete_opportunity(opp_id: str, user=Depends(get_current_user)):
+    if user["role"] not in ("admin", "manager"):
+        raise HTTPException(403, "Not authorized")
+    await db.opportunities.delete_one({"id": opp_id})
+    return {"message": "Opportunity deleted"}
+
 # ─── RESOURCES (Learn Hub) ───
 @api_router.post("/resources")
 async def create_resource(inp: ResourceCreate, user=Depends(get_current_user)):
@@ -574,6 +594,13 @@ async def list_resources(type: Optional[str] = None, category: Optional[str] = N
     resources = await db.resources.find(query, {"_id": 0}).sort("created_at", -1).limit(limit).to_list(limit)
     return resources
 
+@api_router.delete("/resources/{res_id}")
+async def delete_resource(res_id: str, user=Depends(get_current_user)):
+    if user["role"] not in ("admin", "manager"):
+        raise HTTPException(403, "Not authorized")
+    await db.resources.delete_one({"id": res_id})
+    return {"message": "Resource deleted"}
+
 # ─── LEADERBOARD ───
 @api_router.get("/leaderboard")
 async def get_leaderboard(limit: int = 20):
@@ -592,11 +619,20 @@ async def get_dashboard_stats(user=Depends(get_current_user)):
     total_submissions = await db.submissions.count_documents({})
     total_events = await db.events.count_documents({})
     pending_reviews = await db.submissions.count_documents({"status": "pending"})
+    total_opps = await db.opportunities.count_documents({})
+    total_res = await db.resources.count_documents({})
+    total_subs = await db.newsletter_subscribers.count_documents({})
+    total_inq = await db.contact_inquiries.count_documents({})
+    total_arch = await db.archives.count_documents({})
+    total_proj = await db.projects.count_documents({})
     return {
         "my_submissions": my_subs, "my_published": my_published,
         "my_events": my_events, "my_tasks": my_tasks, "my_tasks_done": my_tasks_done,
         "total_users": total_users, "total_submissions": total_submissions,
         "total_events": total_events, "pending_reviews": pending_reviews,
+        "total_opportunities": total_opps, "total_resources": total_res,
+        "total_subscribers": total_subs, "total_inquiries": total_inq,
+        "total_archives": total_arch, "total_projects": total_proj,
         "user": {k: v for k, v in user.items() if k != "password_hash"}
     }
 
@@ -631,13 +667,13 @@ async def get_user_profile(user_id: str):
     u["events_led"] = events
     return u
 
-# ─── ADMIN: MANAGE USERS ───
+# ─── ADMIN: MANAGE USERS & DESK ───
 @api_router.put("/admin/users/{user_id}/role")
 async def update_user_role(user_id: str, role: str = Query(...), user=Depends(get_current_user)):
     if user["role"] != "admin":
         raise HTTPException(403, "Admin only")
-    if role not in ("member", "editor", "manager", "admin"):
-        raise HTTPException(400, "Invalid role. Allowed: member, editor, manager, admin")
+    if role not in ("member", "contributor", "editor", "manager", "admin"):
+        raise HTTPException(400, "Invalid role. Allowed: member, contributor, editor, manager, admin")
     await db.users.update_one({"id": user_id}, {"$set": {"role": role}})
     return {"message": f"User role updated to {role}"}
 
@@ -647,6 +683,20 @@ async def list_all_users(user=Depends(get_current_user)):
         raise HTTPException(403, "Not authorized")
     users = await db.users.find({}, {"_id": 0, "password_hash": 0}).sort("joined_at", -1).to_list(500)
     return users
+
+@api_router.get("/admin/contact-inquiries")
+async def list_contact_inquiries(user=Depends(get_current_user)):
+    if user["role"] not in ("admin", "manager", "editor"):
+        raise HTTPException(403, "Not authorized")
+    inquiries = await db.contact_inquiries.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return inquiries
+
+@api_router.get("/admin/subscribers")
+async def list_newsletter_subscribers(user=Depends(get_current_user)):
+    if user["role"] not in ("admin", "manager"):
+        raise HTTPException(403, "Not authorized")
+    subscribers = await db.newsletter_subscribers.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+    return subscribers
 
 # ─── REWARDS STORE ───
 @api_router.get("/rewards")
@@ -1144,6 +1194,31 @@ async def subscribe_newsletter(inp: NewsletterInput):
 async def list_publication_archives():
     archives = await db.archives.find({}, {"_id": 0}).sort("issue_number", -1).to_list(50)
     return archives
+
+@api_router.post("/archives")
+async def create_archive(inp: ArchiveCreate, user=Depends(get_current_user)):
+    if user["role"] not in ("admin", "manager", "editor"):
+        raise HTTPException(403, "Not authorized. Requires editor or admin role.")
+    archive = {
+        "id": make_id(),
+        "title": inp.title,
+        "issue_number": inp.issue_number,
+        "season": inp.season,
+        "cover_image": inp.cover_image or "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=800&auto=format&fit=crop&q=60",
+        "pdf_url": inp.pdf_url,
+        "articles_count": inp.articles_count or 10,
+        "pages": inp.pages or 28,
+        "created_at": now_iso()
+    }
+    await db.archives.insert_one(archive)
+    return {k: v for k, v in archive.items() if k != "_id"}
+
+@api_router.delete("/archives/{archive_id}")
+async def delete_archive(archive_id: str, user=Depends(get_current_user)):
+    if user["role"] not in ("admin", "manager"):
+        raise HTTPException(403, "Not authorized")
+    await db.archives.delete_one({"id": archive_id})
+    return {"message": "Archive issue deleted"}
 
 # ─── CONTACT & INQUIRIES ───
 @api_router.post("/contact")

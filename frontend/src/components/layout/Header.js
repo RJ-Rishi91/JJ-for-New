@@ -170,7 +170,13 @@ export default function Header() {
                           <span className="text-[10px] text-[#A0A0AB]">{user.redeemable_points || 0} pts</span>
                         </div>
                       </div>
-                      <Link to="/dashboard" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-[#A0A0AB] hover:text-white hover:bg-white/5 transition" data-testid="dropdown-dashboard">Dashboard</Link>
+                      {['admin', 'manager', 'editor'].includes(user.role) && (
+                        <Link to="/dashboard" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-[#00FFA3] bg-[#00FFA3]/10 hover:bg-[#00FFA3]/15 font-semibold transition flex items-center justify-between" data-testid="dropdown-admin">
+                          <span>Newsroom HQ Desk</span>
+                          <span className="text-[9px] uppercase tracking-wider font-mono bg-[#00FFA3]/20 px-1.5 py-0.5 rounded">{user.role}</span>
+                        </Link>
+                      )}
+                      <Link to="/dashboard" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-[#A0A0AB] hover:text-white hover:bg-white/5 transition" data-testid="dropdown-dashboard">My Dashboard</Link>
                       <Link to={`/profile/${user.id}`} onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-[#A0A0AB] hover:text-white hover:bg-white/5 transition" data-testid="dropdown-profile">My Profile</Link>
                       <Link to="/submit" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-[#A0A0AB] hover:text-white hover:bg-white/5 transition sm:hidden" data-testid="dropdown-submit">Submit Work</Link>
                       <button onClick={() => { logout(); setProfileOpen(false); }} className="w-full text-left px-4 py-2 text-sm text-[#FF3B30] hover:bg-white/5 transition" data-testid="dropdown-logout">Sign Out</button>
