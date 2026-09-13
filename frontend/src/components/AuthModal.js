@@ -75,6 +75,20 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
           <button type="submit" disabled={loading} className="btn-primary w-full" data-testid="auth-submit-btn">
             {loading ? 'Loading...' : tab === 'login' ? 'Sign In' : 'Create Account'}
           </button>
+
+          {tab === 'login' && (
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setForm({ ...form, email: 'editor@juniorjournalist.org', password: 'EditorPass123!' });
+                }}
+                className="w-full text-center text-xs text-[#00FFA3] hover:underline font-mono py-1"
+              >
+                ⚡ Fill Staff / Editor Credentials
+              </button>
+            </div>
+          )}
         </form>
       </div>
     </div>

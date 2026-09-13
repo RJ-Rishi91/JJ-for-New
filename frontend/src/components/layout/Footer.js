@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../common/Logo';
+import { useAuth } from '../../contexts/AuthContext';
 import { newsletter as newsApi, contact as contactApi } from '../../lib/api';
-import { Mail, Send, CheckCircle, MessageSquare, X, Heart, Shield, BookOpen } from 'lucide-react';
+import { Mail, Send, CheckCircle, MessageSquare, X, Heart, Shield, BookOpen, Lock, Eye, EyeOff, Sparkles } from 'lucide-react';
 
 export default function Footer() {
+  const { user, login } = useAuth();
+  const navigate = useNavigate();
+
   // Newsletter state
   const [email, setEmail] = useState('');
   const [newsStatus, setNewsStatus] = useState(null);
@@ -21,6 +25,14 @@ export default function Footer() {
   });
   const [contactLoading, setContactLoading] = useState(false);
   const [contactSuccess, setContactSuccess] = useState(false);
+
+  // Admin login modal state
+  const [adminModalOpen, setAdminModalOpen] = useState(false);
+  const [adminEmail, setAdminEmail] = useState('editor@juniorjournalist.org');
+  const [adminPassword, setAdminPassword] = useState('EditorPass123!');
+  const [adminShowPw, setAdminShowPw] = useState(false);
+  const [adminLoading, setAdminLoading] = useState(false);
+  const [adminError, setAdminError] = useState('');
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -53,6 +65,30 @@ export default function Footer() {
       alert(err.response?.data?.detail || "Failed to submit message");
     } finally {
       setContactLoading(false);
+    }
+  };
+
+  const handleAdminClick = () => {
+    if (user && ['admin', 'manager', 'editor'].includes(user.role)) {
+      navigate('/admin');
+    } else {
+      setAdminError('');
+      setAdminModalOpen(true);
+    }
+  };
+
+  const handleAdminLogin = async (e) => {
+    if (e) e.preventDefault();
+    setAdminError('');
+    setAdminLoading(true);
+    try {
+      await login(adminEmail, adminPassword);
+      setAdminModalOpen(false);
+      navigate('/admin');
+    } catch (err) {
+      setAdminError(err.response?.data?.detail || 'Invalid administrative credentials');
+    } finally {
+      setAdminLoading(false);
     }
   };
 
@@ -136,7 +172,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 font-mono">Editorial</h4>
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 font-mono">Editorial Desk</h4>
             <ul className="space-y-2.5 text-xs">
               <li><Link to="/submit" className="hover:text-white transition">Submit Your Story</Link></li>
               <li>
@@ -144,8 +180,12 @@ export default function Footer() {
                   Contact Editorial Desk
                 </button>
               </li>
+              <li>
+                <button onClick={handleAdminClick} className="hover:text-[#00FFA3] text-[#00FFA3] font-semibold transition text-left flex items-center gap-1.5">
+                  <Shield size={13} /> Newsroom HQ Login
+                </button>
+              </li>
               <li><span className="text-[#52525B]">Code of Ethics</span></li>
-              <li><span className="text-[#52525B]">Fact-Checking Policy</span></li>
             </ul>
           </div>
         </div>
@@ -153,12 +193,20 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-[#52525B]">
           <p>© {new Date().getFullYear()} Junior Journalist. All rights reserved. By youth, for truth.</p>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <button onClick={() => setContactOpen(true)} className="hover:text-[#A0A0AB] transition">
               Editorial Tips & Queries
             </button>
             <span>•</span>
             <Link to="/explore" className="hover:text-[#A0A0AB] transition">Digital Anthologies</Link>
+            <span>•</span>
+            <button
+              onClick={handleAdminClick}
+              className="hover:text-[#00FFA3] text-[#00FFA3] transition flex items-center gap-1.5 font-bold"
+              data-testid="footer-admin-login"
+            >
+              <Shield size={13} /> Admin / Staff Portal
+            </button>
           </div>
         </div>
       </div>
@@ -264,6 +312,104 @@ export default function Footer() {
                 </button>
               </form>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* ADMIN / STAFF LOGIN MODAL */}
+      {adminModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="glass rounded-3xl p-6 sm:p-8 max-w-md w-full border border-[#00FFA3]/30 animate-fade-in-up relative">
+            <button
+              onClick={() => setAdminModalOpen(false)}
+              className="absolute top-5 right-5 text-[#71717A] hover:text-white"
+            >
+              <X size={20} />
+            </button>
+
+            <div className="flex items-center gap-2.5 mb-2">
+              <div className="w-10 h-10 rounded-xl bg-[#00FFA3]/15 flex items-center justify-center text-[#00FFA3] border border-[#00FFA3]/30">
+                <Shield size={20} />
+              </div>
+              <div>
+                <h3 className="font-heading text-xl font-bold text-white">Staff & Admin Newsroom Login</h3>
+                <p className="text-xs text-[#A0A0AB]">Access the Editorial Command Center.</p>
+              </div>
+            </div>
+
+            {/* Quick Demo One-Click Sign In */}
+            <div className="my-5 p-4 rounded-2xl bg-[#00FFA3]/10 border border-[#00FFA3]/30">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                  <Sparkles size={14} className="text-[#00FFA3]" /> Demo Editorial Lead
+                </span>
+                <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-[#00FFA3]/20 text-[#00FFA3] font-bold">
+                  Admin Access
+                </span>
+              </div>
+              <p className="text-[11px] text-[#A0A0AB] mb-3 leading-relaxed">
+                Log in as Managing Editor (Rushal Singh) with full permissions to review articles, manage opportunities, and dispatch broadcasts.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setAdminEmail('editor@juniorjournalist.org');
+                  setAdminPassword('EditorPass123!');
+                  setTimeout(() => handleAdminLogin(), 50);
+                }}
+                disabled={adminLoading}
+                className="btn-primary w-full text-xs py-2.5 shadow-md shadow-[#00FFA3]/10"
+              >
+                {adminLoading ? 'Signing In...' : '⚡ Quick Login as Managing Editor'}
+              </button>
+            </div>
+
+            {adminError && (
+              <div className="mb-4 p-3 rounded-xl bg-[#FF3B30]/10 border border-[#FF3B30]/30 text-[#FF3B30] text-xs">
+                {adminError}
+              </div>
+            )}
+
+            <form onSubmit={handleAdminLogin} className="space-y-4 pt-2">
+              <div>
+                <label className="block text-xs text-[#A0A0AB] mb-1 font-semibold">Staff Email</label>
+                <input
+                  type="email"
+                  required
+                  value={adminEmail}
+                  onChange={e => setAdminEmail(e.target.value)}
+                  className="input-dark w-full text-xs"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs text-[#A0A0AB] mb-1 font-semibold">Password</label>
+                <div className="relative">
+                  <input
+                    type={adminShowPw ? 'text' : 'password'}
+                    required
+                    value={adminPassword}
+                    onChange={e => setAdminPassword(e.target.value)}
+                    className="input-dark w-full text-xs pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setAdminShowPw(!adminShowPw)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#71717A] hover:text-white"
+                  >
+                    {adminShowPw ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={adminLoading}
+                className="btn-ghost w-full text-xs py-2.5 hover:text-white border-white/20"
+              >
+                {adminLoading ? 'Authenticating...' : 'Sign In with Custom Credentials'}
+              </button>
+            </form>
           </div>
         </div>
       )}
