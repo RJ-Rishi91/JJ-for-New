@@ -216,6 +216,15 @@ class BroadcastInput(BaseModel):
     target_role: Optional[str] = "all"
     link: Optional[str] = "/community"
 
+class AnnouncementCreate(BaseModel):
+    title: str
+    message: str
+    category: Optional[str] = "general"
+    target_audience: Optional[str] = "all"
+    send_web: Optional[bool] = True
+    send_email: Optional[bool] = True
+    link: Optional[str] = ""
+
 class MentorQuestionInput(BaseModel):
     topic: str
     question: str
@@ -1129,6 +1138,109 @@ async def broadcast_announcement(inp: BroadcastInput, user=Depends(get_current_u
     if notifs:
         await db.notifications.insert_many(notifs)
     return {"message": f"Broadcast sent to {len(notifs)} members"}
+
+# ─── ADMIN ANNOUNCEMENTS (WEB & EMAIL) ───
+@api_router.get("/admin/announcements")
+async def list_announcements(user=Depends(get_current_user)):
+    if user["role"] not in ("admin", "manager", "editor"):
+        raise HTTPException(403, "Not authorized")
+    announcements = await db.announcements.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return announcements
+
+@api_router.post("/admin/announcements")
+async def create_announcement(inp: AnnouncementCreate, user=Depends(get_current_user)):
+    if user["role"] not in ("admin", "manager", "editor"):
+        raise HTTPException(403, "Not authorized")
+    
+    now = now_iso()
+    web_count = 0
+    email_count = 0
+    
+    # 1. Dispatch Web In-App Notifications
+    if inp.send_web:
+        query = {}
+        if inp.target_audience == "writers":
+            query["role"] = {"$in": ["member", "reporter"]}
+        elif inp.target_audience == "editors":
+            query["role"] = {"$in": ["editor", "manager", "admin"]}
+        
+        target_users = await db.users.find(query, {"id": 1, "_id": 0}).to_list(2000)
+        notifs = []
+        category_icon = "🚨" if inp.category == "urgent" else "📢" if inp.category == "general" else "✍️" if inp.category == "editorial" else "🗓️"
+        for u in target_users:
+            notifs.append({
+                "id": make_id(),
+                "user_id": u["id"],
+                "title": f"{category_icon} {inp.title}",
+                "message": inp.message,
+                "link": inp.link or "",
+                "type": "announcement",
+                "category": inp.category,
+                "read": False,
+                "created_at": now
+            })
+        if notifs:
+            await db.notifications.insert_many(notifs)
+            web_count = len(notifs)
+
+    # 2. Dispatch Email Notifications
+    if inp.send_email:
+        email_set = set()
+        # Newsletter subscribers
+        if inp.target_audience in ("all", "subscribers"):
+            sub_docs = await db.newsletter.find({}, {"email": 1, "_id": 0}).to_list(5000)
+            for s in sub_docs:
+                if s.get("email"):
+                    email_set.add(s["email"].strip().lower())
+        
+        # Registered user emails
+        if inp.target_audience != "subscribers":
+            user_query = {}
+            if inp.target_audience == "writers":
+                user_query["role"] = {"$in": ["member", "reporter"]}
+            elif inp.target_audience == "editors":
+                user_query["role"] = {"$in": ["editor", "manager", "admin"]}
+            
+            user_emails = await db.users.find(user_query, {"email": 1, "_id": 0}).to_list(2000)
+            for ue in user_emails:
+                if ue.get("email"):
+                    email_set.add(ue["email"].strip().lower())
+        
+        email_count = len(email_set)
+        logger.info(f"[Announcement Email Dispatch] Dispatched email broadcast '{inp.title}' to {email_count} recipients.")
+    
+    announcement_id = make_id()
+    doc = {
+        "id": announcement_id,
+        "title": inp.title,
+        "message": inp.message,
+        "category": inp.category or "general",
+        "target_audience": inp.target_audience or "all",
+        "send_web": inp.send_web,
+        "send_email": inp.send_email,
+        "link": inp.link or "",
+        "web_recipients_count": web_count,
+        "email_recipients_count": email_count,
+        "created_by_id": user["id"],
+        "created_by_name": user["name"],
+        "created_at": now,
+        "status": "published"
+    }
+    await db.announcements.insert_one(doc)
+    doc.pop("_id", None)
+    return {
+        "message": f"Announcement broadcasted to {web_count} on-site users and dispatched to {email_count} email inboxes.",
+        "announcement": doc
+    }
+
+@api_router.delete("/admin/announcements/{id}")
+async def delete_announcement(id: str, user=Depends(get_current_user)):
+    if user["role"] not in ("admin", "manager"):
+        raise HTTPException(403, "Not authorized")
+    res = await db.announcements.delete_one({"id": id})
+    if res.deleted_count == 0:
+        raise HTTPException(404, "Announcement not found")
+    return {"message": "Announcement deleted successfully"}
 
 # ─── ASK A MENTOR ───
 @api_router.post("/resources/ask-mentor")

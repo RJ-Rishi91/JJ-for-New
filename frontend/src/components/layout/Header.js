@@ -175,7 +175,7 @@ export default function Header() {
                         </div>
                       </div>
                       {['admin', 'manager', 'editor'].includes(user.role) && (
-                        <Link to="/dashboard" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-[#ff758c] bg-[#ff2d55]/15 hover:bg-[#ff2d55]/25 font-semibold transition flex items-center justify-between" data-testid="dropdown-admin">
+                        <Link to="/admin" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-[#ff758c] bg-[#ff2d55]/15 hover:bg-[#ff2d55]/25 font-semibold transition flex items-center justify-between" data-testid="dropdown-admin">
                           <span>Newsroom HQ Desk</span>
                           <span className="text-[9px] uppercase tracking-wider font-mono bg-[#ff2d55]/30 px-1.5 py-0.5 rounded text-white">{user.role}</span>
                         </Link>

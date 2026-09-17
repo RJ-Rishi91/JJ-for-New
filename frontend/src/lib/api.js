@@ -88,6 +88,11 @@ export const chapters = {
 
 export const admin = {
   broadcast: (data) => API.post('/admin/broadcast', data),
+  announcements: {
+    list: () => API.get('/admin/announcements'),
+    create: (data) => API.post('/admin/announcements', data),
+    delete: (id) => API.delete(`/admin/announcements/${id}`),
+  },
   inquiries: () => API.get('/admin/contact-inquiries'),
   subscribers: () => API.get('/admin/subscribers'),
 };
