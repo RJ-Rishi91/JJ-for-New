@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../common/Logo';
 import { useAuth } from '../../contexts/AuthContext';
 import { newsletter as newsApi, contact as contactApi } from '../../lib/api';
-import { Mail, Send, CheckCircle, MessageSquare, X, Shield, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { Mail, Send, CheckCircle, MessageSquare, X, Shield, Eye, EyeOff, Sparkles, ExternalLink } from 'lucide-react';
 
 export default function Footer() {
   const { user, login } = useAuth();
@@ -148,14 +148,28 @@ export default function Footer() {
             <div className="flex items-center gap-2 text-xs text-[#ff758c] font-medium mb-4">
               <Shield size={14} /> 100% Student-First Editorial Freedom
             </div>
-            {/* StudioRavya Branding Badge */}
-            <div className="pt-3 border-t border-white/10 flex items-center gap-3">
-              <img src="/studioravya-logo.png" alt="StudioRavya" className="h-8 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,160,40,0.25)]" />
+            {/* StudioRavya Branding Badge (Clickable) */}
+            <a
+              href="https://studioravya.onerishi.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="pt-3 border-t border-white/10 flex items-center gap-3 group w-fit cursor-pointer hover:opacity-95 transition"
+              title="Visit StudioRavya (studioravya.onerishi.in)"
+            >
+              <img
+                src="/studioravya-logo.png"
+                alt="StudioRavya"
+                className="h-8 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,160,40,0.25)] group-hover:scale-105 transition-transform duration-200"
+              />
               <div className="text-[11px] leading-tight text-[#A0A0AB]">
-                <span className="block text-[9px] uppercase font-mono tracking-widest text-[#FFA028] font-bold">A product of</span>
-                <span className="text-white font-semibold tracking-wide text-xs">StudioRavya</span>
+                <span className="block text-[9px] uppercase font-mono tracking-widest text-[#FFA028] font-bold group-hover:text-[#ffb74d] transition-colors">
+                  A product of
+                </span>
+                <span className="text-white font-semibold tracking-wide text-xs group-hover:underline decoration-[#FFA028]/60 underline-offset-2 flex items-center gap-1">
+                  StudioRavya <ExternalLink size={10} className="text-[#FFA028] opacity-70 group-hover:opacity-100" />
+                </span>
               </div>
-            </div>
+            </a>
           </div>
 
           <div>
@@ -203,7 +217,18 @@ export default function Footer() {
           <div className="flex flex-wrap items-center gap-2">
             <p>© {new Date().getFullYear()} Junior Journalist. All rights reserved. By youth, for truth.</p>
             <span className="hidden sm:inline text-white/20">•</span>
-            <span className="text-[#A0A0AB]">A product of <strong className="text-[#FFA028] font-semibold">StudioRavya</strong></span>
+            <span className="text-[#A0A0AB]">
+              A product of{' '}
+              <a
+                href="https://studioravya.onerishi.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#FFA028] hover:text-[#ffb74d] font-semibold hover:underline transition inline-flex items-center gap-0.5"
+                title="Visit StudioRavya"
+              >
+                StudioRavya <ExternalLink size={10} className="opacity-70" />
+              </a>
+            </span>
           </div>
           <div className="flex flex-wrap items-center gap-4">
             <button onClick={() => setContactOpen(true)} className="hover:text-white transition">
