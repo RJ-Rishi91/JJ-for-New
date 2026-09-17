@@ -1471,6 +1471,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
     allow_origins=cors_origins,
+    allow_origin_regex=r"^https?:\/\/.*",
     allow_methods=["*"],
     allow_headers=["*"],
 )
