@@ -316,7 +316,7 @@ export default function CommunityPage() {
                   desc: "Captured over 50 photo essays documenting rural innovators and grassroots climate solutions."
                 },
                 {
-                  name: "Rushal Singh",
+                  name: "Rushal Sharma",
                   school: "St. Paul's Senior Secondary, Udaipur",
                   title: "Community Builder Award",
                   points: "1,980 XP",

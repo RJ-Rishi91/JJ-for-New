@@ -27,7 +27,7 @@ const defaultMessages = [
   {
     id: "seed-msg-2",
     sender_id: "seed-u4",
-    sender_name: "Rushal Singh",
+    sender_name: "Rushal Sharma",
     sender_role: "Managing Editor",
     channel: "general",
     content: "The Clean Campus plastic audit project is now live under the Projects tab. You can join the audit team!",

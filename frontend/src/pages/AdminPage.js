@@ -404,7 +404,7 @@ export default function AdminPage() {
               </span>
             </div>
             <p className="text-[11px] text-[#A0A0AB] mb-3 leading-relaxed">
-              Log in as Rushal Singh (Managing Editor) to review dispatches, post announcements, and manage newsroom desks.
+              Log in as Rushal Sharma (Managing Editor) to review dispatches, post announcements, and manage newsroom desks.
             </p>
             <button
               type="button"

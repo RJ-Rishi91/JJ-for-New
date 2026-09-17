@@ -757,7 +757,7 @@ async def seed_data():
                 "id": "seed-u4",
                 "email": "editor@juniorjournalist.org",
                 "password_hash": hash_pw("EditorPass123!"),
-                "name": "Rushal Singh",
+                "name": "Rushal Sharma",
                 "bio": "Managing Editor & investigative reporter mentoring young journalists.",
                 "city": "Udaipur",
                 "school": "St. Paul's Senior Secondary",
@@ -893,7 +893,7 @@ async def seed_data():
                 "type": "article",
                 "category": "reviews",
                 "author_id": "seed-u4",
-                "author_name": "Rushal Singh",
+                "author_name": "Rushal Sharma",
                 "author_role": "Managing Editor",
                 "author_school": "St. Paul's Senior Secondary, Udaipur",
                 "status": "published",
@@ -910,7 +910,7 @@ async def seed_data():
                 "type": "field_report",
                 "category": "field_reports",
                 "author_id": "seed-u4",
-                "author_name": "Rushal Singh",
+                "author_name": "Rushal Sharma",
                 "author_role": "Field Reporter",
                 "author_school": "St. Paul's Senior Secondary, Udaipur",
                 "status": "published",
@@ -976,7 +976,7 @@ async def seed_data():
                 "progress": 60,
                 "team": [
                     {"user_id": "seed-u1", "name": "Aarav Sharma", "role": "Project Lead"},
-                    {"user_id": "seed-u4", "name": "Rushal Singh", "role": "Editorial Advisor"}
+                    {"user_id": "seed-u4", "name": "Rushal Sharma", "role": "Editorial Advisor"}
                 ],
                 "created_at": now_iso()
             },
@@ -990,10 +990,10 @@ async def seed_data():
                 "cover_image": "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=800&auto=format&fit=crop&q=60",
                 "open_roles": ["Field Photographer", "Story Editor", "Audio Producer"],
                 "creator_id": "seed-u4",
-                "creator_name": "Rushal Singh",
+                "creator_name": "Rushal Sharma",
                 "progress": 30,
                 "team": [
-                    {"user_id": "seed-u4", "name": "Rushal Singh", "role": "Project Lead"}
+                    {"user_id": "seed-u4", "name": "Rushal Sharma", "role": "Project Lead"}
                 ],
                 "created_at": now_iso()
             }
@@ -1026,10 +1026,10 @@ async def seed_data():
                 "start_date": "2026-04-24T14:00:00Z",
                 "end_date": "2026-04-25T17:00:00Z",
                 "creator_id": "seed-u4",
-                "creator_name": "Rushal Singh",
+                "creator_name": "Rushal Sharma",
                 "open_roles": ["Session Coordinator", "Note Taker", "Tech Support"],
                 "max_team": 12,
-                "team": [{"user_id": "seed-u4", "name": "Rushal Singh", "role": "Event Leader"}],
+                "team": [{"user_id": "seed-u4", "name": "Rushal Sharma", "role": "Event Leader"}],
                 "created_at": now_iso()
             }
         ]
@@ -1040,7 +1040,7 @@ async def seed_data():
     if msg_count == 0:
         sample_msgs = [
             {"id": make_id(), "sender_id": "seed-u1", "sender_name": "Aarav Sharma", "sender_role": "member", "channel": "general", "recipient_id": None, "content": "Welcome everyone to the new Junior Journalist newsroom! Pitch your stories in #investigative or share photo essays in #photojournalism.", "created_at": now_iso()},
-            {"id": make_id(), "sender_id": "seed-u4", "sender_name": "Rushal Singh", "sender_role": "admin", "channel": "general", "recipient_id": None, "content": "The Clean Campus plastic audit project is now live under the Projects tab. You can join the audit team!", "created_at": now_iso()}
+            {"id": make_id(), "sender_id": "seed-u4", "sender_name": "Rushal Sharma", "sender_role": "admin", "channel": "general", "recipient_id": None, "content": "The Clean Campus plastic audit project is now live under the Projects tab. You can join the audit team!", "created_at": now_iso()}
         ]
     # Seed Sample Digital Publication Archives
     archive_count = await db.archives.count_documents({})
@@ -1126,7 +1126,7 @@ async def list_chapters():
     if not chapters:
         chapters = [
             {"school": "Delhi Public School", "city": "Delhi", "member_count": 14, "leaders": [{"name": "Aarav Sharma", "role": "Campus Lead"}]},
-            {"school": "St. Paul's Senior Secondary", "city": "Udaipur", "member_count": 11, "leaders": [{"name": "Rushal Singh", "role": "Chapter Founder"}]},
+            {"school": "St. Paul's Senior Secondary", "city": "Udaipur", "member_count": 11, "leaders": [{"name": "Rushal Sharma", "role": "Chapter Founder"}]},
             {"school": "The Cathedral & John Connon", "city": "Mumbai", "member_count": 12, "leaders": [{"name": "Ananya Desai", "role": "Editor"}]},
             {"school": "National Public School", "city": "Bengaluru", "member_count": 9, "leaders": [{"name": "Rohan Verma", "role": "Lead Reporter"}]},
         ]

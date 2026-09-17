@@ -145,8 +145,16 @@ export default function Footer() {
             <p className="text-xs text-[#7B829A] max-w-sm leading-relaxed mb-4">
               Junior Journalist is an independent, non-profit youth journalism collective. We empower student reporters to investigate, publish, and lead change across campuses globally.
             </p>
-            <div className="flex items-center gap-2 text-xs text-[#ff758c] font-medium">
+            <div className="flex items-center gap-2 text-xs text-[#ff758c] font-medium mb-4">
               <Shield size={14} /> 100% Student-First Editorial Freedom
+            </div>
+            {/* StudioRavya Branding Badge */}
+            <div className="pt-3 border-t border-white/10 flex items-center gap-3">
+              <img src="/studioravya-logo.png" alt="StudioRavya" className="h-8 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,160,40,0.25)]" />
+              <div className="text-[11px] leading-tight text-[#A0A0AB]">
+                <span className="block text-[9px] uppercase font-mono tracking-widest text-[#FFA028] font-bold">A product of</span>
+                <span className="text-white font-semibold tracking-wide text-xs">StudioRavya</span>
+              </div>
             </div>
           </div>
 
@@ -192,7 +200,11 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-[#7B829A]">
-          <p>© {new Date().getFullYear()} Junior Journalist. All rights reserved. By youth, for truth.</p>
+          <div className="flex flex-wrap items-center gap-2">
+            <p>© {new Date().getFullYear()} Junior Journalist. All rights reserved. By youth, for truth.</p>
+            <span className="hidden sm:inline text-white/20">•</span>
+            <span className="text-[#A0A0AB]">A product of <strong className="text-[#FFA028] font-semibold">StudioRavya</strong></span>
+          </div>
           <div className="flex flex-wrap items-center gap-4">
             <button onClick={() => setContactOpen(true)} className="hover:text-white transition">
               Editorial Tips & Queries
@@ -347,7 +359,7 @@ export default function Footer() {
                 </span>
               </div>
               <p className="text-[11px] text-[#CBD0DC] mb-3 leading-relaxed">
-                Log in as Managing Editor (Rushal Singh) with full permissions to review articles, manage opportunities, and dispatch broadcasts.
+                Log in as Managing Editor (Rushal Sharma) with full permissions to review articles, manage opportunities, and dispatch broadcasts.
               </p>
               <button
                 type="button"
