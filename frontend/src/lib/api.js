@@ -7,6 +7,9 @@ const getBaseUrl = () => {
   if (process.env.REACT_APP_API_URL) {
     return process.env.REACT_APP_API_URL;
   }
+  if (typeof window !== 'undefined' && window.location.hostname.includes('onerishi.in')) {
+    return "https://junior-journalist-api.onrender.com/api";
+  }
   return "http://127.0.0.1:8000/api";
 };
 
