@@ -371,12 +371,13 @@ export default function Footer() {
 
             <form onSubmit={handleAdminLogin} className="space-y-4 pt-2">
               <div>
-                <label className="block text-xs text-[#CBD0DC] mb-1 font-semibold">Staff Email</label>
+                <label className="block text-xs text-[#CBD0DC] mb-1 font-semibold">Staff Email or Username</label>
                 <input
-                  type="email"
+                  type="text"
                   required
                   value={adminEmail}
                   onChange={e => setAdminEmail(e.target.value)}
+                  placeholder="editor@juniorjournalist.org or jj_admin"
                   className="input-dark w-full text-xs"
                 />
               </div>
