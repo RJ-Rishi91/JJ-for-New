@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const getBaseUrl = () => {
   if (typeof window !== 'undefined' && (window.location.hostname.includes('onerishi.in') || window.location.protocol === 'https:')) {
-    return "https://clip-introduce-measured-lions.trycloudflare.com/api";
+    return "https://jj-for-new.onrender.com/api";
   }
   if (process.env.REACT_APP_BACKEND_URL) {
     return `${process.env.REACT_APP_BACKEND_URL.replace(/\/+$/, '')}/api`;
