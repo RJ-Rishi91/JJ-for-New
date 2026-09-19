@@ -30,14 +30,14 @@ jobs:
       - name: Install dependencies
         run: |
           cd frontend
-          npm install
+          npm install --legacy-peer-deps
 
       - name: Build frontend
         run: |
           cd frontend
           npm run build
         env:
-          REACT_APP_BACKEND_URL: https://junior-journalist-api.onrender.com
+          REACT_APP_BACKEND_URL: https://jj-for-new.onrender.com
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
