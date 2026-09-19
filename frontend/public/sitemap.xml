@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Core Landing & Home -->
+  <url>
+    <loc>https://junior-journalist.onerishi.in/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Editorial Dispatches & Digital Magazines -->
+  <url>
+    <loc>https://junior-journalist.onerishi.in/explore/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- About Us & Collective Overview -->
+  <url>
+    <loc>https://junior-journalist.onerishi.in/about/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Editorial Standards & Code of Ethics -->
+  <url>
+    <loc>https://junior-journalist.onerishi.in/editorial-standards/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Contact Us & Whistleblower Desk -->
+  <url>
+    <loc>https://junior-journalist.onerishi.in/contact/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Privacy Policy & Youth Safety -->
+  <url>
+    <loc>https://junior-journalist.onerishi.in/privacy/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Terms of Service & Contributor Rights -->
+  <url>
+    <loc>https://junior-journalist.onerishi.in/terms/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Published Articles & Student Dispatches -->
+  <url>
+    <loc>https://junior-journalist.onerishi.in/submissions/0dd34572-670e-410a-8aea-b6c6a7495a17/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&amp;auto=format&amp;fit=crop&amp;q=60</image:loc>
+      <image:title>Campus Mental Health: Breaking the Silence in High Schools</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://junior-journalist.onerishi.in/submissions/1499efca-676e-4fc7-bb93-ba9e82e22171/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&amp;auto=format&amp;fit=crop&amp;q=60</image:loc>
+      <image:title>The River Yamuna Restoration: A Student Photo Essay</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://junior-journalist.onerishi.in/submissions/91208788-e768-49f5-87c9-5da3c4d552d5/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&amp;auto=format&amp;fit=crop&amp;q=60</image:loc>
+      <image:title>Student Voices on AI in Classrooms: Threat or Learning Accelerator?</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://junior-journalist.onerishi.in/submissions/25f03f74-36ff-4ac3-931f-825c38502bb5/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&amp;auto=format&amp;fit=crop&amp;q=60</image:loc>
+      <image:title>Review: The Best Open-Source Tools for Student Newsrooms</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://junior-journalist.onerishi.in/submissions/35efc360-063f-4bb6-a614-5a2cdcc2ca68/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=800&amp;auto=format&amp;fit=crop&amp;q=60</image:loc>
+      <image:title>Field Report: Inside Udaipur's Ancient Water Harvest Systems</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://junior-journalist.onerishi.in/submissions/3acbc231-a785-48d1-b253-6ab924b64da3/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&amp;auto=format&amp;fit=crop&amp;q=60</image:loc>
+      <image:title>Echoes of the Classroom: A Collection of Student Poems</image:title>
+    </image:image>
+  </url>
+
+  <!-- Fellowships, Grants & Opportunities -->
+  <url>
+    <loc>https://junior-journalist.onerishi.in/opportunities/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Events, Bootcamps & Workshops -->
+  <url>
+    <loc>https://junior-journalist.onerishi.in/events/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://junior-journalist.onerishi.in/events/a2359f7b-9d99-4255-ba34-06a56eaf1c5f/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <url>
+    <loc>https://junior-journalist.onerishi.in/events/4ce4f00c-8f7a-45e1-aa8d-a78a4fce311d/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Journalism Learning & Curriculum Hub -->
+  <url>
+    <loc>https://junior-journalist.onerishi.in/learn/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Student Community, Podium & Campus Chapters -->
+  <url>
+    <loc>https://junior-journalist.onerishi.in/community/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Collaborative Reporting Drives -->
+  <url>
+    <loc>https://junior-journalist.onerishi.in/projects/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
+  <!-- Gamification & XP Rewards -->
+  <url>
+    <loc>https://junior-journalist.onerishi.in/rewards/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+
+  <!-- Contributor Story Submission Guide -->
+  <url>
+    <loc>https://junior-journalist.onerishi.in/submit/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+
+</urlset>

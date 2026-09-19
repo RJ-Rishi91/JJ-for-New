@@ -7,14 +7,14 @@ import { Menu, X, ChevronDown, Bell, Check, ExternalLink } from 'lucide-react';
 import { notifications as notifApi } from '../../lib/api';
 
 const navItems = [
-  { label: 'Explore', path: '/explore' },
-  { label: 'Projects', path: '/projects' },
-  { label: 'Newsroom', path: '/messages' },
-  { label: 'Events', path: '/events' },
-  { label: 'Learn', path: '/learn' },
-  { label: 'Opportunities', path: '/opportunities' },
-  { label: 'Rewards', path: '/rewards' },
-  { label: 'Community', path: '/community' },
+  { label: 'Explore', path: '/explore/' },
+  { label: 'Projects', path: '/projects/' },
+  { label: 'Newsroom', path: '/messages/' },
+  { label: 'Events', path: '/events/' },
+  { label: 'Learn', path: '/learn/' },
+  { label: 'Opportunities', path: '/opportunities/' },
+  { label: 'Rewards', path: '/rewards/' },
+  { label: 'Community', path: '/community/' },
 ];
 
 export default function Header() {
@@ -80,7 +80,7 @@ export default function Header() {
           <div className="flex items-center gap-3">
             {user ? (
               <>
-                <Link to="/submit" className="btn-primary text-sm py-2 px-4.5 hidden sm:inline-flex" data-testid="submit-btn">Submit Work</Link>
+                <Link to="/submit/" className="btn-primary text-sm py-2 px-4.5 hidden sm:inline-flex" data-testid="submit-btn">Submit Work</Link>
 
                 {/* Notifications Bell */}
                 <div className="relative">
@@ -175,14 +175,14 @@ export default function Header() {
                         </div>
                       </div>
                       {['admin', 'manager', 'editor'].includes(user.role) && (
-                        <Link to="/admin" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-[#ff758c] bg-[#ff2d55]/15 hover:bg-[#ff2d55]/25 font-semibold transition flex items-center justify-between" data-testid="dropdown-admin">
+                        <Link to="/admin/" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-[#ff758c] bg-[#ff2d55]/15 hover:bg-[#ff2d55]/25 font-semibold transition flex items-center justify-between" data-testid="dropdown-admin">
                           <span>Newsroom HQ Desk</span>
                           <span className="text-[9px] uppercase tracking-wider font-mono bg-[#ff2d55]/30 px-1.5 py-0.5 rounded text-white">{user.role}</span>
                         </Link>
                       )}
-                      <Link to="/dashboard" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-[#CBD0DC] hover:text-white hover:bg-white/5 transition" data-testid="dropdown-dashboard">My Dashboard</Link>
-                      <Link to={`/profile/${user.id}`} onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-[#CBD0DC] hover:text-white hover:bg-white/5 transition" data-testid="dropdown-profile">My Profile</Link>
-                      <Link to="/submit" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-[#CBD0DC] hover:text-white hover:bg-white/5 transition sm:hidden" data-testid="dropdown-submit">Submit Work</Link>
+                      <Link to="/dashboard/" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-[#CBD0DC] hover:text-white hover:bg-white/5 transition" data-testid="dropdown-dashboard">My Dashboard</Link>
+                      <Link to={`/profile/${user.id}/`} onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-[#CBD0DC] hover:text-white hover:bg-white/5 transition" data-testid="dropdown-profile">My Profile</Link>
+                      <Link to="/submit/" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-[#CBD0DC] hover:text-white hover:bg-white/5 transition sm:hidden" data-testid="dropdown-submit">Submit Work</Link>
                       <button onClick={() => { logout(); setProfileOpen(false); }} className="w-full text-left px-4 py-2 text-sm text-[#FF3B30] hover:bg-white/5 transition border-t border-white/5 mt-1" data-testid="dropdown-logout">Sign Out</button>
                     </div>
                   )}

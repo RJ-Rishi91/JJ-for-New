@@ -87,3 +87,6 @@ android-sdk/-e
 # Environment files
 *.env
 *.env.*
+
+# E2E test runs
+e2e/

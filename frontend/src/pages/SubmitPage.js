@@ -85,7 +85,7 @@ export default function SubmitPage() {
       await subApi.create(payload);
       localStorage.removeItem('jj_story_draft');
       setSuccess(true);
-      setTimeout(() => navigate('/dashboard'), 2000);
+      setTimeout(() => navigate('/dashboard/'), 2000);
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to submit');
     }

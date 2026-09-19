@@ -109,7 +109,7 @@ export default function CommunityPage() {
                 return (
                   <Link
                     key={u.id}
-                    to={`/profile/${u.id}`}
+                    to={`/profile/${u.id}/`}
                     className={`glass rounded-2xl p-4 sm:p-5 text-center card-interactive w-28 sm:w-44 flex flex-col justify-between ${height} bg-gradient-to-b ${colors}`}
                     data-testid={`podium-${idx}`}
                   >
@@ -165,7 +165,7 @@ export default function CommunityPage() {
                 {filteredLeaders.map((u, i) => (
                   <Link
                     key={u.id}
-                    to={`/profile/${u.id}`}
+                    to={`/profile/${u.id}/`}
                     className="flex items-center gap-4 px-5 py-4 hover:bg-white/5 transition"
                     data-testid={`leaderboard-row-${i}`}
                   >
@@ -255,7 +255,7 @@ export default function CommunityPage() {
                 <div className="pt-4 border-t border-white/10 flex items-center justify-between">
                   <span className="text-[11px] text-[#00FFA3] font-semibold">● Active Newsroom</span>
                   <Link
-                    to={`/events`}
+                    to="/events/"
                     className="text-xs text-white hover:text-[#00FFA3] flex items-center gap-1 transition"
                   >
                     View Events <ExternalLink size={12} />

@@ -398,7 +398,7 @@ export default function DashboardPage() {
 
           {/* Quick Actions Bar */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4" data-testid="quick-actions">
-            <Link to="/submit" className="glass rounded-2xl p-5 card-interactive flex items-center gap-4 border border-white/10">
+            <Link to="/submit/" className="glass rounded-2xl p-5 card-interactive flex items-center gap-4 border border-white/10">
               <div className="w-11 h-11 rounded-xl bg-[#00FFA3]/15 flex items-center justify-center text-[#00FFA3] shrink-0 border border-[#00FFA3]/30">
                 <PenTool size={20} />
               </div>
@@ -408,7 +408,7 @@ export default function DashboardPage() {
               </div>
               <ArrowRight size={16} className="text-[#71717A] ml-auto" />
             </Link>
-            <Link to="/messages" className="glass rounded-2xl p-5 card-interactive flex items-center gap-4 border border-white/10">
+            <Link to="/messages/" className="glass rounded-2xl p-5 card-interactive flex items-center gap-4 border border-white/10">
               <div className="w-11 h-11 rounded-xl bg-[#2962FF]/15 flex items-center justify-center text-[#2962FF] shrink-0 border border-[#2962FF]/30">
                 <MessageSquare size={20} />
               </div>
@@ -418,7 +418,7 @@ export default function DashboardPage() {
               </div>
               <ArrowRight size={16} className="text-[#71717A] ml-auto" />
             </Link>
-            <Link to="/projects" className="glass rounded-2xl p-5 card-interactive flex items-center gap-4 border border-white/10">
+            <Link to="/projects/" className="glass rounded-2xl p-5 card-interactive flex items-center gap-4 border border-white/10">
               <div className="w-11 h-11 rounded-xl bg-[#FFD600]/15 flex items-center justify-center text-[#FFD600] shrink-0 border border-[#FFD600]/30">
                 <Sparkles size={20} />
               </div>

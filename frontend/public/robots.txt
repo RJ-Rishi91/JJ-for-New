@@ -1,0 +1,29 @@
+# Junior Journalist Robots File
+# Domain: https://junior-journalist.onerishi.in
+
+User-agent: *
+Allow: /
+Allow: /explore/
+Allow: /submissions/
+Allow: /opportunities/
+Allow: /events/
+Allow: /learn/
+Allow: /projects/
+Allow: /community/
+Allow: /rewards/
+Allow: /profile/
+Allow: /about/
+Allow: /contact/
+Allow: /privacy/
+Allow: /terms/
+Allow: /editorial-standards/
+Allow: /submit/
+
+# Disallow private user dashboards and newsroom admin consoles
+Disallow: /admin/
+Disallow: /admin/*
+Disallow: /dashboard/
+Disallow: /messages/
+
+# Canonical XML Sitemap
+Sitemap: https://junior-journalist.onerishi.in/sitemap.xml

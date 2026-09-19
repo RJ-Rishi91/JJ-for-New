@@ -35,7 +35,7 @@ export default function OpportunitiesPage() {
         </div>
         {isStaff && (
           <Link
-            to="/dashboard"
+            to="/dashboard/"
             className="btn-primary flex items-center gap-2 text-xs py-2.5 px-4 self-start sm:self-auto shadow-md"
           >
             <Shield size={16} /> Manage & Post Opportunities

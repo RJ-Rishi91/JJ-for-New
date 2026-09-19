@@ -70,7 +70,7 @@ export default function Footer() {
 
   const handleAdminClick = () => {
     if (user && ['admin', 'manager', 'editor'].includes(user.role)) {
-      navigate('/admin');
+      navigate('/admin/');
     } else {
       setAdminError('');
       setAdminModalOpen(true);
@@ -84,7 +84,7 @@ export default function Footer() {
     try {
       await login(adminEmail, adminPassword);
       setAdminModalOpen(false);
-      navigate('/admin');
+      navigate('/admin/');
     } catch (err) {
       setAdminError(err.response?.data?.detail || 'Invalid administrative credentials');
     } finally {
@@ -175,39 +175,38 @@ export default function Footer() {
           <div>
             <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 font-heading">Platform</h4>
             <ul className="space-y-2.5 text-xs">
-              <li><Link to="/explore" className="hover:text-[#ff758c] transition">Explore Articles</Link></li>
-              <li><Link to="/projects" className="hover:text-[#ff758c] transition">Investigative Desks</Link></li>
-              <li><Link to="/messages" className="hover:text-[#ff758c] transition">Newsroom Chat</Link></li>
-              <li><Link to="/events" className="hover:text-[#ff758c] transition">Events & Workshops</Link></li>
-              <li><Link to="/community" className="hover:text-[#ff758c] transition">Campus Chapters</Link></li>
+              <li><Link to="/explore/" className="hover:text-[#ff758c] transition">Explore Articles</Link></li>
+              <li><Link to="/projects/" className="hover:text-[#ff758c] transition">Investigative Desks</Link></li>
+              <li><Link to="/messages/" className="hover:text-[#ff758c] transition">Newsroom Chat</Link></li>
+              <li><Link to="/events/" className="hover:text-[#ff758c] transition">Events &amp; Workshops</Link></li>
+              <li><Link to="/community/" className="hover:text-[#ff758c] transition">Campus Chapters</Link></li>
+              <li><Link to="/about/" className="hover:text-[#ff758c] transition">About the Collective</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 font-heading">Learning & Ops</h4>
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 font-heading">Learning &amp; Ops</h4>
             <ul className="space-y-2.5 text-xs">
-              <li><Link to="/learn" className="hover:text-[#ff758c] transition">Skill-Building Hub</Link></li>
-              <li><Link to="/opportunities" className="hover:text-[#ff758c] transition">Fellowships & Grants</Link></li>
-              <li><Link to="/rewards" className="hover:text-[#ff758c] transition">XP & Rewards Store</Link></li>
-              <li><Link to="/dashboard" className="hover:text-[#ff758c] transition">Reporter Dashboard</Link></li>
+              <li><Link to="/learn/" className="hover:text-[#ff758c] transition">Skill-Building Hub</Link></li>
+              <li><Link to="/opportunities/" className="hover:text-[#ff758c] transition">Fellowships &amp; Grants</Link></li>
+              <li><Link to="/rewards/" className="hover:text-[#ff758c] transition">XP &amp; Rewards Store</Link></li>
+              <li><Link to="/dashboard/" className="hover:text-[#ff758c] transition">Reporter Dashboard</Link></li>
+              <li><Link to="/contact/" className="hover:text-[#ff758c] transition">Contact &amp; Story Tips</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 font-heading">Editorial Desk</h4>
             <ul className="space-y-2.5 text-xs">
-              <li><Link to="/submit" className="hover:text-[#ff758c] transition">Submit Your Story</Link></li>
-              <li>
-                <button onClick={() => setContactOpen(true)} className="hover:text-[#ff758c] transition text-left">
-                  Contact Editorial Desk
-                </button>
-              </li>
+              <li><Link to="/submit/" className="hover:text-[#ff758c] transition">Submit Your Story</Link></li>
+              <li><Link to="/editorial-standards/" className="hover:text-[#ff758c] transition">Code of Ethics &amp; Standards</Link></li>
+              <li><Link to="/privacy/" className="hover:text-[#ff758c] transition">Privacy &amp; Minor Safety</Link></li>
+              <li><Link to="/terms/" className="hover:text-[#ff758c] transition">Terms of Service</Link></li>
               <li>
                 <button onClick={handleAdminClick} className="hover:text-[#ff758c] text-[#ff758c] font-semibold transition text-left flex items-center gap-1.5">
                   <Shield size={13} /> Newsroom HQ Login
                 </button>
               </li>
-              <li><span className="text-[#7B829A]">Code of Ethics</span></li>
             </ul>
           </div>
         </div>
@@ -230,19 +229,23 @@ export default function Footer() {
               </a>
             </span>
           </div>
-          <div className="flex flex-wrap items-center gap-4">
-            <button onClick={() => setContactOpen(true)} className="hover:text-white transition">
-              Editorial Tips & Queries
-            </button>
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+            <Link to="/about/" className="hover:text-white transition">About</Link>
             <span>•</span>
-            <Link to="/explore" className="hover:text-white transition">Digital Anthologies</Link>
+            <Link to="/privacy/" className="hover:text-white transition">Privacy Policy</Link>
+            <span>•</span>
+            <Link to="/terms/" className="hover:text-white transition">Terms</Link>
+            <span>•</span>
+            <Link to="/editorial-standards/" className="hover:text-white transition">Ethics</Link>
+            <span>•</span>
+            <Link to="/contact/" className="hover:text-white transition">Contact</Link>
             <span>•</span>
             <button
               onClick={handleAdminClick}
-              className="hover:text-[#ff758c] text-[#ff758c] transition flex items-center gap-1.5 font-bold"
+              className="hover:text-[#ff758c] text-[#ff758c] transition flex items-center gap-1 font-semibold"
               data-testid="footer-admin-login"
             >
-              <Shield size={13} /> Admin / Staff Portal
+              <Shield size={12} /> Staff Portal
             </button>
           </div>
         </div>

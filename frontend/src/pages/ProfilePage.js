@@ -260,7 +260,7 @@ export default function ProfilePage() {
             (profile.submissions || []).map((s, i) => (
               <Link
                 key={s.id}
-                to={`/submissions/${s.id}`}
+                to={`/submissions/${s.id}/`}
                 className="glass rounded-2xl p-4 flex items-center gap-4 card-interactive block transition hover:border-[#00FFA3]/40"
                 data-testid={`profile-sub-${i}`}
               >
@@ -293,7 +293,7 @@ export default function ProfilePage() {
                 {profile.events_led.map((ev) => (
                   <Link
                     key={ev.id}
-                    to={`/events/${ev.id}`}
+                    to={`/events/${ev.id}/`}
                     className="glass rounded-2xl p-4 flex items-center justify-between card-interactive block hover:border-[#2962FF]/40 transition"
                   >
                     <div>

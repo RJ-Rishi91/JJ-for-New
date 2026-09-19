@@ -88,10 +88,10 @@ export default function HomePage() {
             <div className="flex flex-wrap gap-4 animate-fade-in-up delay-200">
               {user ? (
                 <>
-                  <Link to="/submit" className="btn-primary flex items-center gap-2.5 text-base px-7 py-3.5" data-testid="hero-submit-btn">
+                  <Link to="/submit/" className="btn-primary flex items-center gap-2.5 text-base px-7 py-3.5" data-testid="hero-submit-btn">
                     <PenTool size={18} /> Start Writing
                   </Link>
-                  <Link to="/events" className="btn-ghost flex items-center gap-2.5 text-base px-7 py-3.5" data-testid="hero-events-btn">
+                  <Link to="/events/" className="btn-ghost flex items-center gap-2.5 text-base px-7 py-3.5" data-testid="hero-events-btn">
                     <Calendar size={18} /> Browse Events
                   </Link>
                 </>
@@ -100,7 +100,7 @@ export default function HomePage() {
                   <button onClick={() => setAuthOpen(true)} className="btn-primary flex items-center gap-2.5 text-base px-7 py-3.5" data-testid="hero-join-btn">
                     Join the Collective <ArrowRight size={18} />
                   </button>
-                  <Link to="/explore" className="btn-ghost flex items-center gap-2.5 text-base px-7 py-3.5" data-testid="hero-explore-btn">
+                  <Link to="/explore/" className="btn-ghost flex items-center gap-2.5 text-base px-7 py-3.5" data-testid="hero-explore-btn">
                     <Compass size={18} /> Explore Stories
                   </Link>
                 </>
@@ -134,7 +134,7 @@ export default function HomePage() {
         </div>
         <div className="flex gap-3.5 overflow-x-auto no-scrollbar pb-3">
           {categories.map((cat) => (
-            <Link key={cat.label} to={`/explore?category=${cat.label.toLowerCase().replace(' ', '_')}`}
+            <Link key={cat.label} to={`/explore/?category=${cat.label.toLowerCase().replace(' ', '_')}`}
               className="glass-card rounded-2xl px-6 py-4 flex items-center gap-3.5 min-w-[200px] card-interactive whitespace-nowrap border border-white/10"
               data-testid={`category-${cat.label.toLowerCase().replace(' ', '-')}`}>
               <span className="text-2xl filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.4)]">{cat.icon}</span>
@@ -151,7 +151,7 @@ export default function HomePage() {
             <div className="overline mb-1.5">Curated Highlights</div>
             <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-white">Featured Stories</h2>
           </div>
-          <Link to="/explore" className="text-[#ff758c] hover:text-white text-sm font-semibold flex items-center gap-1.5 transition" data-testid="see-all-stories">
+          <Link to="/explore/" className="text-[#ff758c] hover:text-white text-sm font-semibold flex items-center gap-1.5 transition" data-testid="see-all-stories">
             See All Stories <ArrowRight size={15} />
           </Link>
         </div>
@@ -163,7 +163,7 @@ export default function HomePage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {(data?.featured || []).slice(0, 3).map((s, i) => (
-              <Link key={s.id} to={`/submissions/${s.id}`}
+              <Link key={s.id} to={`/submissions/${s.id}/`}
                 className="glass-card rounded-3xl overflow-hidden card-interactive animate-fade-in-up border border-white/12 flex flex-col justify-between"
                 style={{ animationDelay: `${i * 120}ms` }}
                 data-testid={`featured-story-${i}`}>
@@ -211,9 +211,9 @@ export default function HomePage() {
               <div className="overline mb-1.5 flex items-center gap-1.5">
                 <Sparkles size={13} /> Investigative Drives
               </div>
-              <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-white">Active Campaigns & Reporting Drives</h2>
+              <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-white">Active Campaigns &amp; Reporting Drives</h2>
             </div>
-            <Link to="/projects" className="text-[#ff758c] hover:text-white text-sm font-semibold flex items-center gap-1.5 transition" data-testid="see-all-campaigns">
+            <Link to="/projects/" className="text-[#ff758c] hover:text-white text-sm font-semibold flex items-center gap-1.5 transition" data-testid="see-all-campaigns">
               View All Drives <ArrowRight size={15} />
             </Link>
           </div>
@@ -222,7 +222,7 @@ export default function HomePage() {
             {projectsList.slice(0, 3).map((proj, i) => (
               <Link
                 key={proj.id}
-                to="/projects"
+                to="/projects/"
                 className="glass-card rounded-3xl overflow-hidden card-interactive flex flex-col justify-between border border-white/12 hover:border-[#ff2d55]/40"
               >
                 <div className="h-44 relative bg-black/40 overflow-hidden">
@@ -279,7 +279,7 @@ export default function HomePage() {
             <div className="overline mb-1.5">Workshops & Sprints</div>
             <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-white">Upcoming Events</h2>
           </div>
-          <Link to="/events" className="text-[#ff758c] hover:text-white text-sm font-semibold flex items-center gap-1.5 transition" data-testid="see-all-events">
+          <Link to="/events/" className="text-[#ff758c] hover:text-white text-sm font-semibold flex items-center gap-1.5 transition" data-testid="see-all-events">
             View All Events <ArrowRight size={15} />
           </Link>
         </div>
@@ -291,7 +291,7 @@ export default function HomePage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {(data?.upcoming_events || []).map((ev, i) => (
-              <Link key={ev.id} to={`/events/${ev.id}`}
+              <Link key={ev.id} to={`/events/${ev.id}/`}
                 className="glass-card rounded-3xl p-7 card-interactive animate-fade-in-up border border-white/12"
                 style={{ animationDelay: `${i * 120}ms` }}
                 data-testid={`event-card-${i}`}>
@@ -324,10 +324,10 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14" data-testid="opportunities-section">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <div className="overline mb-1.5">Career & Fellowships</div>
+            <div className="overline mb-1.5">Career &amp; Fellowships</div>
             <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-white">Opportunities</h2>
           </div>
-          <Link to="/opportunities" className="text-[#ff758c] hover:text-white text-sm font-semibold flex items-center gap-1.5 transition" data-testid="see-all-opps">
+          <Link to="/opportunities/" className="text-[#ff758c] hover:text-white text-sm font-semibold flex items-center gap-1.5 transition" data-testid="see-all-opps">
             Browse All <ArrowRight size={15} />
           </Link>
         </div>
@@ -367,14 +367,14 @@ export default function HomePage() {
             <div className="overline mb-1.5">Hall of Fame</div>
             <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-white">Top Reporters</h2>
           </div>
-          <Link to="/community" className="text-[#ff758c] hover:text-white text-sm font-semibold flex items-center gap-1.5 transition" data-testid="see-leaderboard">
+          <Link to="/community/" className="text-[#ff758c] hover:text-white text-sm font-semibold flex items-center gap-1.5 transition" data-testid="see-leaderboard">
             Full Leaderboard <ArrowRight size={15} />
           </Link>
         </div>
 
         <div className="flex gap-4 overflow-x-auto no-scrollbar pb-3">
           {(data?.top_writers || []).map((w, i) => (
-            <Link key={w.id} to={`/profile/${w.id}`}
+            <Link key={w.id} to={`/profile/${w.id}/`}
               className="glass-card rounded-2xl p-6 min-w-[210px] text-center card-interactive animate-fade-in-up border border-white/12"
               style={{ animationDelay: `${i * 100}ms` }}
               data-testid={`top-writer-${i}`}>

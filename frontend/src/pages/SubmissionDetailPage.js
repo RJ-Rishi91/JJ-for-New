@@ -61,7 +61,7 @@ export default function SubmissionDetailPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 pb-24" data-testid="submission-detail-page">
-      <Link to="/explore" className="flex items-center gap-2 text-[#A0A0AB] hover:text-white text-sm mb-6 transition" data-testid="back-link">
+      <Link to="/explore/" className="flex items-center gap-2 text-[#A0A0AB] hover:text-white text-sm mb-6 transition" data-testid="back-link">
         <ArrowLeft size={16} /> Back to Explore
       </Link>
 
@@ -77,7 +77,7 @@ export default function SubmissionDetailPage() {
         <h1 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight mb-4 text-white" data-testid="submission-title">{sub.title}</h1>
 
         <div className="flex items-center gap-4 mb-8 text-sm text-[#A0A0AB]">
-          <Link to={`/profile/${sub.author_id}`} className="flex items-center gap-2 hover:text-[#00FFA3] transition" data-testid="submission-author">
+          <Link to={`/profile/${sub.author_id}/`} className="flex items-center gap-2 hover:text-[#00FFA3] transition" data-testid="submission-author">
             <div className="w-8 h-8 rounded-full bg-[#00FFA3]/20 flex items-center justify-center">
               <span className="text-xs font-bold text-[#00FFA3]">{sub.author_name?.[0]?.toUpperCase()}</span>
             </div>

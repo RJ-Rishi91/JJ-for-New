@@ -92,7 +92,7 @@ export default function EventsPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6" data-testid="events-grid">
           {events.map((ev, i) => (
-            <Link key={ev.id} to={`/events/${ev.id}`}
+            <Link key={ev.id} to={`/events/${ev.id}/`}
               className="glass rounded-2xl p-6 card-interactive animate-fade-in-up"
               style={{ animationDelay: `${i * 50}ms` }}
               data-testid={`event-item-${i}`}>
