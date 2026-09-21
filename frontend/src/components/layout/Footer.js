@@ -418,6 +418,7 @@ export default function Footer() {
                   value={adminEmail}
                   onChange={e => setAdminEmail(e.target.value)}
                   placeholder="editor@juniorjournalist.org or jj_admin"
+                  autoComplete="username"
                   className="input-dark w-full text-xs"
                 />
               </div>
@@ -430,6 +431,7 @@ export default function Footer() {
                     required
                     value={adminPassword}
                     onChange={e => setAdminPassword(e.target.value)}
+                    autoComplete="current-password"
                     className="input-dark w-full text-xs pr-10"
                   />
                   <button

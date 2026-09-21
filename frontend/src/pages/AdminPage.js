@@ -434,6 +434,7 @@ export default function AdminPage() {
                 required
                 value={loginEmail}
                 onChange={e => setLoginEmail(e.target.value)}
+                autoComplete="username"
                 className="input-dark text-xs py-2.5 px-3.5"
                 placeholder="editor@juniorjournalist.org or jj_admin"
               />
@@ -445,6 +446,7 @@ export default function AdminPage() {
                 required
                 value={loginPassword}
                 onChange={e => setLoginPassword(e.target.value)}
+                autoComplete="current-password"
                 className="input-dark text-xs py-2.5 px-3.5"
                 placeholder="••••••••"
               />

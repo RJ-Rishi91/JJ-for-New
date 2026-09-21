@@ -33,12 +33,18 @@ export default function SubmitPage() {
   const [success, setSuccess] = useState(false);
   const [lastSaved, setLastSaved] = useState(null);
 
-  // Auto-save draft to localStorage
+  // Auto-save draft to localStorage with debouncing (prevents cascading re-renders)
   useEffect(() => {
-    if (form.title || form.content) {
-      localStorage.setItem('jj_story_draft', JSON.stringify(form));
-      setLastSaved(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    }
+    if (!form.title && !form.content) return;
+    const timer = setTimeout(() => {
+      try {
+        localStorage.setItem('jj_story_draft', JSON.stringify(form));
+        setLastSaved(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      } catch (err) {
+        console.warn('Failed to auto-save draft', err);
+      }
+    }, 800);
+    return () => clearTimeout(timer);
   }, [form]);
 
   if (authLoading) {

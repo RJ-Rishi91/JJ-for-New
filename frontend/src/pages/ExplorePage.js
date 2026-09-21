@@ -16,6 +16,11 @@ export default function ExplorePage() {
   const [activeCat, setActiveCat] = useState(searchParams.get('category') || 'all');
   const [search, setSearch] = useState('');
 
+  const categoryQuery = searchParams.get('category') || 'all';
+  useEffect(() => {
+    setActiveCat(categoryQuery);
+  }, [categoryQuery]);
+
   useEffect(() => {
     const params = {};
     params.status = 'published';

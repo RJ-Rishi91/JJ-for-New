@@ -12,6 +12,7 @@ export default function SubmissionDetailPage() {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [submittingComment, setSubmittingComment] = useState(false);
+  const [reactionNotice, setReactionNotice] = useState('');
 
   useEffect(() => {
     subApi.get(id).then(r => { setSub(r.data); setLoading(false); }).catch(() => setLoading(false));
@@ -19,9 +20,15 @@ export default function SubmissionDetailPage() {
   }, [id]);
 
   const handleReact = async (reaction) => {
-    if (!user) return;
-    await subApi.react(id, reaction);
-    setSub(prev => ({ ...prev, reactions: { ...prev.reactions, [reaction]: (prev.reactions?.[reaction] || 0) + 1 } }));
+    if (!user) {
+      setReactionNotice('Please sign in to react to articles and support student reporters!');
+      setTimeout(() => setReactionNotice(''), 4000);
+      return;
+    }
+    try {
+      await subApi.react(id, reaction);
+      setSub(prev => ({ ...prev, reactions: { ...prev.reactions, [reaction]: (prev.reactions?.[reaction] || 0) + 1 } }));
+    } catch {}
   };
 
   const handleCommentSubmit = async (e) => {
@@ -107,18 +114,27 @@ export default function SubmissionDetailPage() {
         </div>
 
         {/* Reactions */}
-        {user && (
-          <div className="flex items-center gap-3 mb-8" data-testid="reactions-bar">
+        <div className="mb-8" data-testid="reactions-bar">
+          <div className="flex flex-wrap items-center gap-3">
             {reactions.map(r => (
               <button key={r.key} onClick={() => handleReact(r.key)}
-                className="glass rounded-xl px-4 py-2 flex items-center gap-2 text-sm card-interactive"
-                data-testid={`react-${r.key}`}>
+                className="glass rounded-xl px-4 py-2 flex items-center gap-2 text-sm card-interactive transition hover:border-[#ff2d55]/40"
+                data-testid={`react-${r.key}`}
+                title={user ? `React with ${r.label}` : 'Sign in to react'}>
                 {r.icon}
                 <span className="font-mono text-xs">{sub.reactions?.[r.key] || 0}</span>
               </button>
             ))}
+            {!user && (
+              <span className="text-xs text-[#A0A0AB]">Sign in to react</span>
+            )}
           </div>
-        )}
+          {reactionNotice && (
+            <p className="text-xs text-[#ff758c] mt-2.5 animate-fade-in font-medium flex items-center gap-1.5" data-testid="reaction-notice">
+              ⚠️ {reactionNotice}
+            </p>
+          )}
+        </div>
 
         {/* Discussion & Peer Feedback */}
         <section className="border-t border-white/10 pt-8 mt-10" data-testid="comments-section">

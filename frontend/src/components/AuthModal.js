@@ -69,9 +69,9 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
               </div>
             </>
           )}
-          <input className="input-dark text-xs" type="text" placeholder={tab === 'login' ? 'Email or Username (e.g. jj_admin)' : 'Student or Personal Email'} value={form.email} onChange={set('email')} required data-testid="auth-email-input" />
+          <input className="input-dark text-xs" type="text" placeholder={tab === 'login' ? 'Email or Username (e.g. jj_admin)' : 'Student or Personal Email'} value={form.email} onChange={set('email')} required autoComplete="username" data-testid="auth-email-input" />
           <div className="relative">
-            <input className="input-dark text-xs pr-10" type={showPw ? 'text' : 'password'} placeholder="Password" value={form.password} onChange={set('password')} required data-testid="auth-password-input" />
+            <input className="input-dark text-xs pr-10" type={showPw ? 'text' : 'password'} placeholder="Password" value={form.password} onChange={set('password')} required autoComplete={tab === 'login' ? 'current-password' : 'new-password'} data-testid="auth-password-input" />
             <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#7B829A] hover:text-white">
               {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
